@@ -9,6 +9,9 @@
                            [compojure "1.3.3"]
                            [clj-redis "0.0.12"]
                            [enlive "1.1.5"]
+                           [org.clojure/java.jdbc "0.3.6"]
+                           [org.xerial/sqlite-jdbc "3.8.7"]
+                           [korma "0.4.0"]
                            [ragtime/ragtime.sql.files "0.3.8"]
                            ;for what ? best loggining ? yeah ? 
                            [log4j "1.2.17" :exclusions [javax.mail/mail
