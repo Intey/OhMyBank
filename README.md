@@ -23,7 +23,7 @@ but so little automatiozation and human factor:
 - [ ] show my full debt
 
 ## And there ombs come Oh my Bank (Small)
-It's a web-app made on clojure libs [ring](github.com/ring-clojure/ring), [compojure](github.com/weavejester/compojure) and many 
+It's a web-app made on clojure libs [ring](https://github.com/ring-clojure/ring), [compojure](https://github.com/weavejester/compojure) and many 
 other. 
 Front side provide common functions:
 - add user 
