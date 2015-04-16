@@ -1,15 +1,29 @@
+
+
 # ombs
 Little bank project for my friends. 
 At work (yes, we work) we often buy cookies and tea, make gifts at birthday,
 and so on. Ad-hoc we don't have money for pay, so we remember a debt. But, when
 we have many events, debt can be lost. At first time, we usee excel. Not bad,
 but so little automatiozation and human factor:
-* One pay with creadit card, one with hand-cash
-* Bankir needs write debts. But also he needs work! Party time in his brain!
-* Some else
+- One pay with creadit card, one with hand-cash
+- Bankir needs write debts. But also he needs work! Party time in his brain!
+- Some else
+
+### Tasks
+- [x] common db actions
+- [ ] add user
+- [ ] add event 
+- [ ] private area 
+- [ ] participate in event
+- [ ] common calculations 
+- [ ] UI
+- [ ] show my debt on some event
+- [ ] show all my events
+- [ ] show my full debt
 
 ## And there ombs come Oh my Bank (Small)
-It's a web-app made on clojure libs [ring](...), [compojure](...) and many 
+It's a web-app made on clojure libs [ring](https://github.com/ring-clojure/ring), [compojure](https://github.com/weavejester/compojure) and many 
 other. 
 Front side provide common functions:
 - add user 
@@ -30,8 +44,8 @@ decreased on party-pay
 
 ### Example
 Tea {participants: 5, price: 70} 
-* all users have rate = 1 
+- all users have rate = 1 
     So, each user party-pay = (price / participants)
-* all users have different rate
+- all users have different rate
     user party-pay = (price / (one_price)*participats - rate)
     
