@@ -15,11 +15,6 @@
                            [lib-noir "0.9.9"] ; session management
                            [liberator "0.12.2"] ; for RESTful project
                            [cheshire "5.4.0"] ; JSON parsing
-                           ; for what ? best loggining ? yeah ? 
-                           [log4j "1.2.17" :exclusions [javax.mail/mail
-                                                        javax.jms/jms
-                                                        com.sun.jdmk/jmxtools
-                                                        com.sun.jmx/jmxri]]
                            [speclj "3.2.0"] ; bdd tests - core 
                            [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
                             :exclusions [org.seleniumhq.selenium/selenium-server]] 
