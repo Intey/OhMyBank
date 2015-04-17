@@ -6,14 +6,16 @@
             :dependencies [[org.clojure/clojure "1.6.0"]
                            [org.clojure/clojure-contrib "1.2.0"]
                            [ring/ring-jetty-adapter "1.3.2"]
-                           [compojure "1.3.3"]
-                           [clj-redis "0.0.12"]
-                           [enlive "1.1.5"]
-                           [org.clojure/java.jdbc "0.3.6"]
-                           [org.xerial/sqlite-jdbc "3.8.7"]
-                           [korma "0.4.0"]
-                           [ragtime/ragtime.sql.files "0.3.8"]
-                           ;for what ? best loggining ? yeah ? 
+                           [compojure "1.3.3"] ; routing
+                           [enlive "1.1.5"] ; templating(plain HTML)
+                           [org.clojure/java.jdbc "0.3.6"] ; deps fo db-driver
+                           [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver
+                           [korma "0.4.0"] ; sql in code
+                           [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
+                           [lib-noir "0.9.9"] ; session management
+                           [liberator "0.12.2"] ; for RESTful project
+                           [cheshire "5.4.0"] ; JSON parsing
+                           ; for what ? best loggining ? yeah ? 
                            [log4j "1.2.17" :exclusions [javax.mail/mail
                                                         javax.jms/jms
                                                         com.sun.jdmk/jmxtools
@@ -23,4 +25,7 @@
                       [ragtime/ragtime.lein "0.3.8"] ]
             :ragtime {:migrations ragtime.sql.files/migrations
                       :database "jdbc:sqlite:database.db" }
-            :ring {:handler ombs.routes/engine})
+            :ring {:handler ombs.routes/engine
+                   ;:init ombs.handler/init       ; use this, Luke.
+                   ;:destroy ombs.handler/destroy
+                   })

@@ -1,14 +1,22 @@
 <html>
 <head>
-  <title></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
-
 <body>
-<div>
-  <div id="msg1">Old value: <span id="old" /></div>
-  <div id="msg2" />
-  <form method="post" action="/some_action" >
-    <input type="text" name="value" ></input><input type="submit" name="ok" ></input>
-  </form>
-</div>
+    <div>
+        <div>
+            <span id="mainspan">WELCOME</span>
+            <span id="error"></span>
+            <form method="post" action="/login" >
+                <p>
+                    <input type="radio" name="register" value="false">LOG IN</input>
+                    <input type="radio" name="register" value="true" >LOG UP</input>
+                </p>                
+                <input type="text" name="username"></input>
+                <input type="password" name="pass"></input>
+                <input type="password" name="pass1"></input>
+                <input type="submit" name="ok" ></input>
+            </form>
+        </div>
+    </div>

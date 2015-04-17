@@ -2,14 +2,7 @@
   (:require [net.cgrand.enlive-html :as h]))
 
 (h/deftemplate page-index "ombs/index.html" [ctxt]
-             [:title] (h/content "Awesome application")
-             [:#old]  (h/content (:old ctxt))
-             [:#msg2] (h/set-attr "style" "display: none"))
+               [:title]  (h/content "Awesome application")
+               [:#error] (h/set-attr "style" (str "display:" (if (:error ctxt) "inline" "none")))
+               [:#error] (h/content ( if (:error ctxt) (:error ctxt) "" ))) 
 
-(h/deftemplate page-summary "ombs/index.html" [ctxt]
-             [:title] (h/content "Awesome application")
-             [:#old]  (h/content (:old ctxt))
-             [:#msg2] (h/content  (if (:error ctxt) (:error ctxt)
-                                  (str "Summary is " (:sum ctxt)))))
-
-; (deftemplate new-event "ombs/newevent.html" [])
