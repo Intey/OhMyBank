@@ -10,8 +10,18 @@ but so little automatiozation and human factor:
 - Bankir needs write debts. But also he needs work! Party time in his brain!
 - Some else
 
+## Tests
+Cat found in dir spec. In root of this - simple core specs. In directory `feature` can be founded web-driver
+specs.
+## Commands
+`lein test` for run all specs.
+`lein spec -a` for run watcher, that run tests after their update.
+`lein ancient upgrade` for upgrade all dependencies. Be *on the ledge*!
+`lein repl` for run REPL with this project (My advice is use [LightTable](http://lighttable.com)).
+
 ### Tasks
 - [x] common db actions
+- [ ] write tests for core calculations
 - [ ] add user
 - [ ] add event 
 - [ ] private area 
