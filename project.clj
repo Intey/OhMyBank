@@ -19,10 +19,22 @@
                            [log4j "1.2.17" :exclusions [javax.mail/mail
                                                         javax.jms/jms
                                                         com.sun.jdmk/jmxtools
-                                                        com.sun.jmx/jmxri]]]
+                                                        com.sun.jmx/jmxri]]
+                           [speclj "3.2.0"] ; bdd tests - core 
+                           [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
+                            :exclusions [org.seleniumhq.selenium/selenium-server]] 
+                           [org.seleniumhq.selenium/selenium-server "2.44.0"] ; drive it manualy
+                           [ring-mock "0.1.5"] ; ??
+                           [ring/ring-jetty-adapter "1.3.2"] ; for runs app before tests
+
+                           ]
+
+
             :plugins [ [lein-ring "0.8.8"]
                       [lein-ancient "0.6.6"]
-                      [ragtime/ragtime.lein "0.3.8"] ]
+                      [ragtime/ragtime.lein "0.3.8"]
+                      [speclj "3.2.0"] ]
+            :test-paths ["spec"]
             :ragtime {:migrations ragtime.sql.files/migrations
                       :database "jdbc:sqlite:database.db" }
             :ring {:handler ombs.routes/engine
