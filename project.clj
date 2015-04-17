@@ -23,7 +23,7 @@
                            [speclj "3.2.0"] ; bdd tests - core 
                            [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
                             :exclusions [org.seleniumhq.selenium/selenium-server]] 
-                           [org.seleniumhq.selenium/selenium-server "2.44.0"] ; drive it manualy
+                           [org.seleniumhq.selenium/selenium-server "2.45.0"] ; drive it manualy
                            [ring-mock "0.1.5"] ; ??
                            [ring/ring-jetty-adapter "1.3.2"] ; for runs app before tests
 
