@@ -1,26 +1,51 @@
 (ns ombs.features.homepage
-  (:require 
-    [speclj.core :refer :all]
-    [ring.adapter.jetty :refer [run-jetty]]
-    [clj-webdriver.taxi :refer :all]
+  (:require
+    [speclj.core :as spec]
+    [ring.adapter.jetty :as jetty]
+    [clj-webdriver.taxi :as taxi]
     [ombs.features.config :refer :all]
     [ombs.routes :refer [main-routes]]))
 
-(defonce server (run-jetty #'main-routes {:port 3000 :join? false}))
+(defonce server (jetty/run-jetty #'main-routes {:port 3000 :join? false}))
+(defn start-browser []
+  (try (taxi/set-driver! {:browser :chrome})
+    (catch Exception e e)))
 
-(defn start-browser [] (set-driver! {:browser :chrome}))
-(defn stop-browser [] (quit))
+(defn stop-browser [] (taxi/quit))
 
-(describe "homepage"
-          (before 
-            (.start server)
-            (start-browser)
-            (to test-base-url))
+(.start server)
+(start-browser)
 
-          (it "should have WELCOME text"
-              (should= (text "#mainspan") "WELCOME"))
+(spec/describe "Homepage"
+               (spec/before 
+                 (taxi/to test-base-url))  
+               (spec/it "should have WELCOME text" 
+                        (spec/should= (taxi/text "#mainspan") "WELCOME")))
 
-          (after (stop-browser)
-                 (.stop server)))
+(spec/describe "logining"
+               (spec/before 
+                 (def uname "intey")
+                 (def password "password")
+                 (def error-no-user (str "User" uname "not exists"))
+                 (spec/before 
+                   (taxi/to test-base-url))  
+                 )
+               (spec/it "should display move user to home, after sucess log in"
+                        ;(taxi/input-text "#username" uname)
+                        ;(taxi/input-text "#pass" password)
+                        (spec/should= (taxi/text "#username") uname) 
+                        
+                        )
+               (spec/it "should error when user not found"
+                        (spec/-fail "but no error") )
+               (spec/it "should error when password is wrong"
+                        (spec/-fail "but no error") )
+               (spec/it "should move user to home after registration. Should add user in db"
+                        (spec/-fail "but no go to home")
+                        (spec/-fail "but no add user in db") )
 
-(run-specs)
+               )
+(stop-browser)
+(.stop server)  
+
+(spec/run-specs)
