@@ -7,6 +7,17 @@
     0.5
     1))
 
+(defn get-rate [user]
+  (:rate
+   (val user)))
+
+(defn rates-sum [users]
+  "get map of users, where key - :user, and value - user data.
+  User data should contains ':rate' pair"
+  (let [rates (map get-rate users)]
+  (reduce + rates)))
+
+; (reduce #(+ (get-rate %1)) 0 users) ; gets summ of rate from map of map
 
 (describe "Database"
           (before (db/add-user "Test User" "01.01.2000" 1.0 100)
@@ -22,56 +33,23 @@
           (it "Username should be unique (db should throw error)"
               (should-throw Exception (db/add-user "Test User" "01.01.2000" 1.0 100))))
 
-;(db/add-user "tester" "21.10.1999" 1.0)
-
 (describe "Calculating:"
           (before
-           (defn rand-rate []
-             (if (<= rand 0.5)
-               0.5
-               1))
            (def event-price (rand-int 2000))
-           (def users {:student1 { :rate rand-rate :name "Betty"}
-                       :worker01 { :rate rand-rate :name "Mark"}
-                       :student2 { :rate rand-rate :name "Joe"}
-                       :worker02 { :rate rand-rate :name "Chendler"}}))
 
-          (it "user debt, when many participants"
-           (should= (let [ucount 5 ]
-                      (/ event-price ucount))
-                    0)))
+           (def users {:student1 { :rate (rand-rate) :name "Betty"}
+                       :worker01 { :rate (rand-rate) :name "Mark"}
+                       :student2 { :rate (rand-rate) :name "Joe"}
+                       :worker02 { :rate (rand-rate) :name "Chendler"}})
 
+           (println (str "\tusers: " users))
+           (println (str "\tevent price: " event-price))
+           (println (str "\trates sum: " (rates-sum users)))
 
-(def users {
-            :student1 { :rate (rand-rate) :name "Betty"}
-            :worker01 { :rate (rand-rate) :name "Mark"}
-            :student2 { :rate (rand-rate) :name "Joe" }
-            :worker02 { :rate (rand-rate) :name "Chend ler"}})
+           (println)
+           )
 
-(defn get-rate [user]
-  (:rate
-   (val user)))
-
-
-(defn two-rate [u uu]
-
-  (vector
-   (get-rate u)
-   (get-rate uu))
-  )
-
- (val {:first {:rate 1}})
-
-
-(two-rate {:first {:rate 1}} {:second {:rate 5}})
-
-users
-
-(defn plus-six [v]
-  (+ 6 v))
-users
-
-
-(reduce #(+ (get-rate %1)) 0 users)
-
+          (it "For first user debt when many participants:"
+           (should (/ event-price (rates-sum users))
+            )))
 (run-specs)
