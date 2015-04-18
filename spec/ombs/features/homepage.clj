@@ -17,24 +17,24 @@
 (start-browser)
 
 (spec/describe "Homepage"
-               (spec/before 
-                 (taxi/to test-base-url))  
-               (spec/it "should have WELCOME text" 
-                        (spec/should= (taxi/text "#mainspan") "WELCOME")))
+               (spec/before
+                 (taxi/to test-base-url))
+               (spec/it "should have WELCOME text"
+                        (spec/should=  "WELCOME" (taxi/text "#mainspan"))))
 
 (spec/describe "logining"
-               (spec/before 
+               (spec/before
                  (def uname "intey")
                  (def password "password")
                  (def error-no-user (str "User" uname "not exists"))
-                 (spec/before 
-                   (taxi/to test-base-url))  
+                 (spec/before
+                   (taxi/to test-base-url))
                  )
                (spec/it "should display move user to home, after sucess log in"
                         ;(taxi/input-text "#username" uname)
                         ;(taxi/input-text "#pass" password)
-                        (spec/should= (taxi/text "#username") uname) 
-                        
+                        (spec/should= uname (taxi/text "#username"))
+
                         )
                (spec/it "should error when user not found"
                         (spec/-fail "but no error") )
@@ -46,6 +46,6 @@
 
                )
 (stop-browser)
-(.stop server)  
+(.stop server)
 
 (spec/run-specs)
