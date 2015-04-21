@@ -6,17 +6,18 @@
 <body>
     <div>
         <div>
-            <span id="mainspan">WELCOME</span>
+            
+            <span id="mainspan">Welcome</span>
+            <span>Current user:</span> <span id="user"></span>
             <span id="error"></span>
-            <form method="post" action="/login" >
-                <p>
-                    <input type="radio" name="register" value="false">LOG IN</input>
-                    <input type="radio" name="register" value="true" >LOG UP</input>
-                </p>                
-                <input type="text" id="username" name="username"></input>
-                <input type="password" id="pass" name="pass"></input>
-                <input type="password" id="pass1" name="pass1"></input>
-                <input type="submit" name="ok" ></input>
-            </form>
+            <p>
+                <form method="post" action="/login" >
+                    <input type="text" id="username" name="username"></input>
+                    <input type="password" id="pass" name="pass"></input>
+                    <input type="submit" id="ok" name="ok">Login</input>
+                </form>
+            </p>
         </div>
     </div>
+</body>
+</html>
