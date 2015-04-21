@@ -24,7 +24,7 @@
            (GET "/user" [params]
                 (handler/user params))
 
-           (GET "/:username" {{uname :username} :params}
+           (GET "/user/:username" {{uname :username} :params}
                 (handler/user uname)
                 )
            (not-found "Page not found"))
