@@ -8,7 +8,7 @@
 
 (defroutes main-routes
            (GET "/" [] (handler/index) )
-           (POST "/login" [username] (handler/login username) ) 
+           (POST "/login" [params] (handler/user params))
            ;(if (= (:registry params) "true")
            ;  (if (= (:pass params) (:pass1 params))
            ;    ;(redirect "/") ;if ok
@@ -20,12 +20,12 @@
            ;(if (core/check-acc (:username params) (:pass params))
            ;  ;(redirect "/") ; mksession
            ;  (handler/index params)
-           ;  )  
+           ;  )
            (GET "/user" [params]
                 (handler/user params))
 
-           (GET "/user/:username" {{uname :username} :params}
-                (handler/user uname)
+           (GET "/user/:username" {{params :username} :params}
+                (handler/user params)
                 )
            (not-found "Page not found"))
 

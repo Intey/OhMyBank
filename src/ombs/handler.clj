@@ -8,13 +8,7 @@
   "Handler. show index page"
   (view/index {:error error}))
 
-(defn user [ctxt]
+(defn user [params]
   "Generate user page, with his name and events."
-  (view/user ctxt)
-  )
-
-(defn login [ctxt]
-  "Redirect user to page with his name"
-  (print (str "handle logining with params: '" ctxt "'."))
-  (redirect (str "/user/" ctxt))
+  (view/user (:username params))
   )

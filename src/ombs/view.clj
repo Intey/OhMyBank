@@ -10,7 +10,7 @@
                [:#error] (h/content (if (:error ctxt) (:error ctxt) "" ))
                )
 
-(h/deftemplate user "ombs/user.html" [ctxt] 
-               [:#error] (h/content (if (:error ctxt) (:error ctxt) "" ))
-               [:#user]  (h/content (:username ctxt))
+(h/deftemplate user "ombs/user.html" [params] 
+               [:#error] (h/content (if (:error params) (:error params) "" ))
+               [:#user]  (h/content (:username params))
                )
