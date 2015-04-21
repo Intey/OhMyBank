@@ -4,7 +4,10 @@
             [compojure.route :refer [not-found]]
             [ombs.core :as core]
             [ombs.handler :as handler]
-            [noir.response :refer [redirect]]))
+            [noir.response :refer [redirect]]
+            [liberator.core :refer [defresource resource request-method-in]]
+            ))
+
 
 (defroutes main-routes
            (GET "/" [] (handler/index) )
