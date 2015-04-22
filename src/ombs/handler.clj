@@ -4,9 +4,9 @@
     [ombs.db :as db]
     [noir.response :refer [redirect] ]))
 
-(defn index [& error]
+(defn index [ctxt]
   "Handler. show index page"
-  (view/index {:error error}))
+  (view/index ctxt))
 
 (defn user [params]
   "Generate user page, with his name and events."
