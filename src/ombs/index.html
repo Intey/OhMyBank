@@ -9,17 +9,22 @@
     <script>
         //add li elem with each user in $user-list
         function renderUsers(users) {
+            console.log("rendering users" + users);
             $('#user-list').empty();
-            for(user in users) { $('#user-list').append( $('<li/>', { html: users[user] }) ); }
+            for(user in users) { 
+                $('#user-list').append( $('<li/>', { html: users[user] }) ); 
+            }
         }
+
         function getUsers() { $.get("/users", renderUsers); }
-        function addUser() { 
-            var jxhr = $.post("/add-user", { user: $('#name').val() }, renderUsers)
-                        .fail(handleError); 
-            getUsers();
-        }
-        function handleError(xhr) {
+
+        function handleError(xhr, status, errorThrown) {
             $('#error').text(xhr.statusText + ": " + xhr.responseText);
+            console.log("some error(xhr):" + xhr + "| status:" + status + "| errorThrown: " + errorThrown);
+        }
+
+        function addUser() { 
+            var jxhr = $.post("/add-user", { user: $('#name').val() }, getUsers).fail(handleError); 
         }
 
         //init
