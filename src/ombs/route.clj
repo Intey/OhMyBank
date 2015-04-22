@@ -24,7 +24,7 @@
              :post! (fn [context]
                       (let [params (get-in context [:request :form-params])]
                         (swap! users conj (get params "user")) ))
-             :handle-created (generate-string @users)
+             :handle-created (fn [_] (generate-string @users))
              :available-media-types ["application/json"]
              )
 
