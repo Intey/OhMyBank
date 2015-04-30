@@ -4,6 +4,7 @@
             [compojure.route :refer [not-found]]
             [ombs.core :as core]
             [ombs.handler :as handler]
+            [noir.session :refer [wrap-noir-session]]
             ))
 
 (defroutes main-routes
@@ -13,5 +14,7 @@
            (not-found "Page not found") )
 
 (def engine 
-  (wrap-routes main-routes 
-               wrap-params))
+  (-> main-routes 
+    (wrap-routes wrap-params)
+    (wrap-routes wrap-noir-session)
+    ))

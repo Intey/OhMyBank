@@ -1,12 +1,13 @@
 (ns ombs.view
   (:require 
     [net.cgrand.enlive-html :as h]
-    ;[noir.validation :as valids] 
+    [noir.session :as sess] 
     ;[noir.util.anti-forgery :refer [anti-forgery-field]] ; security - need, add field fo srcf defence
 
     ) )
 
 (h/deftemplate index "ombs/index.html" [ctxt]
+               [:#username] (h/content (sess/get :username ""))
                [:#params] (h/content (str ctxt))
                )
 

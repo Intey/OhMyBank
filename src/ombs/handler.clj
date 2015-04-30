@@ -3,6 +3,7 @@
     [ombs.view :as view]
     [ombs.db :as db]
     [ombs.core :as core]
+    [noir.session :as sess]
     [noir.response :refer [redirect] ]
 ))
 
@@ -21,6 +22,7 @@
   (if (core/reg-ok? (params "username") (params "pass1") (params "pass2"))  
     (do    
       (db/add-user (params "username") (params "pass1") (params "birthdate") (core/rate (params "student-flag")))
+      (sess/put! :username (params "username"))
       (redirect "/") )
     (view/register params) 
     ))
