@@ -6,11 +6,15 @@
 <body>
     <div>
         <div>
-            <span id="error"></span>
-            <form method="post" action="/login" >
-                <input type="text" id="username" name="username"></input>
-                <input type="password" id="pass" name="pass"></input>
-                <input type="password" id="pass1" name="pass1"></input>
+            <p id="uerror"></p>
+            <p id="perror"></p>
+            <p id="p2error"></p>
+            <form method="post" action="/register" >
+                <span>Name:<input type="text" id="username" name="username"></input></span>
+                <span>Birth date:<input type="date" id="birthdate" name="birthdate"></input></span>
+                <span>Password:<input type="password" id="pass1" name="pass1"></input></span>
+                <span>One more time: <input type="password" id="pass2" name="pass2"></input></span>
+                <span>Student?<input type="checkbox" id="student-flag" name="student-flag"/></span>
                 <input type="submit" name="ok"></input>
             </form>
         </div>

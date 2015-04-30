@@ -18,23 +18,28 @@
 
         function getUsers() { $.get("/users", renderUsers); }
 
-        function handleError(xhr, status, errorThrown) {
+        function handleError(xhr) {
             $('#error').text(xhr.statusText + ": " + xhr.responseText);
-            console.log("some error(xhr):" + xhr + "| status:" + status + "| errorThrown: " + errorThrown);
         }
 
         function addUser() { 
-            var jxhr = $.post("/add-user", { user: $('#name').val() }, renderUsers).fail(handleError); 
+            var jqxhr = $.post("/add-user", { user: $('#name').val() }, renderUsers).fail(handleError); 
         }
-
         //init
         $(function() { getUsers(); });
     </script>
 </head>
 <body>
     <h1>Welcome</h1>
-    <p id="error"></p>
-    <ul id="user-list"></ul>
+
+    <p id="params"></p>
+
+    <form method="get" action="/register">
+        <input type="submit">log up</input>
+    </form>
+
+    <!--<ul id="user-list"></ul>-->
+
     <input type="text" id="name" placeholder="user name"/>
     <button onclick="addUser()">Add User</button>
 </body>

@@ -19,9 +19,11 @@
                (sql/belongs-to events {:fk :eid})
                (sql/belongs-to users {:fk :uid}))
 
-(defn add-user [uname birthdate rate & balance]
-  (sql/insert users (sql/values {:name uname :bdate birthdate :rate rate
-                                      :balance (if (nil? balance) 0 balance)})))
+(defn add-user [uname password birthdate rate]
+  (sql/insert users (sql/values {:name uname 
+                                 :password password 
+                                 :bdate birthdate 
+                                 :rate rate } )))
 
 (defn add-event [name price & date]
   (if-not (nil? date)
