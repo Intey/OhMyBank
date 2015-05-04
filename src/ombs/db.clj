@@ -9,15 +9,18 @@
 ; about many-to-many https://groups.google.com/d/msg/sqlkorma/r3kR6DyQZHo/RrQS_J8kkQ8J
 
 (declare events)
-(sql/defentity users
-               (sql/many-to-many events :participants {:lfk :uid :rfk :eid}))
+(sql/defentity 
+  users
+  (sql/many-to-many events :participants {:lfk :uid :rfk :eid}))
 
-(sql/defentity events
-               (sql/many-to-many users :participants {:lfk :eid :rfk :uid}))
+(sql/defentity 
+  events
+  (sql/many-to-many users :participants {:lfk :eid :rfk :uid}))
 
-(sql/defentity participants
-               (sql/belongs-to events {:fk :eid})
-               (sql/belongs-to users {:fk :uid}))
+(sql/defentity 
+  participants
+  (sql/belongs-to events {:fk :eid})
+  (sql/belongs-to users {:fk :uid}))
 
 (defn add-user [uname password birthdate rate]
   (sql/insert users (sql/values {:name uname 
@@ -34,12 +37,25 @@
   (sql/delete users (sql/where (= :name name))))
 
 (defn get-user [uname]
+  "Return map of user info"
   (sql/select users
-              (sql/fields :name :bdate :balance :rate)
+              (sql/fields :name :bdate :balance :rate :password)
               (sql/where (= :name uname))))
-(defn get-event [ename] (sql/select events (sql/where (= :name ename))))
-(defn get-user-list   [] (sql/select users))
-(defn get-events-list [] (sql/select events))
+
+(defn get-event [ename] 
+  "Return fields of event"
+  (sql/select events 
+              (sql/fields :name :price :remain)
+              (sql/where (= :name ename))))
+
+(defn get-user-list   []
+  "Return list of users"
+  (sql/fields :name :bdate :balance :rate :password)
+  (sql/select users))
+
+(defn get-events-list [] 
+  "Return map of events"
+  (sql/select events))
 
 (defn get-user-events [uname]
   (sql/select participants (sql/fields)
