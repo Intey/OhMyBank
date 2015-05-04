@@ -9,6 +9,7 @@
 
 (defroutes main-routes
            (GET "/" [_] handler/index)
+           (POST "/login" request (handler/login request))
            (POST "/register" {params :params} (handler/register params))
            (GET  "/register" [_] handler/regpage)
            (not-found "Page not found") )
