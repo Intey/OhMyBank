@@ -7,7 +7,7 @@
     [noir.response :refer [redirect] ]
 ))
 
-(defn index [ctxt]
+(defn index [& ctxt]
   "Handler. show index page"
   (view/index ctxt))
 
@@ -15,8 +15,8 @@
 
 (defn log-user [uname]
   "Generate user page, with his name and events."
-  (sess/put! uname)
-  (redirect "/")  
+  (sess/put! :username uname)
+  (redirect "/user")
   )
 
 (defn register [params]
@@ -30,10 +30,13 @@
     ))
 
 
-(defn login [{{uname :username pass :password} :params}]
+(defn login [ { {uname :username pass :password :as params} :params} ]
   (if  (= pass (:password (db/get-user uname)))
     (log-user uname)
     (view/index {:error "wrong login/pass"})
     )
   )
 
+( defn user [& _]
+  (view/user)
+  )

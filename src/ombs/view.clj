@@ -6,22 +6,19 @@
 
     ) )
 
-(h/deftemplate index "ombs/index.html" [ctxt]
-               [:#username] (h/content (sess/get :username ""))
-               [:#params] (h/content (str ctxt))
-               )
+(h/deftemplate index "ombs/index.html" [& ctxt])
 
 ;"Generate register page. If in given params founded keys for this page - fill fields with 
 ;founded values"
 (h/deftemplate register "ombs/register.html" [params] 
-               [:#username]     (h/set-attr :value (params "username"))
-               [:#birthdate]    (h/set-attr :value (params "birthdate"))
-               [:#student-flag] (if (not-empty (params "student-flag")) 
-                                  (h/set-attr :checked "on")  ; check
-                                  (h/set-attr "" "") )        ; unckeck
-               )
+  [:#uname] (h/content (sess/get :username "no user"))
+  [:#username]     (h/set-attr :value (params "username"))
+  [:#birthdate]    (h/set-attr :value (params "birthdate"))
+  [:#student-flag] (if (not-empty (params "student-flag")) 
+                     (h/set-attr :checked "on")  ; check
+                     (h/set-attr "" "") )        ; unckeck
+  )
 
-(h/deftemplate user "ombs/user.html" [params] 
-               [:#error] (h/content (if (:error params) (:error params) "" ))
-               [:#user]  (h/content (:username params))
-               )
+(h/deftemplate user "ombs/user.html" [] 
+  [:#user]  (h/content (sess/get :username "Anon"))
+  )
