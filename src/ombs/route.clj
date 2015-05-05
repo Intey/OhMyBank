@@ -10,12 +10,12 @@
             ))
 
 (defroutes main-routes
-           (GET "/" [_] handler/index)
-           (GET "/user" [_] handler/user)
-           (POST "/login" request handler/login)
-           (POST "/register" {params :params} (handler/register params))
-           (GET  "/register" [_] handler/regpage)
-           (not-found "Page not found") )
+  (GET "/" [_] handler/index)
+  (GET "/user" [_] handler/user)
+  (POST "/login" request handler/login)
+  (POST "/register" {params :params} (handler/register params))
+  (GET  "/register" [_] handler/regpage)
+  (not-found "Page not found") )
 
 (def engine 
   (-> main-routes 

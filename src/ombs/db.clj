@@ -3,9 +3,9 @@
             [korma.core :as sql]))
 
 (kdb/defdb korma-db (kdb/sqlite3
-                { :db "database.db"
-                 :user "user"
-                 :password "placeholder"}))
+                      { :db "database.db"
+                       :user "user"
+                       :password "placeholder"}))
 ; about many-to-many https://groups.google.com/d/msg/sqlkorma/r3kR6DyQZHo/RrQS_J8kkQ8J
 
 (declare events)

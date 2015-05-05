@@ -5,7 +5,7 @@
     [ombs.core :as core]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
-))
+    ))
 
 (defn index [& ctxt]
   "Handler. show index page"
