@@ -6,11 +6,20 @@
 
     ) )
 
+(def event-sel [:#event])
+(h/defsnippet event-elem "ombs/user.html" event-sel [{:keys [name remain price]}]
+  [:#e-name] (h/content name)
+  [:#e-cost] (h/content (str price))
+  [:#e-remain] (h/content (str remain))
+  ;[:#e-debt] (h/content d)
+  )
+
 (h/deftemplate index "ombs/index.html" [ctxt]
   [:#error] (fn [match] 
               (if-let [error (:error ctxt)]
-                ((h/content error)      match)  
-                ((h/content "") match) )))
+                ((h/content error) match)  
+                ((h/content "") match) ))
+  [:#event-list] (h/content (map #(event-elem %) (:events ctxt))) ) 
 
 ;"Generate register page. If in given params founded keys for this page - fill fields with 
 ;founded values"
@@ -22,14 +31,6 @@
   [:#student-flag] (if (not-empty (params "student-flag")) 
                      (h/set-attr :checked "on")  ; check
                      (h/set-attr "" "") )        ; unckeck
-  )
-
-(def event-sel [:#event])
-(h/defsnippet event-elem "ombs/user.html" event-sel [{:keys [name remain price]}]
-  [:#e-name] (h/content name)
-  [:#e-cost] (h/content (str price))
-  [:#e-remain] (h/content (str remain))
-  ;[:#e-debt] (h/content d)
   )
 
 (h/deftemplate user "ombs/user.html" 

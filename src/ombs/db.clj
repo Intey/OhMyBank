@@ -28,13 +28,13 @@
                                  :bdate birthdate 
                                  :rate rate } )))
 
-(defn add-event [name price & date]
+(defn add-event [ename price & [date]]
   (if-not (nil? date)
-    (sql/insert events (sql/values {:name name :price price :date date}))
-    (sql/insert events (sql/values {:name name :price price }))))
+    (sql/insert events (sql/values {:ename ename :price price :date date}))
+    (sql/insert events (sql/values {:ename ename :price price }))))
 
-(defn remove-user [name]
-  (sql/delete users (sql/where (= :name name))))
+(defn remove-user [ename]
+  (sql/delete users (sql/where (= :ename ename))))
 
 (defn get-user [uname]
   "Return map of user info"

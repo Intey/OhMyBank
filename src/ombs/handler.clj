@@ -7,9 +7,9 @@
     [noir.response :refer [redirect] ]
     ))
 
-(defn index [& ctxt]
+(defn index [& params]
   "Handler. show index page"
-  (view/index ctxt))
+  (view/index (conj (assoc {} :events (db/get-events-list)) params)))
 
 (defn regpage [_] (view/register {}))
 
@@ -43,6 +43,11 @@
   )
 
 ( defn user [& _]
-  ;(view/user (db/get-user-events (sess/get :username)))
-  (view/user (db/get-events-list))
+  (view/user (db/get-user-events (sess/get :username)))
+  ;(view/user (db/get-events-list))
+  )
+
+(defn add-event [{{ename :name price :price date :date} :params}]
+  (db/add-event ename price date)
+  (redirect "/")
   )

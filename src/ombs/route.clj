@@ -16,6 +16,7 @@
   (POST "/logout" request handler/logout)
   (POST "/register" {params :params} (handler/register params))
   (GET  "/register" [_] handler/regpage)
+  (POST "/addevent" request handler/add-event)
   (not-found "Page not found") )
 
 (def engine 
