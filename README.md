@@ -10,6 +10,10 @@ but so little automatiozation and human factor:
 - Bankir needs write debts. But also he needs work! Party time in his brain!
 - Some else
 
+## TODO
+- [ ] rate for event
+
+
 ## Tests
 Cat found in dir spec. In root of this - simple core specs. In directory `feature` can be founded web-driver
 specs.
@@ -22,9 +26,9 @@ specs.
 ### Tasks
 - [x] common db actions
 - [ ] write tests for core calculations
-- [ ] add user
+- [x] add user
 - [ ] add event 
-- [ ] private area 
+- [x] private area 
 - [ ] participate in event
 - [ ] common calculations 
 - [ ] UI
@@ -59,3 +63,4 @@ Tea {participants: 5, price: 70}
 - all users have different rate
     user party-pay = (price / (one_price)*participats - rate)
     
+
