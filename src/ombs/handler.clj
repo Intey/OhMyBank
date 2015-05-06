@@ -43,5 +43,6 @@
   )
 
 ( defn user [& _]
-  (view/user)
+  ;(view/user (db/get-user-events (sess/get :username)))
+  (view/user (db/get-events-list))
   )

@@ -24,7 +24,16 @@
                      (h/set-attr "" "") )        ; unckeck
   )
 
-(h/deftemplate user "ombs/user.html" [] 
+(def event-sel [:#event])
+(h/defsnippet event-elem "ombs/user.html" event-sel [{:keys [name remain price]}]
+  [:#e-name] (h/content name)
+  [:#e-cost] (h/content (str price))
+  [:#e-remain] (h/content (str remain))
+  ;[:#e-debt] (h/content d)
+  )
+
+(h/deftemplate user "ombs/user.html" 
+  [event-list] 
   [:#user]  (h/content (sess/get :username "Anon"))
-  ;snippets, candies, zerg and you
+  [:#event-list] (h/content (map #(event-elem %) event-list))
   )
