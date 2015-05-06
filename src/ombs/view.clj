@@ -26,4 +26,5 @@
 
 (h/deftemplate user "ombs/user.html" [] 
   [:#user]  (h/content (sess/get :username "Anon"))
+  ;snippets, candies, zerg and you
   )
