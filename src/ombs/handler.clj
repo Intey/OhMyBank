@@ -20,21 +20,26 @@
   )
 
 (defn register [params]
-  (if (core/reg-ok? (params "username") (params "pass1") (params "pass2"))  
+  (if (core/reg-ok? (:username params) (:password1 params) (:password2 params))
     ;true
     (do 
-      (db/add-user (params "username") (params "pass1") (params "birthdate") (core/rate (params "student-flag")))
-      (log-user (params "username")) )
+      (db/add-user (:username params) (:password1 params) (:birthdate params) (core/rate (:student-flag params)))
+      (log-user (:username params)) )
     ;fasle 
     (view/register params) 
     ))
 
 
 (defn login [ { {uname :username pass :password :as params} :params} ]
-  (if  (= pass (:password (db/get-user uname)))
+  (if (= pass (:password (db/get-user uname)))
     (log-user uname)
     (view/index {:error "wrong login/pass"})
     )
+  )
+
+(defn logout [& _] 
+  (sess/clear!)
+  (redirect "/")
   )
 
 ( defn user [& _]

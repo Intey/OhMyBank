@@ -38,9 +38,11 @@
 
 (defn get-user [uname]
   "Return map of user info"
-  (sql/select users
+  (first (sql/select users
               (sql/fields :name :bdate :balance :rate :password)
-              (sql/where (= :name uname))))
+              (sql/where (= :name uname))
+              (sql/limit 1)
+              )))
 
 (defn get-event [ename] 
   "Return fields of event"
