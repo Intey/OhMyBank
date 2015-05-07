@@ -2,23 +2,31 @@
   (:require 
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess] 
+    [noir.validation :as vld]
     ;[noir.util.anti-forgery :refer [anti-forgery-field]] ; security - need, add field fo srcf defence
 
     ) )
 
 (def event-sel [:#event])
+
 (h/defsnippet event-elem "ombs/user.html" event-sel [{:keys [name remain price]}]
-  [:#e-name] (h/content name)
+  [:#e-name] (h/content name )
   [:#e-cost] (h/content (str price))
   [:#e-remain] (h/content (str remain))
   ;[:#e-debt] (h/content d)
   )
 
 (h/deftemplate index "ombs/index.html" [ctxt]
-  [:#error] (fn [match] 
-              (if-let [error (:error ctxt)]
-                ((h/content error) match)  
-                ((h/content "") match) ))
+  ;[:#ename] (fn [match] 
+  ;  (vld/on-error :ename ((h/set-attr :placeholder (vld/get-errors :ename)) match) ))
+  [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors))))
+                ;(if-let [error (:error ctxt)]
+                ;     ((h/content error) match)  
+                ;     ((h/content "") match) ) 
+  ; hide log and reg forms, show logout form if have username in session 
+  ;[:#logform] (hide)
+  ;[:#regform] (hide)
+  ;[:#logout]  (unhide)
   [:#event-list] (h/content (map #(event-elem %) (:events ctxt))) ) 
 
 ;"Generate register page. If in given params founded keys for this page - fill fields with 

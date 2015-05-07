@@ -7,6 +7,7 @@
             [ombs.handler :as handler]
             [noir.session :refer [wrap-noir-session]]
             [noir.response :refer [redirect]]
+            [noir.validation :refer [wrap-noir-validation]]
             ))
 
 (defroutes main-routes
@@ -24,4 +25,5 @@
     (wrap-routes wrap-params)
     (wrap-routes wrap-keyword-params)
     (wrap-routes wrap-noir-session { :timeout (* 60 30) :timeout-response (redirect "/") })
+    (wrap-routes wrap-noir-validation)
     ))
