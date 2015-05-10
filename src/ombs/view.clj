@@ -9,14 +9,14 @@
 
 (def event-sel [:#event])
 
-(h/defsnippet event-elem "ombs/user.html" event-sel [{:keys [name remain price]}]
+(h/defsnippet event-elem "ombs/assets/user.html" event-sel [{:keys [name remain price]}]
   [:#e-name] (h/content name )
   [:#e-cost] (h/content (str price))
   [:#e-remain] (h/content (str remain))
   ;[:#e-debt] (h/content d)
   )
 
-(h/deftemplate index "ombs/index.html" [ctxt]
+(h/deftemplate index "ombs/assets/index.html" [ctxt]
   ;[:#ename] (fn [match] 
   ;  (vld/on-error :ename ((h/set-attr :placeholder (vld/get-errors :ename)) match) ))
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors))))
@@ -31,7 +31,7 @@
 
 ;"Generate register page. If in given params founded keys for this page - fill fields with 
 ;founded values"
-(h/deftemplate register "ombs/register.html" [params] 
+(h/deftemplate register "ombs/assets/register.html" [params] 
   [:#uname] (h/content (sess/get :username "no user"))
   [:#error] (h/content (str params))
   [:#username]     (h/set-attr :value (params "username"))
@@ -41,7 +41,7 @@
                      (h/set-attr "" "") )        ; unckeck
   )
 
-(h/deftemplate user "ombs/user.html" 
+(h/deftemplate user "ombs/assets/user.html" 
   [event-list] 
   [:#user]  (h/content (sess/get :username "Anon"))
   [:#event-list] (h/content (map #(event-elem %) event-list))
