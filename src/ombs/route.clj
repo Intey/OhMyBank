@@ -18,6 +18,7 @@
   (POST "/register" {params :params} (handler/register params))
   (GET  "/register" [_] handler/regpage)
   (POST "/addevent" request handler/add-event)
+  (POST "/participate" request handler/participate)
   (not-found "Page not found") )
 
 (def engine 

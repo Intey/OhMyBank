@@ -58,3 +58,8 @@
     (vld/errors? :ename :eprice :edate) (do (db/add-event ename price date) (redirect "/user"))
     (index))
   )
+
+(defn participate [req]
+  ;(db/add-participate (sess/get :username) )
+  (str req)
+  )
