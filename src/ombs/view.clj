@@ -9,14 +9,15 @@
 
 (def event-sel [:#event])
 
-(h/defsnippet event-elem "ombs/assets/user.html" event-sel [{:keys [name remain price]}]
-  [:#e-name] (h/content name )
-  [:#e-cost] (h/content (str price))
-  [:#e-remain] (h/content (str remain))
-  ;[:#e-debt] (h/content d)
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name remain price]}]
+  [:#ename] (h/content name )
+  [:#eprice] (h/content (str price))
+  [:#eremain] (h/content (str remain))
   )
 
-(h/deftemplate index "ombs/assets/index.html" [ctxt]
+(defmacro create-error [tag content] `({:tag p :content ("message")}) )
+
+(h/deftemplate index "../resources/public/index.html" [ctxt]
   ;[:#ename] (fn [match] 
   ;  (vld/on-error :ename ((h/set-attr :placeholder (vld/get-errors :ename)) match) ))
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors))))
@@ -27,11 +28,11 @@
   ;[:#logform] (hide)
   ;[:#regform] (hide)
   ;[:#logout]  (unhide)
-  [:#event-list] (h/content (map #(event-elem %) (:events ctxt))) ) 
+  [:#event-list] (h/content 
+                   (map #(event-elem %) (:events ctxt)) ) );make events list 
 
-;"Generate register page. If in given params founded keys for this page - fill fields with 
-;founded values"
-(h/deftemplate register "ombs/assets/register.html" [params] 
+;Generate register page. If in given params founded keys for this page - fill fields with founded values
+(h/deftemplate register "../resources/public/register.html" [params] 
   [:#uname] (h/content (sess/get :username "no user"))
   [:#error] (h/content (str params))
   [:#username]     (h/set-attr :value (params "username"))
@@ -41,7 +42,7 @@
                      (h/set-attr "" "") )        ; unckeck
   )
 
-(h/deftemplate user "ombs/assets/user.html" 
+(h/deftemplate user "../resources/public/user.html" 
   [event-list] 
   [:#user]  (h/content (sess/get :username "Anon"))
   [:#event-list] (h/content (map #(event-elem %) event-list))

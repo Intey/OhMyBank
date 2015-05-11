@@ -1,8 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Example</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/reset.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
 </head>
 <body>
     <header>
@@ -22,14 +26,11 @@
         <label for="edate">Event date:</label>     <input id="edate"  type="date"   name="date"  value="2015-01-01"/>
         <input type="submit" value="Add event"/>
     </form>
-    <ul id="event-list"> <!-- events list -->
-        <li id="event">
-            <p id="e-name"></p>
-            <span id="e-cost">cost</span>
-            <span id="e-remain">remain</span>
-            <span onclick="participate(this)" id="participate">Participate</input>
-        </li>
+    <ul id="event-list">
+        <!-- inserted from event.html by enlive snippets -->
     </ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <script>
     function participate(caller){
         var ename = $(caller).prevAll().first().text();
