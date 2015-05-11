@@ -33,10 +33,11 @@
 
 
 (defn login [ { {uname :username pass :password :as params} :params} ]
-  (if (= pass (:password (db/get-user uname)))
+  (vld/rule (vld/has-value? uname) [:uname "Username can't be empty"])
+  (vld/rule (= pass (:password (db/get-user uname))) [:upassword "Username can't be empty"])
+  (if-not (vld/errors? :uname :upassword)  
     (log-user uname)
-    (view/index {:error "wrong login/pass"})
-    )
+    (index))
   )
 
 (defn logout [& _] 
