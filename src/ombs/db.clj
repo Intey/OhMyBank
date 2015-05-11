@@ -63,3 +63,7 @@
   (sql/select participants (sql/fields)
               (sql/with users (sql/where (= :name uname)) (sql/fields))
               (sql/with events)))
+
+(defn add-participate [uname ename]
+  ;(sql/insert participate (sql/values { :uid (get-uid uname) :eid (get-eid ename)}))
+  )

@@ -33,10 +33,15 @@
     <script src="/js/bootstrap.min.js"></script>
     <script>
     function participate(caller){
-        var ename = $(caller).prevAll().first().text();
+        var ename = $(caller).prevAll("#ename").text();
         alert(ename);
-        $.post("/participate", function(data) {
-            alert(data);
+        $.post("/participate", { "event-name": ename }, function(data) {
+            if (data != "") { //check if all is ok. 
+                //Maybe check error message from response
+                $(caller).text("You are participate this event");
+                $(caller).removeAttr("onclick");
+                alert(data);
+            }
         });
     }
     </script>
