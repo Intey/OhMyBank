@@ -39,10 +39,10 @@
 (defn get-user [uname]
   "Return map of user info"
   (first (sql/select users
-              (sql/fields :name :bdate :balance :rate :password)
-              (sql/where (= :name uname))
-              (sql/limit 1)
-              )))
+                     (sql/fields :name :bdate :balance :rate :password)
+                     (sql/where (= :name uname))
+                     (sql/limit 1)
+                     )))
 
 (defn get-event [ename] 
   "Return fields of event"
@@ -64,6 +64,25 @@
               (sql/with users (sql/where (= :name uname)) (sql/fields))
               (sql/with events)))
 
+(defn get-uid [uname] 
+  (first (sql/select users (sql/fields :id) 
+              (sql/where (= :name uname)))))
+
+(defn get-eid [ename] 
+  (first (sql/select events (sql/fields :id) 
+              (sql/where (= :name ename)))))
+
+(defn participapated? [uname ename]
+  (not (empty? 
+    (sql/select participants 
+      (sql/where 
+        (and (= :uid (get-uid uname)) 
+             (= :eid (get-eid ename)) ))))))
+
 (defn add-participate [uname ename]
-  ;(sql/insert participate (sql/values { :uid (get-uid uname) :eid (get-eid ename)}))
+  (if-not (participapated? uname ename)
+    (do 
+      (sql/insert participants (sql/values {:uid (get-uid uname) :eid (get-eid ename)}))
+      "Success." ) 
+    (str uname " already participate " ename " event."))
   )

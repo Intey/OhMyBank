@@ -26,21 +26,20 @@
         <label for="edate">Event date:</label>     <input id="edate"  type="date"   name="date"  value="2015-01-01"/>
         <input type="submit" value="Add event"/>
     </form>
-    <ul id="event-list">
+    <table id="event-list">
         <!-- inserted from event.html by enlive snippets -->
-    </ul>
+    </table>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script>
     function participate(caller){
-        var ename = $(caller).prevAll("#ename").text();
-        alert(ename);
+        var ename = $(caller).parent().prevAll("#ename").text();
         $.post("/participate", { "event-name": ename }, function(data) {
-            if (data != "") { //check if all is ok. 
+            alert(data);
+            if (data == "Success") { //check if all is ok. 
                 //Maybe check error message from response
                 $(caller).text("You are participate this event");
                 $(caller).removeAttr("onclick");
-                alert(data);
             }
         });
     }
