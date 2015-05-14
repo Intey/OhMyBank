@@ -1,7 +1,11 @@
 <html>
 <head>
-    <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>User page</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/reset.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
 </head>
 <body>
     <div>
@@ -12,8 +16,23 @@
         <input type="submit" value="logout"/>
     </form>
     </div>
-    <ul id="event-list">
+    <table class="table" id="event-list">
         <!-- inserted from event.html by enlive snippets -->
-    </ul>
+    </table>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+    function participate(caller){
+        var ename = $(caller).parent().prevAll("#ename").text();
+        $.post("/participate", { "event-name": ename }, function(data) {
+            alert(data);
+            if (data != "") { //check if all is ok. 
+                //Maybe check error message from response
+                $(caller).text("You are participate this event");
+                $(caller).removeAttr("onclick");
+            }
+        });
+    }
+    </script>
 </body>
 </html>

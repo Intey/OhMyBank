@@ -17,7 +17,7 @@
 
 (defmacro create-error [tag content] `({:tag p :content ("message")}) )
 
-(h/deftemplate index "../resources/public/index.html" [ctxt]
+(h/deftemplate index "../resources/public/index.html" [& [ctxt]]
   ;[:#ename] (fn [match] 
   ;  (vld/on-error :ename ((h/set-attr :placeholder (vld/get-errors :ename)) match) ))
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors))))
@@ -28,8 +28,7 @@
   ;[:#logform] (hide)
   ;[:#regform] (hide)
   ;[:#logout]  (unhide)
-  [:#event-list] (h/content 
-                   (map #(event-elem %) (:events ctxt)) ) );make events list 
+  )
 
 ;Generate register page. If in given params founded keys for this page - fill fields with founded values
 (h/deftemplate register "../resources/public/register.html" [params] 
@@ -44,6 +43,6 @@
 
 (h/deftemplate user "../resources/public/user.html" 
   [event-list] 
-  [:#user]  (h/content (sess/get :username "Anon"))
+  [:#user] (h/content (sess/get :username "Anon"))
   [:#event-list] (h/content (map #(event-elem %) event-list))
   )
