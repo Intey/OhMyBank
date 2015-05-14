@@ -9,16 +9,13 @@
 ; about many-to-many https://groups.google.com/d/msg/sqlkorma/r3kR6DyQZHo/RrQS_J8kkQ8J
 
 (declare events)
-(sql/defentity 
-  users
+(sql/defentity users
   (sql/many-to-many events :participants {:lfk :uid :rfk :eid}))
 
-(sql/defentity 
-  events
+(sql/defentity events
   (sql/many-to-many users :participants {:lfk :eid :rfk :uid}))
 
-(sql/defentity 
-  participants
+(sql/defentity participants
   (sql/belongs-to events {:fk :eid})
   (sql/belongs-to users {:fk :uid}))
 
@@ -84,5 +81,4 @@
     (do 
       (sql/insert participants (sql/values {:uid (get-uid uname) :eid (get-eid ename)}))
       "Success." ) 
-    (str uname " already participate " ename " event."))
-  )
+    (str uname " already participate " ename " event.")) )
