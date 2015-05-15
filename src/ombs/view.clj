@@ -9,15 +9,18 @@
 
 (def event-sel [:#event])
 
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name remain price]}]
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name remain price username]}]
   [:#ename] (h/content name )
   [:#eprice] (h/content (str price))
   [:#eremain] (h/content (str remain))
+  [:#participate] (fn [match] (if (= (sess/get :username) username) 
+                                ((h/set-attr :style "display: none")   match) 
+                                ((h/set-attr :disabled "disabled") match) ) )
   )
 
 (defmacro create-error [tag content] `({:tag p :content ("message")}) )
 
-(h/deftemplate index "../resources/public/index.html" [& [ctxt]]
+(h/deftemplate index "../resources/public/index.html" [& ctxt]
   ;[:#ename] (fn [match] 
   ;  (vld/on-error :ename ((h/set-attr :placeholder (vld/get-errors :ename)) match) ))
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors))))

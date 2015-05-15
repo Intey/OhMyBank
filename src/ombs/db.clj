@@ -19,6 +19,8 @@
   (sql/belongs-to events {:fk :eid})
   (sql/belongs-to users {:fk :uid}))
 
+(sql/defentity participation)
+
 (defn add-user [uname password birthdate rate]
   (sql/insert users (sql/values {:name uname 
                                  :password password 
@@ -82,3 +84,7 @@
       (sql/insert participants (sql/values {:uid (get-uid uname) :eid (get-eid ename)}))
       "Success." ) 
     (str uname " already participate " ename " event.")) )
+
+(defn get-events [& [username]]
+  (sql/select participation)
+  )

@@ -47,7 +47,9 @@
   )
 
 ( defn user [& _]
-  (view/user (db/get-user-events (sess/get :username)))
+  (if-let [username (sess/get :username)]
+    (view/user (db/get-events ))
+    (redirect "/"))
   )
 
 (defn add-event [{{ename :name price :price date :date :as params} :params}]
@@ -62,6 +64,6 @@
   )
 
 (defn participate [{{ename :event-name} :params}]
-  ;(db/add-participate (sess/get :username) ename)
+  (db/add-participate (sess/get :username) ename)
   (str (assoc {} :ok (str "Now, user " (sess/get :username) " participate in event \"" ename "\"")))
   )
