@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Oh My Bank</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/reset.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+</head>
+<body>
+    <header>
+        <form method="get" action="/register" id="regform">
+            <input type="submit" value="log up"/>
+        </form>
+        <form method="post" id="logform" action="/login">
+            <input type="text" name="username" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <input type="submit" value="log in"/>
+        </form>
+    </header>
+    <span id="error"></span>
+    <form method="post" action="/addevent">
+        <label for="ename">Event name:</label>      <input id="ename"  type="text"   name="name"  value="Event name"/>
+        <label for="eprice">Event price:</label>    <input id="eprice" type="number" name="price" value="0"/>
+        <label for="edate">Event date:</label>     <input id="edate"  type="date"   name="date"  value="2015-01-01"/>
+        <input type="submit" value="Add event"/>
+    </form>
+</body>
+</html>
