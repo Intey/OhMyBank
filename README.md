@@ -22,14 +22,14 @@ specs.
 ### Tasks
 - [x] common db actions
 - [ ] write tests for core calculations
-- [ ] add user
-- [ ] add event 
-- [ ] private area 
+- [x] add user
+- [x] add event 
+- [x] private area 
 - [ ] participate in event
 - [ ] common calculations 
 - [ ] UI
 - [ ] show my debt on some event
-- [ ] show all my events
+- [x] show all my events
 - [ ] show my full debt
 
 ## And there ombs come Oh my Bank (Small)
