@@ -11,12 +11,8 @@ but so little automatiozation and human factor:
 - Some else
 
 ## TODO
-- [ ] rate for event
+- [ ] rate for event (NOTE: pizza parts)
 
-
-## Tests
-Cat found in dir spec. In root of this - simple core specs. In directory `feature` can be founded web-driver
-specs.
 ## Commands
 `lein test` for run all specs.
 `lein spec -a` for run watcher, that run tests after their update.
@@ -27,13 +23,13 @@ specs.
 - [x] common db actions
 - [ ] write tests for core calculations
 - [x] add user
-- [ ] add event 
+- [x] add event 
 - [x] private area 
 - [ ] participate in event
 - [ ] common calculations 
 - [ ] UI
 - [ ] show my debt on some event
-- [ ] show all my events
+- [x] show all my events
 - [ ] show my full debt
 
 ## And there ombs come Oh my Bank (Small)
