@@ -3,7 +3,7 @@ CREATE TABLE events(
     [name] VARCHAR(200) NOT NULL,
     [price] INTEGER NOT NULL,
     [remain] INTEGER NOT NULL,
-    [date] DATE NOT NULL DEFAULT current_timestamp,
+    [date] DATE NOT NULL DEFAULT (date('now')),
     UNIQUE([name], [date])
     );
 
