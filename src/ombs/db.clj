@@ -86,5 +86,4 @@
     (str uname " already participate " ename " event.")) )
 
 (defn get-events [& [username]]
-  (sql/select participation)
-  )
+  (sql/select participation) )
