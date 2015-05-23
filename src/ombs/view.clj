@@ -8,14 +8,17 @@
     ) )
 
 (def event-sel [:#event])
-
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name remain price username]}]
-  [:#ename] (h/content name )
+(def participate-button-sel [:#event :> :button])
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [event remain price username]}]
+  [:#ename] (h/content event)
   [:#eprice] (h/content (str price))
   [:#eremain] (h/content (str remain))
-  [:#participate] (fn [match] (if (= (sess/get :username) username) 
-                                ((h/set-attr :style "display: none")   match) 
-                                ((h/set-attr :disabled "disabled") match) ) )
+  [:#participate] (fn [match] 
+                    (if (= (sess/get :username) username) ;if user participated in events
+                      ;both should use participate-button-sel
+                      ((h/set-attr :style "display: none") match)
+                      ((h/set-attr :none "none") match) 
+                      ))
   )
 
 (defmacro create-error [tag content] `({:tag p :content ("message")}) )
