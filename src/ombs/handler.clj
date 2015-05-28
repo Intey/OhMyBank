@@ -48,7 +48,7 @@
 
 ( defn user [& _]
   (if-let [username (sess/get :username)]
-    (view/user (db/get-events ))
+    (view/user (db/get-user-events username))
     (redirect "/"))
   )
 
@@ -64,6 +64,19 @@
   )
 
 (defn participate [{{ename :event-name} :params}]
-  (db/add-participate (sess/get :username) ename)
-  (str (assoc {} :ok (str "Now, user " (sess/get :username) " participate in event \"" ename "\"")))
+  "Add participation of current user and selected event(given as param from post)"
+  (let [uname (sess/get :username) 
+        uid (db/get-uid uname) 
+        eid (db/get-eid ename)]
+    (vld/clear-errors!)
+    (vld/rule (vld/has-value? uid) [:user-exist "User " uname " not found in database"])
+    (vld/rule (vld/has-value? eid) [:event-exist (str "Event " ename " not found in database")])
+    (if-not (vld/errors? :user-exist :event-exist) 
+      (do 
+        (println (str "uid:" uid " | eid:" eid))
+        (db/add-participate uid eid)  
+        (str (assoc {} :ok (str "Now, user " uname " participate in event \"" ename "\"")))       
+        ) 
+      (str (vld/get-errors :user-exist :event-exist)) ) 
+    )
   )
