@@ -24,9 +24,9 @@
 (sql/defentity groupedParticipants)
 
 (defn add-user [uname password birthdate rate]
-  (sql/insert users (sql/values {:name uname 
-                                 :password password 
-                                 :bdate birthdate 
+  (sql/insert users (sql/values {:name uname
+                                 :password password
+                                 :bdate birthdate
                                  :rate rate } )))
 
 (defn add-event [ename price & [date]]
@@ -45,9 +45,9 @@
                      (sql/limit 1)
                      )))
 
-(defn get-event [ename] 
+(defn get-event [ename]
   "Return fields of event"
-  (sql/select events 
+  (sql/select events
               (sql/fields :name :price :remain)
               (sql/where (= :name ename))))
 
@@ -56,22 +56,22 @@
   (sql/fields :name :bdate :balance :rate :password)
   (sql/select users))
 
-(defn get-events-list [] 
+(defn get-events-list []
   "Return map of events"
   (sql/select events))
 
 
-(defn get-uid [uname] 
-  (:id (first (sql/select users (sql/fields :id) 
+(defn get-uid [uname]
+  (:id (first (sql/select users (sql/fields :id)
               (sql/where (= :name uname))))))
 
-(defn get-eid [ename] 
-  (:id (first (sql/select events (sql/fields :id) 
+(defn get-eid [ename]
+  (:id (first (sql/select events (sql/fields :id)
               (sql/where (= :name ename))))))
 
 (defn participapated? [uid eid]
-  (do (println (str "TRACE:::::::: " uid " E: " eid)) 
-    (not (empty? (sql/select participants (sql/where 
+  (do (println (str "TRACE:::::::: " uid " E: " eid))
+    (not (empty? (sql/select participants (sql/where
                                             (and (= :uid uid)
                                                  (= :eid eid))))))))
 
