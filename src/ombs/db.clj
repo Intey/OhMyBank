@@ -21,6 +21,8 @@
 
 (sql/defentity participation)
 
+(sql/defentity groupedParticipants)
+
 (defn add-user [uname password birthdate rate]
   (sql/insert users (sql/values {:name uname 
                                  :password password 

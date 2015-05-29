@@ -28,3 +28,13 @@ LEFT JOIN participants p
 on e.id = p.eid
 LEFT JOIN users u
 on u.id = p.uid;
+
+CREATE VIEW groupedParticipants
+AS 
+SELECT e.name event, e.date, e.price, e.remain, group_concat(u.name) users
+FROM events e
+LEFT JOIN participants p
+on e.id = p.eid
+LEFT JOIN users u
+on u.id = p.uid
+group by e.name;
