@@ -1,13 +1,15 @@
 (ns ombs.core
   "contains main logic"
-  (:require [ombs.db :as db] 
+  (:require [ombs.db :as db]
+            [ombs.ddf :as ddf]
             [noir.validation :as valids]
+
             ))
 
-(defn reg-ok? [username pass1 pass2] 
+(defn reg-ok? [username pass1 pass2]
   "check user post params on errors, and return false if some is not pass"
   (if (and (not (empty? username)) (> (count pass1) 8) (= pass1 pass2) )
-    true 
+    true
     false
     )
   )
@@ -17,3 +19,19 @@
   (if (= "on" student?)
     0.5
     1.0 ) )
+
+(defn event-users []
+  "Reorganize participation result to map, where key - is event,
+  and value - vector of users, that participate this event."
+  (map
+  (fn [[k v]]
+     {:event k :users (mapv :username v)}) ;this func map usernames in vector
+  (group-by ddf/extract-event (db/participated-list) ) ) )
+
+(defn need-button? [uname event-users-pair]
+ (->> event-users-pair
+      :users
+      (some #{uname}) boolean not))
+  ;(apply
+  ;(fn [[k v]] (nil? (some #{uname} v ))) ; is user in participate list?
+  ;event-users-pair) )

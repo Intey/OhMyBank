@@ -84,10 +84,8 @@
               (sql/with users (sql/where (= :name uname)) (sql/fields))
               (sql/with events (sql/fields [:name :event]))))
 
-(defn participated-list [uname]
+(defn participated-list []
   ;need grouping by event params. Should get event params and vector of it's users.
   ;Actually it's solved by sqlite.
- (map
-  #(assoc % :participated? (= (:username %) uname))
-  (sql/select participation) ) )
+  (sql/select participation) )
 
