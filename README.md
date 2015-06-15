@@ -59,4 +59,8 @@ Tea {participants: 5, price: 70}
 - all users have different rate
     user party-pay = (price / (one_price)*participats - rate)
     
+### design links
+[Simple Grid](http://tympanus.net/codrops/2013/04/17/responsive-full-width-grid)
+[Improved Grid](http://tympanus.net/Development/AnimatedGridLayout)
+[Product Comparison(Just Nice solution)](http://tympanus.net/codrops/2015/05/26/product-comparison-layout-effect/)
 
