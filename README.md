@@ -20,17 +20,7 @@ but so little automatiozation and human factor:
 `lein repl` for run REPL with this project (My advice is use [LightTable](http://lighttable.com)).
 
 ### Tasks
-- [x] common db actions
-- [ ] write tests for core calculations
-- [x] add user
-- [x] add event 
-- [x] private area 
-- [ ] participate in event
-- [ ] common calculations 
-- [ ] UI
-- [ ] show my debt on some event
-- [x] show all my events
-- [ ] show my full debt
+Look in [Asana](https://app.asana.com/0/32535141326586/32535141326586)
 
 ## And there ombs come Oh my Bank (Small)
 It's a web-app made on clojure libs [ring](https://github.com/ring-clojure/ring), [compojure](https://github.com/weavejester/compojure) and many 
