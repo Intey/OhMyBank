@@ -26,5 +26,26 @@
         <label for="edate">Event date:</label>     <input id="edate"  type="date"   name="date"  value="2015-01-01"/>
         <input type="submit" value="Add event"/>
     </form>
+    <button onclick="testMsg()">test WebSocket</button>
+    <script>
+        var socket = new WebSocket("ws://localhost:8080/ws");
+
+        socket.onopen = function() { alert("Connected"); };
+
+        socket.onclose = function(event) {
+            if (event.wasClean) { alert("Closed clearly"); } 
+            else { console.log(event); }
+        };
+
+        socket.onmessage = function(event) { 
+            alert("get data: " + event.data);
+        };
+
+        socket.onerror = function(error) {
+            alert("Error: " + error.message);
+        };
+
+        function testMsg() { socket.send("Tesing..."); }
+    </script>
 </body>
 </html>

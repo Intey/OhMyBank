@@ -3,7 +3,7 @@
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess]
     [noir.validation :as vld]
-    [ombs.core :as core]
+    [ombs.ddm :as ddm]
     ;[noir.util.anti-forgery :refer [anti-forgery-field]] ; security - need, add field fo srcf defence
 
     ) )
@@ -43,9 +43,10 @@
   [:#ename] (h/content event)
   [:#eprice] (h/content (str price))
   [:#eremain] (h/content (str remain))
+  [:#edebt] (h/content (ddm/user-debt))
   [:#participate] (fn [match]
                     ;(println (str "list:" users "session user:" (sess/get :username) "need btn:" (core/need-button? (sess/get :username) users)))
-                    (if (core/need-button? (sess/get :username) event-user)  ;if user participated in events
+                    (if (ddm/need-button? (sess/get :username) event-user)  ;if user participated in events
                       ;both should use participate-button-sel
                       ((h/set-attr :none "none") match)      
                       ((h/set-attr :style "display: none") match)

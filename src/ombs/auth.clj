@@ -3,7 +3,7 @@
     [ombs.view :as view]
     [ombs.db :as db]
     [ombs.handler :as handler]
-    [ombs.core :as core]
+    [ombs.ddm :as ddm]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
     [noir.validation :as vld] )
@@ -18,10 +18,10 @@
   )
 
 (defn register [params]
-  (if (core/reg-ok? (:username params) (:password1 params) (:password2 params))
+  (if (ddm/reg-ok? (:username params) (:password1 params) (:password2 params))
     ;true
     (do
-      (db/add-user (:username params) (:password1 params) (:birthdate params) (core/rate (:student-flag params)))
+      (db/add-user (:username params) (:password1 params) (:birthdate params) (ddm/rate (:student-flag params)))
       (log-user (:username params)) )
     ;fasle
     (view/register params)

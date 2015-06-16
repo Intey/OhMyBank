@@ -1,37 +1,26 @@
 (ns ombs.core
-  "contains main logic"
-  (:require [ombs.db :as db]
-            [ombs.ddf :as ddf]
-            [noir.validation :as valids]
+  (:require 
+    [ring.middleware.reload :refer [wrap-reload]] 
+    ;[ring.adapter.jetty9 :refer [run-jetty]]
+    [org.httpkit.server :refer [run-server]]
+    [ombs.route :refer [engine ]]))
 
-            ))
+(def ws-handler
+  {:on-connect (fn [ws] (println "opened"))
+   :on-close (fn [ws status reason] (println "closed"))
+   :on-error (fn [ws e] (println "error"))
+   :on-text (fn [ws msg]
+              ;(send! ws msg)
+              (println "text")
+              )
+   :on-byte (fn [ws bytes offset length] 
+              (println "bytes")
+              ) } )
 
-(defn reg-ok? [username pass1 pass2]
-  "check user post params on errors, and return false if some is not pass"
-  (if (and (not (empty? username)) (> (count pass1) 8) (= pass1 pass2) )
-    true
-    false
-    )
-  )
+(def in-dev? false) ;; TODO read a config variable from command line, env, or file?
 
-(defn rate [student?]
-  "Return rate for user. student - 0.5; else - 1."
-  (if (= "on" student?)
-    0.5
-    1.0 ) )
-
-(defn event-users []
-  "Reorganize participation result to map, where key - is event,
-  and value - vector of users, that participate this event."
-  (map
-  (fn [[k v]]
-     {:event k :users (mapv :username v)}) ;this func map usernames in vector
-  (group-by ddf/extract-event (db/participated-list) ) ) )
-
-(defn need-button? [uname event-users-pair]
- (->> event-users-pair
-      :users
-      (some #{uname}) boolean not))
-  ;(apply
-  ;(fn [[k v]] (nil? (some #{uname} v ))) ; is user in participate list?
-  ;event-users-pair) )
+(defn -main [& args] ;; entry point, lein run will pick up and start from here
+  (let [handler (if in-dev? 
+                  (wrap-reload engine) ;; only reload when dev
+                  engine)]
+    (run-server handler {:port 8080})))

@@ -2,10 +2,11 @@
   (:require
     [ombs.view :as view]
     [ombs.db :as db]
-    [ombs.core :as core]
+    [ombs.ddm :as ddm]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
     [noir.validation :as vld]
+    [org.httpkit.server :refer :all]
     ))
 
 (defn index [& [params]]
@@ -15,7 +16,7 @@
 
 ( defn user [& _]
   (if-let [username (sess/get :username)] ; if any user logged
-    (view/user (core/event-users))
+    (view/user (ddm/event-users))
     (redirect "/"))
   )
 
@@ -47,3 +48,17 @@
       (str (vld/get-errors :user-exist :event-exist)) )
     )
   )
+(defn ws-h [req]
+  (with-channel req channel ; get the channel
+    ;; communicate with client using method defined above
+    (on-close channel (fn [status]
+                        (println "channel closed")))
+    (if (websocket? channel)
+      "websocket"
+      "HTTP channel")
+    (on-receive channel (fn [data]       ; data received from client
+                          ;; An optional param can pass to send!: close-after-send?
+                          ;; When unspecified, `close-after-send?` defaults to true for HTTP channels
+                          ;; and false for WebSocket.  (send! channel data close-after-send?)
+                          (println (str "recieve: " data))
+                          (send! channel data))))) ; data is sent directly to the client
