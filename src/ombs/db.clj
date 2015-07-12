@@ -78,6 +78,7 @@
   (println (str uid ":" eid))
   (if-not ( participapated? uid eid) 
     (sql/insert participants (sql/values {:uid uid :eid eid }))
+    nil
     ) )
 
 (defn get-user-events [uname]

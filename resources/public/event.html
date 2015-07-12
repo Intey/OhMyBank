@@ -1,9 +1,10 @@
 <html>
 <body>
-    <button id="event" onclick="participate(this)">
-        <div id="ename"></div>
-        <div id="eprice"></div>
-        <div id="eremain"></div>
-    </button>
+    <form id="event" method="post" action="/participate">
+        <input type="text" readonly id="ename"  value="" name="event-name"></input>
+        <input type="text" disabled id="eprice" value=""></input>
+        <input type="text" disabled id="edebt"  value=""></input>
+        <input type="submit" id="action" value="participate">
+    </form>
 </body>
 </html>

@@ -40,9 +40,9 @@
     (vld/rule (vld/has-value? eid) [:event-exist (str "Event " ename " not found in database")])
     (if-not (vld/errors? :user-exist :event-exist)
       (do
-        (println (str "uid:" uid " | eid:" eid))
-        (db/add-participate uid eid)
-        (str (assoc {} :ok (str "Now, user " uname " participate in event \"" ename "\"")))
+        (if-not (nil? (db/add-participate uid eid))
+          (str (assoc {} :ok (str "Now, user " uname " participate in event \"" ename "\""))))
+          (redirect "/user")
         )
       (str (vld/get-errors :user-exist :event-exist)) )
     )
