@@ -70,14 +70,15 @@
               (sql/where (= :name ename))))))
 
 (defn participapated? [uid eid]
-  (do (println (str "TRACE:::::::: " uid " E: " eid))
-    (not (empty? (sql/select participants (sql/where
-                                            (and (= :uid uid)
-                                                 (= :eid eid))))))))
+  (not (empty? (sql/select participants (sql/where
+                                          (and (= :uid uid)
+                                               (= :eid eid)))))))
 
 (defn add-participate [uid eid]
   (println (str uid ":" eid))
-  (sql/insert participants (sql/values {:uid uid :eid eid })) )
+  (if-not ( participapated? uid eid) 
+    (sql/insert participants (sql/values {:uid uid :eid eid }))
+    ) )
 
 (defn get-user-events [uname]
   (sql/select participants (sql/fields)

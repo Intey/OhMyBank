@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/reset.css"/>
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
 </head>
 <body>
     <div>
@@ -16,23 +14,19 @@
         <input type="submit" value="logout"/>
     </form>
     </div>
-    <table class="table" id="event-list">
+    <div id="event-list">
         <!-- inserted from event.html by enlive snippets -->
-    </table>
-    <script src="/js/jquery-2.1.4.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    </div>
     <script>
     function participate(caller){
-        var ename = $(caller).parent().prevAll("#ename").text();
+        var ename = $(caller).children("#ename").text();
         $.post("/participate", { "event-name": ename }, function(data) {
             alert(data);
-            if (data != "") { //check if all is ok. 
-                //Maybe check error message from response
-                $(caller).text("You are participate this event");
-                $(caller).removeAttr("onclick");
-            }
+            // disable button
         });
     }
     </script>
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

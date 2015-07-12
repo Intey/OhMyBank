@@ -43,13 +43,20 @@
   [:#ename] (h/content event)
   [:#eprice] (h/content (str price))
   [:#eremain] (h/content (str remain))
-  [:#participate] (fn [match]
+  [:#event] (fn [match]
                     ;(println (str "list:" users "session user:" (sess/get :username) "need btn:" (core/need-button? (sess/get :username) users)))
                     (if (core/need-button? (sess/get :username) event-user)  ;if user participated in events
                       ;both should use participate-button-sel
-                      ((h/set-attr :none "none") match)      
-                      ((h/set-attr :style "display: none") match)
-                      )))
+                      ((h/set-attr 
+                         :onclick "participate(this)"
+                         :style "background: #777777"
+                         ) match)      
+                      (
+                       (h/set-attr :onclick ""
+                                   :style "background: #cacaca"
+                                   ) match)
+                     ) )
+)
 
 
 (h/deftemplate user "../resources/public/user.html"
