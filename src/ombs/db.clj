@@ -74,12 +74,20 @@
                                           (and (= :uid uid)
                                                (= :eid eid)))))))
 
+(defn event-price [id]
+  (-> (sql/select events (sql/where (= :id id)) (sql/fields [:price]))
+    first
+    :price
+    )
+  )
 (defn add-participate [uid eid]
   (println (str uid ":" eid))
   (if-not ( participapated? uid eid) 
-    (sql/insert participants (sql/values {:uid uid :eid eid }))
+    (sql/insert participants (sql/values {:uid uid :eid eid :debt (event-price eid)}))
     nil
-    ) )
+    ) 
+
+)
 
 (defn get-user-events [uname]
   (sql/select participants (sql/fields)

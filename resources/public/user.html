@@ -6,17 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div>
-        <div>
-            <span>Welcome, </span><span id="user"></span>
-        </div>
-    <form method="post" id="logform" action="/logout">
-        <input type="submit" value="logout"/>
-    </form>
-    </div>
-    <div id="event-list">
+    <header>
+        <span>Welcome, </span><span id="user"></span>
+        <form method="post" id="logform" action="/logout">
+            <input type="submit" value="logout"/>
+        </form>
+    </header>
+    <main>
         <!-- inserted from event.html by enlive snippets -->
-    </div>
+    </main>
+    <!-- Progressive enhancement!
     <script>
     function participate(caller){
         var ename = $(caller).children("#ename").text();
@@ -28,5 +27,6 @@
     </script>
     <script src="/js/jquery-2.1.4.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    -->
 </body>
 </html>

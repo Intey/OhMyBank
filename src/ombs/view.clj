@@ -36,7 +36,7 @@
   )
 
 
-(def event-sel [:#event])
+(def event-sel [:article])
 ;(def participate-button-sel [:#event :> :button])
 
 (h/defsnippet event-elem "../resources/public/event.html" event-sel [{{:keys [event price remain date]} :event users :users :as event-user-list}]
@@ -54,5 +54,5 @@
 (h/deftemplate user "../resources/public/user.html"
   [event-list]
   [:#user] (h/content (sess/get :username))
-  [:#event-list] (h/content (map #(event-elem %) event-list))
+  [:main] (h/content (map #(event-elem %) event-list))
   )
