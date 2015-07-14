@@ -1,8 +1,8 @@
 CREATE TABLE events(
     [id] INTEGER PRIMARY KEY AUTOINCREMENT,
     [name] VARCHAR(200) NOT NULL,
-    [price] INTEGER NOT NULL,
-    [remain] INTEGER NOT NULL,
+    [price] DOUBLE NOT NULL,
+    [remain] DOUBLE NOT NULL,
     [date] DATE NOT NULL DEFAULT (date('now')),
     UNIQUE([name], [date])
     );
@@ -13,12 +13,12 @@ CREATE TABLE users(
     [password] varchar(40) NOT NULL,
     [bdate] DATE NOT NULL,
     [rate] DOUBLE NOT NULL DEFAULT 1,
-    [balance] INTEGER NOT NULL DEFAULT 0);
+    [balance] DOUBLE NOT NULL DEFAULT 0);
 
 CREATE TABLE participants(
     [eid]  INTEGER REFERENCES events(id),
     [uid]  INTEGER REFERENCES users(id),
-    [debt] INTEGER NOT NULL DEFAULT 0);
+    [debt] DOUBLE NOT NULL DEFAULT 0);
 
 CREATE TABLE pays(
     [uid] INTEGER REFERENCES users(id),
