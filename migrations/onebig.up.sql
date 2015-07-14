@@ -37,7 +37,7 @@ CREATE TABLE transfers(
 
 CREATE VIEW participation
 AS 
-SELECT e.name event, e.date, e.price, e.remain, u.name username
+SELECT e.name event, e.date, e.price, u.name username, u.rate rate
 FROM events e
 LEFT JOIN participants p
 on e.id = p.eid
