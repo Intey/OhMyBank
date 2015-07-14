@@ -19,6 +19,12 @@
   (sql/belongs-to events {:fk :eid})
   (sql/belongs-to users {:fk :uid}))
 
+(sql/defentity pays
+  (sql/belongs-to events {:fk :eid})
+  (sql/belongs-to users {:fk :uid})
+  ) 
+   
+
 (sql/defentity participation)
 
 (sql/defentity groupedParticipants)
@@ -75,18 +81,19 @@
                                                (= :eid eid)))))))
 
 (defn event-price [id]
-  (-> (sql/select events (sql/where (= :id id)) (sql/fields [:price]))
-    first
-    :price
-    )
+  (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price]))))
   )
+
 (defn add-participate [uid eid]
   (println (str uid ":" eid))
   (if-not ( participapated? uid eid) 
-    (sql/insert participants (sql/values {:uid uid :eid eid :debt (event-price eid)}))
+    (do 
+      (sql/insert participants (sql/values {:uid uid :eid eid}))
+      (sql/insert pays (sql/values {:uid uid :eid eid :credit (event-price eid)}))
+      
+      )
     nil
     ) 
-
 )
 
 (defn get-user-events [uname]
