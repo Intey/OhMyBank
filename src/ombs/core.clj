@@ -1,9 +1,8 @@
 (ns ombs.core
   "contains main logic"
   (:require [ombs.db :as db]
-            [ombs.ddf :as ddf]
+            [ombs.funcs :as fns]
             [noir.validation :as valids]
-
             ))
 
 (defn reg-ok? [username pass1 pass2]
@@ -20,13 +19,18 @@
     0.5
     1.0 ) )
 
+(defn extract-event [m]
+  "Extract event keys from raw result of query participated-list."
+  (select-keys m '(:event :remain :price :date :debt)) )
+
 (defn event-users []
-  "Reorganize participation result to map, where key - is event,
-  and value - vector of users, that participate this event."
+  "Reorganize participation result to map, where key - is event, and value - vector of users, that 
+  participate this event. Expect input, after using group-by on BD-table 'participants':
+  (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
   (map
   (fn [[k v]]
-     {:event k :users (mapv :username v)}) ;this func map usernames in vector
-  (group-by ddf/extract-event (db/participated-list) ) ) )
+    {:event k :users (mapv :username v)}) ;this func map usernames in vector
+    (group-by extract-event (db/participated-list) ) ) )
 
 (defn need-button? [uname event-users-pair]
  (->> event-users-pair
