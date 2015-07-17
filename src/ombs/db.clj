@@ -106,3 +106,8 @@
   ;Actually it's solved by sqlite.
   (sql/select participation) )
 
+(defn get-usernames []
+  "Return list of users names"
+  (sql/select users
+    (sql/fields :name))
+  )

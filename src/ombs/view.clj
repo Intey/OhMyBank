@@ -39,7 +39,12 @@
 (def event-sel [:article])
 ;(def participate-button-sel [:#event :> :button])
 
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{{:keys [event price remain date]} :event users :users :as event-user-list}]
+
+(h/defsnippet event-elem "../resources/public/event.html" event-sel 
+  [{{:keys [event price remain date]} :event 
+    users :users 
+    :as event-user-list}]
+
   [:#ename] (h/set-attr :value event)
   [:#eprice] (h/set-attr :value (str price))
   [:#edebt] (h/set-attr :value (core/debt (sess/get :username)))
@@ -50,9 +55,22 @@
                       ) )
 )
 
-
 (h/deftemplate user "../resources/public/user.html"
   [event-list]
   [:#user] (h/content (sess/get :username))
   [:main] (h/content (map #(event-elem %) event-list))
+  )
+
+(def usercheckbox-sel [:.users] )
+
+(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}] 
+  [:.userbox] (h/do-> 
+                (h/content username)  
+                (h/set-attr :value username)
+                )
+  )
+
+(h/deftemplate addevent-full "../resources/public/addevent.html"
+  [users]
+  [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   )

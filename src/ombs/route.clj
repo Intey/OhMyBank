@@ -20,8 +20,9 @@
   (POST "/logout" request auth/logout)
   (POST "/register" {params :params} (auth/register params))
   (GET  "/register" [_] auth/regpage)
-  (POST "/addevent" request handler/add-event)
+  (GET "/addevent" [_] handler/addevent-page)
   (POST "/participate" request handler/participate)
+  (POST "/printer" [_] handler/printer)
   (resources "/")
   (not-found "Page not found") )
 

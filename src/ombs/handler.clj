@@ -47,3 +47,9 @@
       (str (vld/get-errors :user-exist :event-exist)) )
     )
   )
+
+(defn printer [request] (str request))
+
+(defn addevent-page [& [params]]
+    (view/addevent-full (db/get-usernames) )
+  )
