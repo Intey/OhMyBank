@@ -22,7 +22,7 @@
   (GET  "/register" [_] auth/regpage)
   (GET "/addevent" [_] handler/addevent-page)
   (POST "/participate" request handler/participate)
-  (POST "/printer" [_] handler/printer)
+  (POST "/addevent" [_] handler/printer)
   (resources "/")
   (not-found "Page not found") )
 
