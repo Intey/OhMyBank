@@ -57,10 +57,10 @@
               (sql/fields :name :price :remain)
               (sql/where (= :name ename))))
 
-(defn get-user-list   []
-  "Return list of users"
-  (sql/fields :name :bdate :balance :rate :password)
-  (sql/select users))
+(defn get-users   [] "Return list of users"
+  (sql/select users
+              (sql/fields :name :bdate :balance :rate :password) 
+              ))
 
 (defn get-events-list []
   "Return map of events"
@@ -90,7 +90,6 @@
     (do 
       (sql/insert participants (sql/values {:uid uid :eid eid}))
       (sql/insert pays (sql/values {:uid uid :eid eid :credit (event-price eid)}))
-      
       )
     nil
     ) 
