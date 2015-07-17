@@ -1,6 +1,6 @@
 (ns ombs.auth
   (:require  
-    [ombs.view :as view]
+    [ombs.view.common :as view]
     [ombs.db :as db]
     [ombs.handler :as handler]
     [ombs.core :as core]

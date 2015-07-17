@@ -1,6 +1,7 @@
 (ns ombs.handler
   (:require
-    [ombs.view :as view]
+    [ombs.view.common :as vc]
+    [ombs.view.event :as ve]
     [ombs.db :as db]
     [ombs.core :as core]
     [noir.session :as sess]
@@ -8,14 +9,19 @@
     [noir.validation :as vld]
     ))
 
+(defn printer 
+  "just print request. Debug method."
+  [request] 
+  (str request))
+
 (defn index [& [params]]
   "Handler. show index page with events."
-  (view/index (assoc params :events (db/get-events-list)))
+  (vc/index (assoc params :events (db/get-events-list)))
   )
 
 ( defn user [& _]
   (if-let [username (sess/get :username)] ; if any user logged
-    (view/user (core/event-users))
+    (vc/user (core/event-users))
     (redirect "/"))
   )
 
@@ -48,8 +54,7 @@
     )
   )
 
-(defn printer [request] (str request))
 
 (defn addevent-page [& [params]]
-    (view/addevent-page (db/get-usernames) )
+    (ve/addevent-page (db/get-usernames) )
   )
