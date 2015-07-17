@@ -40,13 +40,13 @@
   (vld/rule (vld/has-value? event) [:ename "Event name should not be empty"])
   (vld/rule (vld/greater-than? price 0) [:eprice "Event price should be greater than 0"])
   (vld/rule (vld/has-value? date) [:edate "Event should have date"])
-
   
   (let [ user-rates (db/get-rates users)
         party-pay (/ (read-string price) (reduce + user-rates))
         ]
     (db/add-event event (read-string price) date)
     (map #(db/credit-payment % event (* party-pay (db/get-rate %))) users)
+    (redirect "/addevent")
     
     )
   )
