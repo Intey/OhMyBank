@@ -57,15 +57,9 @@
               (sql/fields :name :price :remain)
               (sql/where (= :name ename))))
 
-(defn get-users   [] "Return list of users"
-  (sql/select users
-              (sql/fields :name :bdate :balance :rate :password) 
-              ))
-
 (defn get-events-list []
   "Return map of events"
   (sql/select events))
-
 
 (defn get-uid [uname]
   (:id (first (sql/select users (sql/fields :id)
@@ -73,7 +67,12 @@
 
 (defn get-eid [ename]
   (:id (first (sql/select events (sql/fields :id)
-              (sql/where (= :name ename))))))
+                          (sql/where (= :name ename))))))
+
+(defn get-rate [uname]
+  (:rate (first (sql/select users (sql/fields :rate) 
+                            (sql/where (= :name uname)))))
+  )
 
 (defn participapated? [uid eid]
   (not (empty? (sql/select participants (sql/where
@@ -110,3 +109,20 @@
   (sql/select users
     (sql/fields :name))
   )
+
+(defn get-users   [] "Return list of users"
+  (sql/select users
+              (sql/fields :name :bdate :balance :rate :password) 
+              ))
+
+(defn credit-payment [username ename money]
+  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
+  )
+(defn debit-payment [username ename money]
+  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
+  )
+
+(defn get-rates [usernames]
+  (map #(get-rate %) usernames)
+  )
+

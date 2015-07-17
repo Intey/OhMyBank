@@ -9,7 +9,7 @@
     [noir.validation :as vld]
     ))
 
-(defn printer 
+(defn print 
   "just print request. Debug method."
   [request] 
   (str request))
@@ -23,17 +23,6 @@
   (if-let [username (sess/get :username)] ; if any user logged
     (vc/user (core/event-users))
     (redirect "/"))
-  )
-
-(defn add-event [{{ename :name price :price date :date :as params} :params}]
-  (str params)
-  (vld/clear-errors!)
-  (vld/rule (vld/has-value? ename) [:ename "Event name should not be empty"])
-  (vld/rule (vld/greater-than? price 0) [:eprice "Event price should be greater than 0"])
-  (vld/rule (vld/has-value? date) [:edate "Event should have date"])
-  (if-not
-    (vld/errors? :ename :eprice :edate) (do (db/add-event ename price date) (redirect "/user"))
-    (index))
   )
 
 (defn participate [{{ename :event-name} :params}]

@@ -44,5 +44,3 @@
   ;(-> (db/get-user-events username) 
   ;  )
   )
-   
-

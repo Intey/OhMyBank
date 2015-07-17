@@ -2,6 +2,7 @@
   (:require [compojure.core :refer [ANY POST GET defroutes wrap-routes]]
             [ombs.core :as core]
             [ombs.handler :as handler]
+            [ombs.handler.addevent :as event]
             [ombs.auth :as auth]
             [ring.middleware.params :refer [wrap-params]]
             ;[ring.middleware.reload :refer [wrap-reload]] ; don't work
@@ -22,7 +23,7 @@
   (GET  "/register" [_] auth/regpage)
   (GET "/addevent" [_] handler/addevent-page)
   (POST "/participate" request handler/participate)
-  (POST "/addevent" [_] handler/printer)
+  (POST "/addevent" {params :params} (event/addevent params))
   (resources "/")
   (not-found "Page not found") )
 
