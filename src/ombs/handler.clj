@@ -51,5 +51,5 @@
 (defn printer [request] (str request))
 
 (defn addevent-page [& [params]]
-    (view/addevent-full (db/get-usernames) )
+    (view/addevent-page (db/get-usernames) )
   )

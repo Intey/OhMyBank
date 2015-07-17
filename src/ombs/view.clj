@@ -70,7 +70,7 @@
                 )
   )
 
-(h/deftemplate addevent-full "../resources/public/addevent.html"
+(h/deftemplate addevent-page "../resources/public/addevent.html"
   [users]
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   )
