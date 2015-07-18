@@ -9,7 +9,7 @@
     [noir.validation :as vld]
     ))
 
-(defn print 
+(defn print-it
   "just print request. Debug method."
   [request] 
   (str request))

@@ -51,11 +51,10 @@
                      (sql/limit 1)
                      )))
 
-(defn get-event [ename]
+(defn get-event [ename date] 
   "Return fields of event"
   (sql/select events
-              (sql/fields :name :price :remain)
-              (sql/where (= :name ename))))
+              (sql/where (and (= :date date) (= :name ename)))))
 
 (defn get-events-list []
   "Return map of events"
@@ -116,9 +115,11 @@
               ))
 
 (defn credit-payment [username ename money]
+  (println (str "add credit : "username" event: "ename " price: "money) )
   (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
   )
 (defn debit-payment [username ename money]
+  (println (str "add debit: "username" event: "ename " price: "money) )
   (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
   )
 
