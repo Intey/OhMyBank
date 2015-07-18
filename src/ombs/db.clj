@@ -68,10 +68,6 @@
   (:id (first (sql/select events (sql/fields :id)
                           (sql/where (= :name ename))))))
 
-(defn get-rate [uname]
-  (:rate (first (sql/select users (sql/fields :rate) 
-                            (sql/where (= :name uname)))))
-  )
 
 (defn participapated? [uid eid]
   (not (empty? (sql/select participants (sql/where
@@ -122,6 +118,10 @@
   (println (str "add debit: "username" event: "ename " price: "money) )
   (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
   )
+
+(defn get-rate [uname]
+  (:rate (first (sql/select users (sql/fields :rate) 
+                            (sql/where (= :name uname))))))
 
 (defn get-rates [usernames]
   (map #(get-rate %) usernames)

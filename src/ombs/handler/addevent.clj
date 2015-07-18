@@ -19,18 +19,14 @@
   (* (/ eventprice (reduce + rates)) userrate)
   )
 
-(defn add-event [{{ename :name price :price date :date :as params} :params}]
-  "Add event in events table. Just create, without participantion."
-
+(defn valid? [event price date users] 
   (vld/clear-errors!)
-  (vld/rule (vld/has-value? ename) [:ename "Event name should not be empty"])
+  (vld/rule (vld/has-value? event) [:ename "Event name should not be empty"])
   (vld/rule (vld/greater-than? price 0) [:eprice "Event price should be greater than 0"])
   (vld/rule (vld/has-value? date) [:edate "Event should have date"])
-
-  (if-not
-    (vld/errors? :ename :eprice :edate) (do (db/add-event ename price date) (redirect "/user"))
-    (handle/index))
-  )
+  (vld/rule (empty? (db/get-event event date)) [:event "Event with same name today was created. Use another name"])
+  (vld/rule (not (nil? users)) [:event "Participants should be checked"])
+  (vld/errors? :ename :eprice :edate :event))
 
 ;FIXME:
 ; issue, when we check one user as participant, so there, users - is value(string). When >1, users - vector.
@@ -43,23 +39,18 @@
                   users :participants :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
-  (vld/clear-errors!)
-  (vld/rule (vld/has-value? event) [:ename "Event name should not be empty"])
-  (vld/rule (vld/greater-than? price 0) [:eprice "Event price should be greater than 0"])
-  (vld/rule (vld/has-value? date) [:edate "Event should have date"])
-  (vld/rule (empty? (db/get-event event date)) [:event "Event with same name today was created. Use another name"])
-  ;end validation
-  (println (empty? (db/get-event event date)))
-  (if-not (vld/errors? :ename :eprice :edate :event) 
+  (if-not (valid? event price date users) 
     (let [user-rates (db/get-rates (core/as-vec users))
-          party-pay (/ (read-string price) (reduce + user-rates))]
-
+          party-pay (/ (read-string price) (reduce + user-rates))
+          ]
+      (println (str "Ok.rate summ: "(reduce + user-rates)))
       (db/add-event event (read-string price) date)
-      (dorun (map 
+      (dorun (map ;use 'dorun' for execute lazy function 'db/credit-payment'
                #(db/credit-payment % event (* party-pay (db/get-rate %))) 
                (core/as-vec users)))
-      (redirect "/addevent"))
-
-    (handle/index))
-
+      (println (str "rates " user-rates " pp " party-pay " users " users))
+      (redirect "/addevent")
+      )
+    (println (str "Wrong. Is Error?" (vld/errors? :ename :eprice :edate :event))) 
+    )
   )
