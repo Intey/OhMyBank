@@ -1,9 +1,9 @@
 (ns ombs.route
   (:require [compojure.core :refer [ANY POST GET defroutes wrap-routes]]
             [ombs.core :as core]
-            [ombs.handler :as handler]
-            [ombs.handler.addevent :as event]
-            [ombs.auth :as auth]
+            [ombs.handler.common :refer [index user]]
+            [ombs.handler.addevent :refer [addevent-page addevent]]
+            [ombs.handler.auth :refer [login logout register reg-page]]
             [ring.middleware.params :refer [wrap-params]]
             ;[ring.middleware.reload :refer [wrap-reload]] ; don't work
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
@@ -15,15 +15,15 @@
             ))
 
 (defroutes main-routes
-  (GET  "/" [params] handler/index)
-  (GET  "/user" [_] handler/user)
-  (POST "/login" request auth/login)
-  (POST "/logout" request auth/logout)
-  (POST "/register" {params :params} (auth/register params))
-  (GET  "/register" [_] auth/regpage)
-  (GET "/addevent" [_] handler/addevent-page)
-  (POST "/participate" request handler/participate)
-  (POST "/addevent" {params :params} (event/addevent params))
+  (GET  "/" [params] index)
+  (GET  "/user" [_] user)
+  (POST "/login" request login)
+  (POST "/logout" request logout)
+  (POST "/register" {params :params} (register params))
+  (GET  "/register" [_] reg-page)
+  (GET "/addevent" [_] addevent-page)
+  (POST "/participate" [_] user);request common/participate) ; TODO: not fixed, after realize participation on addition
+  (POST "/addevent" {params :params} (addevent params))
   (resources "/")
   (not-found "Page not found") )
 
@@ -35,4 +35,5 @@
     (wrap-routes wrap-keyword-params)
     (wrap-routes wrap-noir-session { :timeout (* 60 30) :timeout-response (redirect "/") })
     (wrap-routes wrap-noir-validation)
+    ; wrap println
     ))

@@ -26,34 +26,29 @@
 
 ;Generate register page. If in given params founded keys for this page - fill fields with founded values
 (h/deftemplate register "../resources/public/register.html" [params]
-  [:#uname] (h/content (sess/get :username))
-  [:#error] (h/content (str params))
-  [:#username]     (h/set-attr :value (params "username"))
-  [:#birthdate]    (h/set-attr :value (params "birthdate"))
-  [:#student-flag] (if (not-empty (params "student-flag"))
+  [:#uname]        (h/content (sess/get :username))
+  [:#error]        (h/content (reduce str (map #(str "|" % "|") (vld/get-errors :register))))
+  [:#username]     (h/set-attr :value (params :username))
+  [:#birthdate]    (h/set-attr :value (params :birthdate))
+  [:#student-flag] (if (not-empty (params :student-flag))
                      (h/set-attr :checked "on")  ; check
                      (h/set-attr "" "") )        ; unckeck
   )
 
-
 (def event-sel [:article])
-;(def participate-button-sel [:#event :> :button])
-
 
 (h/defsnippet event-elem "../resources/public/event.html" event-sel 
   [{{:keys [event price remain date]} :event 
     users :users 
     :as event-user-list}]
-
   [:#ename] (h/set-attr :value event)
   [:#eprice] (h/set-attr :value (str price))
   [:#edebt] (h/set-attr :value (core/debt (sess/get :username)))
   [:.action] (fn [match]
-                    (if (core/need-button? (sess/get :username) event-user-list)  ;if user participated in events
-                      ((h/remove-attr :disabled "")  match)
-                      ((h/set-attr :disabled "")     match)      
-                      ) )
-)
+               (if (core/need-button? (sess/get :username) event-user-list)  ;if user participated in events
+                 ((h/remove-attr :disabled "")  match)
+                 ((h/set-attr :disabled "")     match)      
+                 )))
 
 (h/deftemplate user "../resources/public/user.html"
   [event-list]
@@ -61,16 +56,10 @@
   [:main] (h/content (map #(event-elem %) event-list))
   )
 
-(def usercheckbox-sel [:.users] )
-
-(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}] 
-  [:.userbox] (h/do-> 
-                (h/content username)  
-                (h/set-attr :value username)
-                )
-  )
-
-(h/deftemplate addevent-page "../resources/public/addevent.html"
-  [users]
-  [:.users] (h/content ( map #(usercheckbox-elem %) users) )
+(defmacro defpage [pname rules & body]
+  "Marco for declaring pages. Incapsulate validating fields. 
+  Redirect on self, when validation fails with attaching errors messages."
+  ;validate rules
+  ;if ok - body
+  ;else - redirect
   )
