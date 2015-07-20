@@ -127,3 +127,6 @@
   (map #(get-rate %) usernames)
   )
 
+(defn get-debt [username eventname]
+  ; sum of all credits and debits in pays for current user and event. 
+  )

@@ -43,7 +43,7 @@
     :as event-user-list}]
   [:#ename] (h/set-attr :value event)
   [:#eprice] (h/set-attr :value (str price))
-  [:#edebt] (h/set-attr :value (core/debt (sess/get :username)))
+  [:#edebt] (h/set-attr :value (core/debt (sess/get :username) event))
   [:.action] (fn [match]
                (if (core/need-button? (sess/get :username) event-user-list)  ;if user participated in events
                  ((h/remove-attr :disabled "")  match)

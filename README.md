@@ -10,18 +10,6 @@ but so little automatiozation and human factor:
 - Bankir needs write debts. But also he needs work! Party time in his brain!
 - Some else
 
-## TODO
-- [ ] rate for event (NOTE: pizza parts)
-
-## Commands
-`lein test` for run all specs.
-`lein spec -a` for run watcher, that run tests after their update.
-`lein ancient upgrade` for upgrade all dependencies. Be *on the ledge*!
-`lein repl` for run REPL with this project (My advice is use [LightTable](http://lighttable.com)).
-
-### Tasks
-Look in [Asana](https://app.asana.com/0/32535141326586/32535141326586)
-
 ## And there ombs come Oh my Bank (Small)
 It's a web-app made on clojure libs [ring](https://github.com/ring-clojure/ring), [compojure](https://github.com/weavejester/compojure) and many 
 other. 
@@ -38,6 +26,19 @@ Front side provide common functions:
 - auto close event 
     when all users full pay(by parts or in one time)
 
+## TODO
+- [ ] rate for event (NOTE: pizza parts)
+
+## Commands
+`lein test` for run all specs.
+`lein spec -a` for run watcher, that run tests after their update.
+`lein ancient upgrade` for upgrade all dependencies. Be *on the ledge*!
+`lein repl` for run REPL with this project (My advice is use [LightTable](http://lighttable.com)).
+
+### Tasks
+Look in [Asana](https://app.asana.com/0/32535141326586/32535141326586)
+
+
 ##calculations 
 User debt - when user sets to participation in some event, his balance 
 decreased on party-pay
@@ -48,7 +49,7 @@ Tea {participants: 5, price: 70}
     So, each user party-pay = (price / participants)
 - all users have different rate
     user party-pay = (price / (one_price)*participats - rate)
-    
+
 ### design links
 - [Simple Grid](http://tympanus.net/codrops/2013/04/17/responsive-full-width-grid)
 - [Improved Grid](http://tympanus.net/Development/AnimatedGridLayout)
