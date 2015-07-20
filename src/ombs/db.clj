@@ -64,9 +64,9 @@
   (:id (first (sql/select users (sql/fields :id)
               (sql/where (= :name uname))))))
 
-(defn get-eid [ename]
+(defn get-eid [ename date]
   (:id (first (sql/select events (sql/fields :id)
-                          (sql/where (= :name ename))))))
+                          (sql/where (and (= :name ename) (= :date date)))))))
 
 
 (defn participapated? [uid eid]
@@ -111,11 +111,11 @@
               ))
 
 (defn credit-payment [uid eid money]
-  (println (str "add credit : "username" event: "ename " price: "money) )
+  (println (str "add credit : "uid" event: "eid " price: "money) )
   (sql/insert pays (sql/values { :uid uid :eid eid :credit money }))
   )
 (defn debit-payment [uid eid money]
-  (println (str "add debit: "username" event: "ename " price: "money) )
+  (println (str "add debit: "uid" event: "eid " price: "money) )
   (sql/insert pays (sql/values { :uid uid :eid eid :credit money }))
   )
 
