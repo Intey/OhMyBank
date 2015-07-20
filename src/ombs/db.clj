@@ -110,13 +110,13 @@
               (sql/fields :name :bdate :balance :rate :password) 
               ))
 
-(defn credit-payment [username ename money]
+(defn credit-payment [uid eid money]
   (println (str "add credit : "username" event: "ename " price: "money) )
-  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
+  (sql/insert pays (sql/values { :uid uid :eid eid :credit money }))
   )
-(defn debit-payment [username ename money]
+(defn debit-payment [uid eid money]
   (println (str "add debit: "username" event: "ename " price: "money) )
-  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid ename) :credit money }))
+  (sql/insert pays (sql/values { :uid uid :eid eid :credit money }))
   )
 
 (defn get-rate [uname]
@@ -127,6 +127,10 @@
   (map #(get-rate %) usernames)
   )
 
-(defn get-debt [username eventname]
+(defn get-debt [uid eid]
   ; sum of all credits and debits in pays for current user and event. 
+  (:debt (first (sql/select pays 
+              (sql/where (and (= :eid eid) (= :uid uid)))
+              (sql/aggregate (sum :credit) :debt)
+              )))
   )
