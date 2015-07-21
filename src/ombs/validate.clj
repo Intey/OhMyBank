@@ -8,6 +8,17 @@
   (reduce str (map #(str "|" % "|") (vld/get-errors tags)))
   )
 
+(defmacro create-rule [tag data]
+  `(vld/rule (first ~data) [~tag (last ~data)])
+  )
+
+;(defmacro create-validator [tag rules]
+;  (vld/clear-errors!)
+;  (map #(create-rule tag %) rules)
+;  (not (vld/errors? tag))
+;  )
+
+
 (defn registration? [params]
   (vld/clear-errors!)
   ; there your code !
@@ -31,9 +42,28 @@
   )
 
 (defn login? [username password] 
+  ;(create-validator :login [[ (vld/has-value? username)                       "Username can't be empty" ]
+  ;                          [ (vld/has-value? (:name (db/get-user username))) "User not found"]
+  ;                          [ (= password (:password (db/get-user username))) "Incorrect Login or password"]
+  ;                          ])
+  (vld/clear-errors!)
   (vld/rule (vld/has-value? username) [:login "Username can't be empty"])
   (vld/rule (vld/has-value? (:name (db/get-user username))) [:login "User not found"])
   (vld/rule (= password (:password (db/get-user username))) [:login "Incorrect Login or password"])
   (not (vld/errors? :login))
   
+  )
+
+(defn stake? [eid uid]
+;  (create-validator :pay [[ (vld/has-value? uid) "User not found in database" ]
+;                          [ (vld/has-value? eid) "Event not found in database"] ])
+;
+  (vld/clear-errors!)
+  (create-rule :pay [ (vld/has-value? eid) "Event does not exist!" ])
+  (vld/rule (vld/has-value? uid) [:pay "Incorrect Login or password"])
+  (if-not (vld/errors? :pay)
+    (println "No errors")
+    (println (str "event:" eid " uid:" uid" err: "(vld/get-errors :pay)) )
+    )
+
   )
