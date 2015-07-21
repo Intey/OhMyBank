@@ -3,6 +3,7 @@
     [ombs.view.pages :as pages]
     [ombs.db :as db]
     [ombs.core :as core]
+    [ombs.validate :as isvalid]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
     [noir.validation :as vld]
@@ -24,3 +25,10 @@
     (redirect "/"))
   )
 
+(defn pay [{ename :event-name date :date price :price }]
+  "Add participation of current user and selected event(given as param from post)"
+  (let [uname (sess/get :username)
+        uid (db/get-uid uname)
+        eid (db/get-eid ename date)]
+    (isvalid/stake? eid uid)
+    ))
