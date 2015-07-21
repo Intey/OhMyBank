@@ -1,15 +1,15 @@
 (ns ombs.handler.auth
   (:require  
-    [ombs.view.common :as view]
+    [ombs.view.pages :as page]
     [ombs.db :as db]
-    [ombs.handler.common :as handler]
+    [ombs.handler.handle :as handler]
     [ombs.core :as core]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
     [ombs.validate :as isvalid] )
   )
 
-(defn reg-page [_] (view/register {}))
+(defn reg-page [_] (page/register {}))
 
 (defn log-user [uname]
   "Generate user page, with his name and events."
@@ -22,7 +22,7 @@
     (do
       (db/add-user username password1 birthdate (core/rate student-flag))
       (log-user username))
-    (view/register params)))
+    (page/register params)))
 
 
 (defn login [ { {uname :username pass :password :as params} :params} ]

@@ -1,4 +1,4 @@
-(ns ombs.view.common
+(ns ombs.view.pages
   (:require
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess]

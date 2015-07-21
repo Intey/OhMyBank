@@ -1,6 +1,6 @@
-(ns ombs.handler.common
+(ns ombs.handler.handle
   (:require
-    [ombs.view.common :as commonview]
+    [ombs.view.pages :as pages]
     [ombs.db :as db]
     [ombs.core :as core]
     [noir.session :as sess]
@@ -15,11 +15,11 @@
 
 (defn index [& [params]]
   "Handler. show index page with events."
-  (commonview/index (assoc params :events (db/get-events-list)))
+  (pages/index (assoc params :events (db/get-events-list)))
   )
 
 ( defn user [& _]
   (if-let [username (sess/get :username)] ; if any user logged
-    (commonview/user (core/event-users))
+    (pages/user (core/event-users))
     (redirect "/"))
   )
