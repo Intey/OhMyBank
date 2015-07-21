@@ -18,8 +18,9 @@
   (pages/index (assoc params :events (db/get-events-list)))
   )
 
-( defn user [& _]
+(defn user [& _]
   (if-let [username (sess/get :username)] ; if any user logged
     (pages/user (core/event-users))
     (redirect "/"))
   )
+

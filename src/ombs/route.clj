@@ -24,17 +24,29 @@
     ))
 
 (defroutes main-routes
+  (resources "/") ; search all resources in dir 'resources' in root of project
   (GET  "/" [params] index)
-  (GET  "/user" [_] user)
+
+
   (POST "/login" request login)
   (POST "/logout" request logout)
+
   (POST "/register" {params :params} (register params))
   (GET  "/register" [_] reg-page)
+
+
   (GET "/addevent" [_] addevent-page)
-  (POST "/participate" [_] user);request common/participate) ; TODO: not fixed, after realize participation on addition
   (POST "/addevent" {params :params} (addevent params))
-  (resources "/") ; search all resources in dir 'resources' in root of project
-  (not-found "Page not found") )
+
+  (GET  "/user" [_] user)
+
+  ;payment controlling
+  (POST "/pay" {params :params} (pay params))
+  ;(POST "/confirm {params :params} (confirm-payment)
+
+  ;(POST "/participate" [_] user) ;request common/participate) ; TODO: not fixed, after realize participation on addition
+
+  (not-found "Page not found") ) ; should be last, it overlap all below routes.
 
 (def engine
   (-> main-routes
