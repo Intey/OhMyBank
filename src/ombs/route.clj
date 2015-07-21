@@ -18,15 +18,13 @@
     [noir.response :refer [redirect]]
 
     ; request handlers. Prepare data, and call views. 
-    [ombs.handler.handle :refer [index user]]
+    [ombs.handler.handle :refer [index user pay]]
     [ombs.handler.addevent :refer [addevent-page addevent]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
 
 (defroutes main-routes
-  (resources "/") ; search all resources in dir 'resources' in root of project
   (GET  "/" [params] index)
-
 
   (POST "/login" request login)
   (POST "/logout" request logout)
@@ -45,6 +43,8 @@
   ;(POST "/confirm {params :params} (confirm-payment)
 
   ;(POST "/participate" [_] user) ;request common/participate) ; TODO: not fixed, after realize participation on addition
+
+  (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
 
   (not-found "Page not found") ) ; should be last, it overlap all below routes.
 
