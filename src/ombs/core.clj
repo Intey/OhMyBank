@@ -42,9 +42,12 @@
 
 (defn debt [username event date]
   (let [eid (db/get-eid event date) 
-        uid (db/get-uid username)]
-    (db/get-debt uid eid))
-  )
+        uid (db/get-uid username)
+        credit (db/get-credit uid eid)
+        debit (db/get-debit uid eid)]
+    (- credit debit)
+    ;(println (str "user "username" event '"event"' date "date" crd:"credit" dbt:"debit)  )
+    ))
 
 (defn as-vec
   "get a vector or value and represents it as vector. [1 2 3] -> [1 2 3]; 1 -> [1]"

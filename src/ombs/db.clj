@@ -127,10 +127,22 @@
   (map #(get-rate %) usernames)
   )
 
-(defn get-debt [uid eid]
+(defn get-credit [uid eid]
   ; sum of all credits and debits in pays for current user and event. 
-  (:debt (first (sql/select pays 
-              (sql/where (and (= :eid eid) (= :uid uid)))
-              (sql/aggregate (sum :credit) :debt)
-              )))
+  (if-let [summary 
+           (:credit (first (sql/select pays (sql/where (and (= :eid eid) (= :uid uid))) 
+                              (sql/aggregate (sum :credit) :credit))))]
+    summary
+    0 ; if value - nil, return 0
+    )
+  )
+
+(defn get-debit [uid eid]
+  ; sum of all credits and debits in pays for current user and event. 
+  (if-let [summary
+           (:debit (first (sql/select pays (sql/where (and (= :eid eid) (= :uid uid))) 
+                              (sql/aggregate (sum :debit) :debit))))] 
+    summary
+    0 ; if value - nil, return 0
+    )
   )
