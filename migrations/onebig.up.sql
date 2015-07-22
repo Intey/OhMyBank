@@ -32,14 +32,13 @@ CREATE TABLE transfers(
 
 CREATE VIEW summary
 AS 
-SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits, 
-(sum(credit) - credit) should_be_zero -- Just a hypothesis: same event with same user have multiple credits, thats strange. 
-FROM pays p 
-INNER JOIN users u
-ON p.uid = u.id
-INNER JOIN events e
-ON p.eid = e.id
-group by eid; -- for hypothesis 
+SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
+FROM events e
+LEFT JOIN pays p 
+ON e.id = p.eid
+LEFT JOIN users u
+ON u.id = p.uid
+group by p.eid, p.uid;
 
 CREATE VIEW stakes
 AS 
