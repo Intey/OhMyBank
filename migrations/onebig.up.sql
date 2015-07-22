@@ -15,11 +15,6 @@ CREATE TABLE users(
     [rate] DOUBLE NOT NULL DEFAULT 1,
     [balance] DOUBLE NOT NULL DEFAULT 0);
 
-CREATE TABLE participants(
-    [eid]  INTEGER REFERENCES events(id),
-    [uid]  INTEGER REFERENCES users(id),
-    [debt] DOUBLE NOT NULL DEFAULT 0);
-
 CREATE TABLE pays(
     [uid] INTEGER REFERENCES users(id),
     [eid] INTEGER REFERENCES events(id),
@@ -35,21 +30,14 @@ CREATE TABLE transfers(
     UNIQUE(debiter, crediter)
 );
 
-CREATE VIEW participation
+CREATE VIEW summary
 AS 
-SELECT e.name event, e.date, e.price, u.name username, u.rate rate
-FROM events e
-LEFT JOIN participants p
-on e.id = p.eid
-LEFT JOIN users u
-on u.id = p.uid;
+SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits, 
+(sum(credit) - credit) should_be_zero -- Just a hypothesis: same event with same user have multiple credits, thats strange. 
+FROM pays p 
+INNER JOIN users u
+ON p.uid = u.id
+INNER JOIN events e
+ON p.eid = e.id
+group by eid; -- for hypothesis 
 
-CREATE VIEW groupedParticipants
-AS 
-SELECT e.name event, e.date, e.price, e.remain, group_concat(u.name) users
-FROM events e
-LEFT JOIN participants p
-on e.id = p.eid
-LEFT JOIN users u
-on u.id = p.uid
-group by e.name;
