@@ -4,18 +4,22 @@
         <form id="event" method="post" action="/pay">
             <table>
                 <tr>
-                    <td><label for="event-name">Event:</label></td>
-                    <td><input type="text" readonly id="ename"  value="" name="event-name"></input></td>
+                    <td> <label for="event-name">Event:</label> </td>
+                    <td> <input type="text" readonly id="name"  value="" name="event-name"></input> </td>
+                </tr>
+                <tr>
+                    <td><label for="event-name">Date:</label></td>
+                    <td><input type="text" readonly id="date"  value="" name="date"></input></td>
                 </tr>
                 <tr>
                     <td><label for="price">Price:</label></td>
-                    <td><input type="text" name="price" disabled id="eprice" value=""></input></td>
+                    <td><input type="text" name="price" readonly id="price" value=""></input></td>
                 </tr>
                 <tr>
                     <td><label for="debt">Your debt:</label></td>
-                    <td><input type="text" name="debt" disabled id="edebt" value=""></input></td>
+                    <td><input type="text" name="debt" readonly id="debt" value=""></input></td>
                 </tr>
-                <tr><td colspan="2" align="center"><input type="submit" class="action" value="pay"></td></tr>
+                <tr><td colspan="2" align="center"><input type="submit" class="action" value="participate"></td></tr>
             </table>
         </form>
     </article>
