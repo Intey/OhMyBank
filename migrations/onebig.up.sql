@@ -48,5 +48,6 @@ FROM events e
 LEFT JOIN pays p
 ON e.id = p.eid
 LEFT JOIN users u
-ON u.id = p.uid;
+ON u.id = p.uid
+GROUP BY e.name, e.date, u.name;
 
