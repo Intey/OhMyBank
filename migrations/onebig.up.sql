@@ -50,3 +50,7 @@ LEFT JOIN users u
 ON u.id = p.uid
 GROUP BY e.name, e.date, u.name;
 
+CREATE VIEW debs
+AS 
+SELECT user, event, [date], debits - credits debt
+FROM summary;
