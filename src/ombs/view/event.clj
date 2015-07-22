@@ -22,14 +22,15 @@
 (def event-sel [:article])
 
 (h/defsnippet event-elem "../resources/public/event.html" event-sel 
-  [{{:keys [event price remain date]} :event 
-    users :users 
-    :as event-user-list}]
-  [:#ename] (h/set-attr :value event)
-  [:#eprice] (h/set-attr :value (str price))
-  [:#edebt] (h/set-attr :value (core/debt (sess/get :username) event date))
+  [{{:keys [event price date]}  :event 
+           users                :users 
+    :as events}]
+  [:#name]   (h/set-attr :value event)
+  [:#date]   (h/set-attr :value date)
+  [:#price]  (h/set-attr :value (str price))
+  [:#debt]   (h/set-attr :value (core/debt (sess/get :username) event date))
   [:.action] (fn [match]
-               (if (core/need-button? (sess/get :username) event-user-list)  ;if user participated in events
+               (if (core/need-button? (sess/get :username) events)  ;if user participated in events
                  ((h/remove-attr :disabled "")  match)
                  ((h/set-attr :disabled "")     match)      
                  )))

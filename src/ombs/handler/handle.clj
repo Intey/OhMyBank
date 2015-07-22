@@ -21,7 +21,7 @@
 
 (defn user [& _]
   (if-let [username (sess/get :username)] ; if any user logged
-    (pages/user (core/event-users))
+    (pages/user (core/stakes))
     (redirect "/"))
   )
 

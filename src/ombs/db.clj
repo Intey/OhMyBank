@@ -9,25 +9,24 @@
 ; about many-to-many https://groups.google.com/d/msg/sqlkorma/r3kR6DyQZHo/RrQS_J8kkQ8J
 
 (declare events)
+
 (sql/defentity users
-  (sql/many-to-many events :participants {:lfk :uid :rfk :eid}))
+  (sql/many-to-many events :pays {:lfk :uid :rfk :eid}))
 
 (sql/defentity events
-  (sql/many-to-many users :participants {:lfk :eid :rfk :uid}))
-
-(sql/defentity participants
-  (sql/belongs-to events {:fk :eid})
-  (sql/belongs-to users {:fk :uid}))
+  (sql/many-to-many users :pays {:lfk :eid :rfk :uid}))
 
 (sql/defentity pays
   (sql/belongs-to events {:fk :eid})
   (sql/belongs-to users {:fk :uid})
   ) 
-   
 
-(sql/defentity participation)
+(sql/defentity stakes)
 
-(sql/defentity groupedParticipants)
+(sql/defentity summary)
+
+; ===========================================================================================================
+; ===========================================================================================================
 
 (defn add-user [uname password birthdate rate]
   (sql/insert users (sql/values {:name uname
@@ -69,35 +68,18 @@
                           (sql/where (and (= :name ename) (= :date date)))))))
 
 
-(defn participapated? [uid eid]
-  (not (empty? (sql/select participants (sql/where
-                                          (and (= :uid uid)
-                                               (= :eid eid)))))))
+(defn participated? [uid eid]
+  "Check participation in event. If user have some payment action on event - he is participated."
+  (not (empty? (sql/select pays (sql/where
+                                  (and (= :uid uid)
+                                       (= :eid eid)))))))
 
 (defn event-price [id]
   (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price]))))
   )
 
-(defn add-participate [uid eid]
-  (println (str uid ":" eid))
-  (if-not ( participapated? uid eid) 
-    (do 
-      (sql/insert participants (sql/values {:uid uid :eid eid}))
-      (sql/insert pays (sql/values {:uid uid :eid eid :credit (event-price eid)}))
-      )
-    nil
-    ) 
-)
-
-(defn get-user-events [uname]
-  (sql/select participants (sql/fields)
-              (sql/with users (sql/where (= :name uname)) (sql/fields))
-              (sql/with events (sql/fields [:name :event]))))
-
-(defn participated-list []
-  ;need grouping by event params. Should get event params and vector of it's users.
-  ;Actually it's solved by sqlite.
-  (sql/select participation) )
+(defn get-stakes [] 
+  (sql/select stakes) )
 
 (defn get-usernames []
   "Return list of users names"
@@ -105,7 +87,7 @@
     (sql/fields :name))
   )
 
-(defn get-users   [] "Return list of users"
+(defn get-users [] "Return list of users"
   (sql/select users
               (sql/fields :name :bdate :balance :rate :password) 
               ))

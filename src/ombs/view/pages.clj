@@ -9,7 +9,15 @@
 
     ) )
 
-(defmacro create-error [tag content] `({:tag p :content ("message")}) )
+; (defmacro create-error [tag content] `({:tag p :content ("message")}) )
+
+(defmacro defpage [pname rules & body]
+  "Marco for declaring pages. Incapsulate validating fields. 
+  Redirect on self, when validation fails with attaching errors messages."
+  ;validate rules
+  ;if ok - body
+  ;else - redirect
+  )
 
 (h/deftemplate index "../resources/public/index.html" [& ctxt]
   ;[:#ename] (fn [match]
@@ -43,10 +51,3 @@
   [:main] (h/content (map #(event-elem %) event-list))
   )
 
-(defmacro defpage [pname rules & body]
-  "Marco for declaring pages. Incapsulate validating fields. 
-  Redirect on self, when validation fails with attaching errors messages."
-  ;validate rules
-  ;if ok - body
-  ;else - redirect
-  )
