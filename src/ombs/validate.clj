@@ -60,10 +60,5 @@
 ;
   (vld/clear-errors!)
   (create-rule :pay [ (vld/has-value? eid) "Event does not exist!" ])
-  (vld/rule (vld/has-value? uid) [:pay "Incorrect Login or password"])
-  (if-not (vld/errors? :pay)
-    (println "No errors")
-    (println (str "event:" eid " uid:" uid" err: "(vld/get-errors :pay)) )
-    )
-
-  )
+  (create-rule :pay [ (vld/has-value? uid) "User not exists!" ])
+  (not (vld/errors? :pay)))

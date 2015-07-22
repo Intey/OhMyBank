@@ -29,8 +29,20 @@
   [:#date]   (h/set-attr :value date)
   [:#price]  (h/set-attr :value (str price))
   [:#debt]   (h/set-attr :value (core/debt (sess/get :username) event date))
-  [:.action] (fn [match]
+  [:.action.participate] (fn [match]
                (if (core/need-button? (sess/get :username) events)  ;if user participated in events
                  ((h/remove-attr :disabled "")  match)
                  ((h/set-attr :disabled "")     match)      
-                 )))
+                 ))
+  [:.action.pay] (fn [match]
+                   (if (and 
+                         (not= (core/debt (sess/get :username) event date) 0.0) ; have debt
+                         (not (core/need-button? (sess/get :username) events)) ;i'm stake in event
+                         )
+                     ((h/remove-attr :disabled "")  match)
+                     ((h/set-attr :disabled "")     match)      
+
+                     )
+                   )
+  
+  )
