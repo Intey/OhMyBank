@@ -120,11 +120,11 @@
   )
 
 (defn get-debit [uid eid]
-  ; sum of all credits and debits in pays for current user and event. 
+  "sum of all credits and debits in pays for current user and event. "
   (if-let [summary
            (:debit (first (sql/select pays (sql/where (and (= :eid eid) (= :uid uid))) 
                               (sql/aggregate (sum :debit) :debit))))] 
     summary
-    0 ; if value - nil, return 0
+    0.0 ; if value - nil, return 0.0
     )
   )

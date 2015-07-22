@@ -18,7 +18,7 @@
     [noir.response :refer [redirect]]
 
     ; request handlers. Prepare data, and call views. 
-    [ombs.handler.handle :refer [index user pay]]
+    [ombs.handler.handle :refer [index user pay participate]]
     [ombs.handler.addevent :refer [addevent-page addevent]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
@@ -38,11 +38,16 @@
 
   (GET  "/user" [_] user)
 
+  (POST "/act" {params :params} 
+        (if (:pay params) 
+          (pay params)
+          (participate params)
+          ))
   ;payment controlling
-  (POST "/pay" {params :params} (pay params))
   ;(POST "/confirm {params :params} (confirm-payment)
 
-  ;(POST "/participate" [_] user) ;request common/participate) ; TODO: not fixed, after realize participation on addition
+  ;(POST "/pay" {params :params} (println (str "paying! Params:" params)))
+  ;(POST "/participate" {params :params} (println (str "participating! Params:" params))) ;request common/participate) ; TODO: not fixed, after realize participation on addition
 
   (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
 

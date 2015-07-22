@@ -1,7 +1,7 @@
 <html>
 <body>
     <article>
-        <form id="event" method="post" action="/pay">
+        <form id="event" method="post" action="/act">
             <table>
                 <tr>
                     <td> <label for="event-name">Event:</label> </td>
@@ -19,7 +19,11 @@
                     <td><label for="debt">Your debt:</label></td>
                     <td><input type="text" name="debt" readonly id="debt" value=""></input></td>
                 </tr>
-                <tr><td colspan="2" align="center"><input type="submit" class="action" value="participate"></td></tr>
+                <tr>
+                    <td><input type="submit" class="action pay" name="pay" value="pay"></td>
+                    <td><input type="submit" class="action participate" name="participate" value="participate"></td>
+                </tr>
+                
             </table>
         </form>
     </article>

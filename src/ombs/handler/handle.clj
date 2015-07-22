@@ -30,5 +30,20 @@
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         eid (db/get-eid ename date)]
-    (isvalid/stake? eid uid)
+    (if (isvalid/stake? eid uid)
+      (db/debit-payment eid uid price)
+      "validation fails."
+      )
+
+    ))
+(defn participate [{ename :event-name date :date price :price }]
+  "Add participation of current user and selected event(given as param from post)"
+  (let [uname (sess/get :username)
+        uid (db/get-uid uname)
+        eid (db/get-eid ename date)]
+    (if (isvalid/stake? eid uid)
+      "participayed ^_^"
+      "validation fails."
+      )
+
     ))
