@@ -41,3 +41,12 @@ INNER JOIN events e
 ON p.eid = e.id
 group by eid; -- for hypothesis 
 
+CREATE VIEW stakes
+AS 
+SELECT e.name event, e.date, e.price, u.name user
+FROM events e
+LEFT JOIN pays p
+ON e.id = p.eid
+LEFT JOIN users u
+ON u.id = p.uid;
+
