@@ -31,7 +31,7 @@
         uid (db/get-uid uname)
         eid (db/get-eid ename date)]
     (if (isvalid/stake? eid uid)
-      (str "u:"uname " e:"ename " gonna pay " (db/get-debit uname ename date))
+      (db/debit-payment uid eid (db/get-debt uname ename date))
       "validation fails."
       )
 

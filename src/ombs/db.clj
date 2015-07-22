@@ -98,5 +98,5 @@
   )
 (defn debit-payment [uid eid money]
   (println (str "add debit: "uid" event: "eid " price: "money) )
-  (sql/insert pays (sql/values { :uid uid :eid eid :credit money }))
+  (sql/insert pays (sql/values { :uid uid :eid eid :debit money }))
   )
