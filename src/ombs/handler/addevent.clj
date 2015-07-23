@@ -39,7 +39,7 @@
           #(db/credit-payment (db/get-uid %) (db/get-eid event date) (* party-pay (db/get-rate %))) 
           (core/as-vec users)))
       (println (str "rates " user-rates " pp " party-pay " users " users))
-      (redirect "/addevent"))
+      (redirect "/user"))
     (addevent-page)
        
     )

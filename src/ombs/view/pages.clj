@@ -48,6 +48,7 @@
 (h/deftemplate user "../resources/public/user.html"
   [event-list]
   [:#user] (h/content (sess/get :username))
+  [:.debt] (h/content (str (core/debt (sess/get :username))))
   [:main] (h/content (map #(event-elem %) event-list))
   )
 

@@ -34,7 +34,7 @@
       (db/debit-payment uid eid (db/get-debt uname ename date))
       "validation fails."
       )
-
+    (redirect "/user")
     ))
 (defn participate [{ename :event-name date :date price :price }]
   "Add participation of current user and selected event(given as param from post)"

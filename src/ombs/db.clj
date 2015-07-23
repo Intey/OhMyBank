@@ -84,12 +84,19 @@
     )
   )
 
-(defn get-debt [username event date]
+(defn get-debt 
   "sum of all credits and debits in pays for current user and event. "
+  ; full debt
+  ([username]
+  (if-let [summary (:debt (first (sql/select debts (sql/where (= username :user)) (sql/aggregate (sum :debt) :debt))))]
+    summary 
+    0.0))
+
+  ; debt on some event
+  ([username event date]
   (if-let [summary (:debt (first (sql/select debts (sql/where (and (= username :user) (= event :event) (= date :date) )))))]
-    summary
-    0.0 ; if value - nil, return 0.0
-    )
+    summary 
+    0.0))
   ) 
 
 (defn credit-payment [uid eid money]

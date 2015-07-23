@@ -8,6 +8,13 @@
 <body>
     <header>
         <span>Welcome, </span><span id="user"></span>
+
+        <p> Your summary debt: <span class="debt"></span></p>
+
+        <form method="get" id="addeventform" action="/addevent">
+            <input type="submit" value="Add event"/>
+        </form>
+
         <form method="post" id="logform" action="/logout">
             <input type="submit" value="logout"/>
         </form>

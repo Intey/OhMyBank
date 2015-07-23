@@ -39,8 +39,9 @@
   ;(fn [[k v]] (nil? (some #{uname} v ))) ; is user in participate list?
   ;event-users-pair) )
 
-(defn debt [username event date]
-  (db/get-debt username event date)
+(defn debt 
+  ([username] (db/get-debt username))
+  ([username event date] (db/get-debt username event date))
   )
 
 (defn as-vec
