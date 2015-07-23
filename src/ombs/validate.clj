@@ -38,6 +38,7 @@
   (vld/rule (vld/has-value? username) [:register "Username can't be empty"])
   (vld/rule (>= (count pass1) 8) [:register "Password should be longer than 7 chars"])
   (vld/rule (= pass1 pass2) [:register "Password doesn't match"])
+  (create-rule :register [ (empty? (db/get-user username)) "Username already used!" ])
   (not (vld/errors? :register))
   )
 
