@@ -13,6 +13,7 @@
                            [lib-noir "0.9.9"] ; session management
                            [liberator "0.12.2"] ; for RESTful project
                            [cheshire "5.4.0"] ; JSON parsing
+                           [clj-time "0.10.0"]
 
                            [org.clojure/java.jdbc "0.3.6"] ; deps fo db-driver
                            [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver

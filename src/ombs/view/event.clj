@@ -4,6 +4,9 @@
     [noir.session :as sess]
     [noir.validation :as vld]  
     [ombs.core :as core]
+    [clj-time.format :refer [formatter unparse]]
+    [clj-time.local :refer [local-now]]
+    [clj-time.core :refer [date-time]]
     ))
 
 ; Helpers, for creation list of user for participation
@@ -16,6 +19,7 @@
 (h/deftemplate addevent-page "../resources/public/addevent.html"
   [users]
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
+  [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors :event))))
   )
 
