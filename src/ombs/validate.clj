@@ -4,8 +4,9 @@
     [ombs.db :as db]
     ))
 
-(defn errors-string [tags]
-  (reduce str (map #(str "|" % "|") (vld/get-errors tags)))
+(defn errors-string 
+  ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
+  ([tags] (reduce str (map #(str "|" % "|") (vld/get-errors tags))))
   )
 
 (defmacro create-rule [tag data]

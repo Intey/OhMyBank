@@ -42,7 +42,7 @@
         uid (db/get-uid uname)
         eid (db/get-eid ename date)]
     (if (isvalid/stake? eid uid)
-      "participayed ^_^"
+      "participayed ^_^ . Joke, Just not realized."
       "validation fails."
       )
 

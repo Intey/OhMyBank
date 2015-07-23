@@ -2,7 +2,7 @@
   (:require
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess]
-    [noir.validation :as vld]
+    [ombs.validate :refer [errors-string]]
     [ombs.core :as core]
     [ombs.view.event :refer [event-elem]]
     ;[noir.util.anti-forgery :refer [anti-forgery-field]] ; security - need, add field fo srcf defence
@@ -20,13 +20,7 @@
   )
 
 (h/deftemplate index "../resources/public/index.html" [& ctxt]
-  ;[:#ename] (fn [match]
-  ;  (vld/on-error :ename ((h/set-attr :placeholder (vld/get-errors :ename)) match) ))
-  [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors))))
-                ;(if-let [error (:error ctxt)]
-                ;     ((h/content error) match)
-                ;     ((h/content "") match) )
-
+  [:#error] (h/content (errors-string))
   ; hide log and reg forms, show logout form if have username in session
   ;[:#logform] (hide)
   ;[:#regform] (hide)
@@ -36,14 +30,13 @@
 ;Generate register page. If in given params founded keys for this page - fill fields with founded values
 (h/deftemplate register "../resources/public/register.html" [params]
   [:#uname]        (h/content (sess/get :username))
-  [:#error]        (h/content (reduce str (map #(str "|" % "|") (vld/get-errors :register))))
+  [:#error]        (h/content (errors-string :register))
   [:#username]     (h/set-attr :value (params :username))
   [:#birthdate]    (h/set-attr :value (params :birthdate))
   [:#student-flag] (if (not-empty (params :student-flag))
                      (h/set-attr :checked "on")  ; check
                      (h/set-attr "" "") )        ; unckeck
   )
-
 
 (h/deftemplate user "../resources/public/user.html"
   [event-list]
