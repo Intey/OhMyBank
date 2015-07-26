@@ -43,7 +43,6 @@
   (create-rule :event [ (vld/greater-than? price 0)             (get-in errors [:event :zero-price]) ])
   (create-rule :event [ (vld/has-value? date)                   (get-in errors [:event :empty-date]) ])
   (create-rule :event [ (empty? (db/get-event eventname date))  (get-in errors [:event :duplicate-event]) ])
-  (create-rule :event [ (not (nil? users))                      (get-in errors [:event :no-participants]) ])
   (not (vld/errors? :event)))
 
 (defn new-user? [username pass1 pass2] 
