@@ -25,6 +25,8 @@
 (sql/defentity summary)
 (sql/defentity debts)
 
+(sql/defentity new-participants)
+
 
 ; ===========================================================================================================
 ; ===========================================================================================================
@@ -99,11 +101,14 @@
     0.0))
   ) 
 
-(defn credit-payment [uid eid money]
-  (println (str "add credit : "uid" event: "eid " price: "money) )
-  (sql/insert pays (sql/values { :uid uid :eid eid :credit money }))
+(defn credit-payment [eventname date username money] 
+  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money }))
   )
+
 (defn debit-payment [uid eid money]
-  (println (str "add debit: "uid" event: "eid " price: "money) )
   (sql/insert pays (sql/values { :uid uid :eid eid :debit money }))
+  )
+
+(defn add-participant [event date user]
+  (sql/insert new-participants (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
   )
