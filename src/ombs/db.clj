@@ -37,10 +37,10 @@
                                  :bdate birthdate
                                  :rate rate } )))
 
-(defn add-event [ename price & [date]]
+(defn add-event [ename price author & [date]]
   (if-not (nil? date)
-    (sql/insert events (sql/values {:name ename :price price :remain price :date date}))
-    (sql/insert events (sql/values {:name ename :price price :remain price }))))
+    (sql/insert events (sql/values {:name ename :price price :author author :date date}))
+    (sql/insert events (sql/values {:name ename :price price :author author}))))
 
 (defn get-user [uname]
   "Return map of user info"
@@ -68,7 +68,8 @@
 
 (defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
 
-(defn get-stakes [] (sql/select stakes) )
+(defn get-stakes [] 
+  (sql/select stakes) )
 
 (defn get-usernames [] (sql/select users (sql/fields :name)))
 
@@ -111,4 +112,8 @@
 
 (defn add-participant [event date user]
   (sql/insert new-participants (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
+  )
+
+(defn get-events-created-by [username]
+  (sql/select events (sql/where (= :author username)) (sql/fields [:name :event] :price :date :author))
   )

@@ -19,7 +19,7 @@
 
     ; request handlers. Prepare data, and call views. 
     [ombs.handler.handle :refer [index user pay participate]]
-    [ombs.handler.addevent :refer [addevent-page addevent]]
+    [ombs.handler.addevent :refer [addevent-page init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
 
@@ -34,7 +34,7 @@
 
 
   (GET "/addevent" [_] addevent-page)
-  (POST "/addevent" {params :params} (addevent params))
+  (POST "/addevent" {params :params} (init-event params))
 
   (GET  "/user" [_] user)
 

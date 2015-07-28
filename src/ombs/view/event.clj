@@ -23,16 +23,17 @@
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors :event))))
   )
 
-(def event-sel [:article])
+(def event-sel [:.event])
 
 (h/defsnippet event-elem "../resources/public/event.html" event-sel 
-  [{{:keys [event price date]}  :event 
+  [{{:keys [event price date author]}  :event 
            users                :users 
     :as events}]
-  [:#name]   (h/set-attr :value event)
-  [:#date]   (h/set-attr :value date)
-  [:#price]  (h/set-attr :value (str price))
-  [:#debt]   (h/set-attr :value (core/debt (sess/get :username) event date))
+  [:.name]   (h/set-attr :value event)
+  [:.date]   (h/set-attr :value date)
+  [:.author] (h/set-attr :value author)
+  [:.price]  (h/set-attr :value (str price))
+  [:.debt]   (h/set-attr :value (core/debt (sess/get :username) event date))
   [:.action.participate] (fn [match]
                (if (core/need-button? (sess/get :username) events)  ;if user participated in events
                  ((h/remove-attr :disabled "")  match)

@@ -37,7 +37,7 @@
   ; there your code !
   (not (vld/errors? :ename :eprice :edate :event))) 
 
-(defn new-event? [eventname price date users] 
+(defn new-event? [eventname price date] 
   (vld/clear-errors!)
   (create-rule :event [ (vld/has-value? eventname)              (get-in errors [:event :empty-name]) ])
   (create-rule :event [ (vld/greater-than? price 0)             (get-in errors [:event :zero-price]) ])

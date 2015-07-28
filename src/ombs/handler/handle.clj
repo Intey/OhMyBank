@@ -20,8 +20,8 @@
   )
 
 (defn user [& _]
-  (if-let [username (sess/get :username)] ; if any user logged
-    (pages/user (core/stakes))
+  (if-let [username (sess/get :username)] ; if user logged
+    (pages/user username)
     (redirect "/"))
   )
 
