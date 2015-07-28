@@ -2,7 +2,7 @@ CREATE TABLE events(
     [id] INTEGER PRIMARY KEY AUTOINCREMENT,
     [name] VARCHAR(200) NOT NULL,
     [price] DOUBLE NOT NULL,
-    [remain] DOUBLE NOT NULL,
+    [author] varchar(50) NOT NULL,
     [date] DATE NOT NULL DEFAULT (date('now')),
     UNIQUE([name], [date])
     );
@@ -22,7 +22,7 @@ CREATE TABLE pays(
     [credit] DOUBLE NOT NULL DEFAULT 0
 );
 
-CREATE TABLE new-participants(
+CREATE TABLE new_participants(
     [uid] INTEGER REFERENCES users(id),
     [eid] INTEGER REFERENCES events(id)
 );
@@ -39,7 +39,7 @@ group by p.eid, p.uid;
 
 CREATE VIEW stakes
 AS 
-SELECT e.name event, e.date, e.price, u.name user
+SELECT e.name event, e.date, e.price, e.author, u.name user
 FROM events e
 LEFT JOIN pays p
 ON e.id = p.eid
