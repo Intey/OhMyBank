@@ -30,9 +30,8 @@
   (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
        (group-by extract-event events)))
 
-(defn stakes [] 
-  (grouper (db/get-stakes)) 
-  )
+(defn stakes [] (grouper (db/get-stakes)) )
+
 (defn user-events [username] (grouper (db/get-events-created-by username)))
 
 (defn need-button? [uname events]
@@ -56,3 +55,5 @@
 
 (defn party-pay [event-price users]
   (/ (read-string event-price) (count users)))
+
+(defn is-initial? [ename date] (db/is-initial? ename date))

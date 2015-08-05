@@ -1,9 +1,11 @@
+
 CREATE TABLE events(
     [id] INTEGER PRIMARY KEY AUTOINCREMENT,
     [name] VARCHAR(200) NOT NULL,
     [price] DOUBLE NOT NULL,
-    [author] varchar(50) NOT NULL,
+    [author] VARCHAR(50) NOT NULL,
     [date] DATE NOT NULL DEFAULT (date('now')),
+    [status] VARCHAR(10) NOT NULL,
     UNIQUE([name], [date])
     );
 

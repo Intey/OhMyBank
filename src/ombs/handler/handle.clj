@@ -25,6 +25,8 @@
     (redirect "/"))
   )
 
+;=================================================== actions ================================================
+
 (defn pay [{ename :event-name date :date debt :debt :as params}]
   "Add participation of current user and selected event(given as param from post)"
   (let [uname (sess/get :username)
@@ -36,6 +38,7 @@
       )
     (redirect "/user")
     ))
+
 (defn participate [{ename :event-name date :date price :price }]
   "Add participation of current user and selected event(given as param from post)"
   (let [uname (sess/get :username)
@@ -47,3 +50,8 @@
       )
 
     ))
+
+(defn start [{ename :event-name date :date}]
+  (db/set-status ename date :in-progress)
+  (redirect "/user")
+  )

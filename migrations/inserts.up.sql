@@ -10,11 +10,11 @@ VALUES
 INSERT 
 INTO 
 events
-                (id,    name,          price,          author) 
+                (id,    name,          price,          author,      status) 
 VALUES
-                (1,     'Cookies',     '124',          'Intey'),
-                (2,     'Tea',         '50',           'Intey'),
-                (3,     'Pizza',       '1300',         'andreyk')
+                (1,     'Cookies',     '124',          'Intey',     "initial"),
+                (2,     'Tea',         '50',           'Intey',     "initial"),
+                (3,     'Pizza',       '1300',         'andreyk',   "initial")
                 ;
 
 INSERT 

@@ -27,6 +27,11 @@
 
 (sql/defentity new-participants)
 
+; statuses - describe status of event. 
+;   Initial - created, but not started. Collecting participants.
+;   In-progress - Collecting money! Not full sum payed.
+;   Finished - closed.
+(def statuses {:initial "initial" :finished "finished" :in-progress "in-progress"})
 
 ; ===========================================================================================================
 ; ===========================================================================================================
@@ -37,10 +42,11 @@
                                  :bdate birthdate
                                  :rate rate } )))
 
-(defn add-event [ename price author & [date]]
-  (if-not (nil? date)
-    (sql/insert events (sql/values {:name ename :price price :author author :date date}))
-    (sql/insert events (sql/values {:name ename :price price :author author}))))
+(defn add-event 
+  ([ename price author date] 
+   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial)})))
+  ([ename price author] 
+   (sql/insert events (sql/values {:name ename :price price :author author :status (statuses :initial)}))))
 
 (defn get-user [uname]
   "Return map of user info"
@@ -68,8 +74,7 @@
 
 (defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
 
-(defn get-stakes [] 
-  (sql/select stakes) )
+(defn get-stakes [] (sql/select stakes))
 
 (defn get-usernames [] (sql/select users (sql/fields :name)))
 
@@ -117,3 +122,9 @@
 (defn get-events-created-by [username]
   (sql/select events (sql/where (= :author username)) (sql/fields [:name :event] :price :date :author))
   )
+
+(defn is-initial? [ename date] (sql/select events (sql/where (= :status (statuses :initial)))))
+
+(defn set-status [ename date s]
+  (sql/update events (sql/set-fields {:status (statuses s)}) 
+              (sql/where {:name ename :date date})))
