@@ -18,8 +18,8 @@
     [noir.response :refer [redirect]]
 
     ; request handlers. Prepare data, and call views. 
-    [ombs.handler.handle :refer [index user pay participate]]
-    [ombs.handler.addevent :refer [addevent-page addevent]]
+    [ombs.handler.handle :refer [index user pay participate start]]
+    [ombs.handler.addevent :refer [addevent-page init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
 
@@ -34,14 +34,15 @@
 
 
   (GET "/addevent" [_] addevent-page)
-  (POST "/addevent" {params :params} (addevent params))
+  (POST "/addevent" {params :params} (init-event params))
 
   (GET  "/user" [_] user)
 
   (POST "/act" {params :params} 
-        (if (:pay params) 
-          (pay params)
-          (participate params)
+        (case (:action params) 
+          "pay" (pay params)
+          "participate" (participate params)
+          "start" (start params)
           ))
   ;payment controlling
   ;(POST "/confirm {params :params} (confirm-payment)

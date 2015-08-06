@@ -21,15 +21,18 @@
 
 (defn extract-event [m]
   "Extract event keys from raw result of query participated-list."
-  (select-keys m '(:event :price :date)))
+  (select-keys m '(:event :price :date :author)))
 
-(defn stakes []
+(defn grouper [events]
   "Reorganize participation result to map, where key - is event, and value - vector of users, that 
   participate this event. Expect input, after using group-by on BD-table 'participants':
   (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
   (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
-       (group-by extract-event (db/get-stakes) ) )
-  )
+       (group-by extract-event events)))
+
+(defn stakes [] (grouper (db/get-stakes)) )
+
+(defn user-events [username] (grouper (db/get-events-created-by username)))
 
 (defn need-button? [uname events]
  (->> events
@@ -49,3 +52,8 @@
   [x] (if-not (vector? x) 
         (conj [] x)
         x))
+
+(defn party-pay [event-price users]
+  (/ (read-string event-price) (count users)))
+
+(defn is-initial? [ename date] (db/is-initial? ename date))

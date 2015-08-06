@@ -23,30 +23,31 @@
   [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors :event))))
   )
 
-(def event-sel [:article])
+(def event-sel [:.event])
 
 (h/defsnippet event-elem "../resources/public/event.html" event-sel 
-  [{{:keys [event price date]}  :event 
+  [{{:keys [ename price date author]}  :event 
            users                :users 
-    :as events}]
-  [:#name]   (h/set-attr :value event)
-  [:#date]   (h/set-attr :value date)
-  [:#price]  (h/set-attr :value (str price))
-  [:#debt]   (h/set-attr :value (core/debt (sess/get :username) event date))
+    :as event}]
+  [:.name]   (h/set-attr :value ename)
+  [:.date]   (h/set-attr :value date)
+  [:.author] (h/set-attr :value author)
+  [:.price]  (h/set-attr :value (str price))
+  [:.debt]   (h/set-attr :value (core/debt (sess/get :username) ename date))
   [:.action.participate] (fn [match]
-               (if (core/need-button? (sess/get :username) events)  ;if user participated in events
+               (if (core/need-button? (sess/get :username) event)  ;if user participated in event
                  ((h/remove-attr :disabled "")  match)
-                 ((h/set-attr :disabled "")     match)      
-                 ))
+                 ((h/set-attr :disabled "")     match)))
   [:.action.pay] (fn [match]
                    (if (and 
-                         (not= (core/debt (sess/get :username) event date) 0.0) ; have debt
-                         (not (core/need-button? (sess/get :username) events)) ;i'm stake in event
+                         (not= (core/debt (sess/get :username) ename date) 0.0) ; have debt
+                         (not (core/need-button? (sess/get :username) event)) ;i'm stake in ename
                          )
                      ((h/remove-attr :disabled "")  match)
-                     ((h/set-attr :disabled "")     match)      
-
-                     )
-                   )
+                     ((h/set-attr :disabled "")     match)))
+  [:.action.start] (fn [match]
+                     (if (and (= author (sess/get :username)) (core/is-initial? ename date))
+                       ((h/remove-attr :disabled "")  match)
+                       ((h/set-attr :disabled "")     match)))
   
   )
