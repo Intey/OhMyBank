@@ -126,5 +126,7 @@
 (defn is-initial? [ename date] (sql/select events (sql/where (= :status (statuses :initial)))))
 
 (defn set-status [ename date s]
+
+  (println (str "set status " (statuses s) " to evnt " ename " date " date  ))
   (sql/update events (sql/set-fields {:status (statuses s)}) 
-              (sql/where {:name ename :date date})))
+              (sql/where {:name ename :date date})) )
