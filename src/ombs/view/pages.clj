@@ -43,6 +43,6 @@
   [:#user] (h/content username)
   [:.debt] (h/content (str (core/debt username)))
   [:section.events :> :article] (h/content (map #(event-elem %) (core/stakes)))
-  [:section.new-events :> :article] (h/content (map #(event-elem %) (core/user-events username)))
+  ; [:section.new-events :> :article] (h/content (map #(event-elem %) (core/user-events username)))
   )
 
