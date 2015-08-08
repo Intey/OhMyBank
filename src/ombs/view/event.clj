@@ -4,6 +4,7 @@
     [noir.session :as sess]
     [noir.validation :as vld]  
     [ombs.core :as core]
+    [ombs.validate :refer [errors-string]]
     [clj-time.format :refer [formatter unparse]]
     [clj-time.local :refer [local-now]]
     [clj-time.core :refer [date-time]]
@@ -20,7 +21,7 @@
   [users]
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
-  [:#error] (h/content (reduce str (map #(str "|" % "|") (vld/get-errors :event))))
+  [:#error] (h/content (errors-string :event))
   )
 
 (def event-sel [:.event])
