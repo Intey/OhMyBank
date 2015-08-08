@@ -30,26 +30,26 @@ CREATE TABLE new_participants(
 );
 
 CREATE VIEW summary
-AS 
-SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
-FROM events e
-LEFT JOIN pays p 
-ON e.id = p.eid
-LEFT JOIN users u
-ON u.id = p.uid
-group by p.eid, p.uid;
+    AS 
+    SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
+    FROM events e
+    LEFT JOIN pays p 
+    ON e.id = p.eid
+    LEFT JOIN users u
+    ON u.id = p.uid
+    group by p.eid, p.uid;
 
 CREATE VIEW stakes
-AS 
-SELECT e.name event, e.date, e.price, e.author, u.name user
-FROM events e
-LEFT JOIN pays p
-ON e.id = p.eid
-LEFT JOIN users u
-ON u.id = p.uid
-GROUP BY e.name, e.date, u.name;
+    AS 
+    SELECT e.name event, e.date, e.price, e.author, u.name user
+    FROM events e
+    LEFT JOIN pays p
+    ON e.id = p.eid
+    LEFT JOIN users u
+    ON u.id = p.uid
+    GROUP BY e.name, e.date, u.name;
 
 CREATE VIEW debts
-AS 
-SELECT user, event, [date], credits - debits debt
-FROM summary;
+    AS 
+    SELECT user, event, [date], credits - debits debt
+    FROM summary;
