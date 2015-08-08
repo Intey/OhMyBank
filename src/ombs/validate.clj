@@ -31,6 +31,8 @@
 ;  (not (vld/errors? tag))
 ;  )
 
+(defn add-error [tag text] (vld/set-error tag text))
+
 
 (defn registration? [params]
   (vld/clear-errors!)
@@ -75,3 +77,11 @@
   (create-rule :pay [ (vld/has-value? eid) "Event does not exist!" ])
   (create-rule :pay [ (vld/has-value? uid) "User not exists!" ])
   (not (vld/errors? :pay)))
+
+(defn participation? [ename date uname]
+  (create-rule :participation [ (vld/has-value? ename) "Event name is empty"])
+  (create-rule :participation [ (vld/has-value? date) "Event date is empty"])
+  (create-rule :participation [ (vld/has-value? uname) "Username is empty"])
+  ;event should be not finished
+  (create-rule :participation [ (not= (db/get-status ename date) (db/statuses :finished)) "Event already finished"])
+  )

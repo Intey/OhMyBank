@@ -38,9 +38,9 @@
                      (h/set-attr "" "") )        ; unckeck
   )
 
-(h/deftemplate user "../resources/public/user.html"
-  [username]
+(h/deftemplate user "../resources/public/user.html" [username]
   [:#user] (h/content username)
+  [:#error] (h/content (errors-string [:participation :pay]))
   [:.debt] (h/content (str (core/debt username)))
   [:section.events :> :article] (h/content (map #(event-elem %) (core/stakes)))
   ; [:section.new-events :> :article] (h/content (map #(event-elem %) (core/user-events username)))

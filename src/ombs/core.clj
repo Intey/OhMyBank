@@ -1,8 +1,10 @@
 (ns ombs.core
-  "contains main logic"
+  "Contains main logic. No validations. All function hope that you give to it valid data. Use in 
+  handlers, views, etc. "
   (:require [ombs.db :as db]
             [ombs.funcs :as fns]
-            [noir.validation :as valids]
+            [ombs.validate :refer [add-error]]
+            [noir.response :refer [redirect]]
             ))
 
 (defn reg-ok? [username pass1 pass2]
@@ -19,11 +21,11 @@
     0.5
     1.0 ) )
 
-(defn extract-event [m]
+(defn- extract-event [m]
   "Extract event keys from raw result of query participated-list."
   (select-keys m '(:event :price :date :author)))
 
-(defn grouper [events]
+(defn- grouper [events]
   "Reorganize participation result to map, where key - is event, and value - vector of users, that 
   participate this event. Expect input, after using group-by on BD-table 'participants':
   (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
@@ -57,3 +59,20 @@
   (/ (read-string event-price) (count users)))
 
 (defn is-initial? [ename date] (db/is-initial? ename date))
+
+(defn- add-in-progress [ename date uname]
+  (println "Add in progress!")
+  (let [message (str "No implementation for participate user " uname " in-progress event " (db/get-event ename date) )]
+    (add-error :participation message))
+    (redirect "/user")
+  )
+
+(defn add-participant [ename date uname]
+  "Hope, that data is ok, and given user can participate in given event."
+  (println (str "core.add-participant:" uname " event:" ename " date:" date))
+  (if (is-initial? ename date)
+    (db/add-participant ename date uname)
+    (add-in-progress ename date uname)
+    )
+  )
+

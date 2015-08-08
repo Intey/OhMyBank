@@ -25,7 +25,7 @@
 (sql/defentity summary)
 (sql/defentity debts)
 
-(sql/defentity new-participants)
+(sql/defentity new_participants)
 
 ; statuses - describe status of event. 
 ;   Initial - created, but not started. Collecting participants.
@@ -116,7 +116,7 @@
   )
 
 (defn add-participant [event date user]
-  (sql/insert new-participants (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
+  (sql/insert new_participants (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
   )
 
 (defn get-events-created-by [username]
@@ -132,3 +132,6 @@
   (println (str "set status " (statuses s) " to evnt " ename " date " date  ))
   (sql/update events (sql/set-fields {:status (statuses s)}) 
               (sql/where {:name ename :date date})) )
+
+(defn get-status [ename date]
+  (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status)))))
