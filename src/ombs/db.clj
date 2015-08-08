@@ -123,7 +123,9 @@
   (sql/select events (sql/where (= :author username)) (sql/fields [:name :event] :price :date :author))
   )
 
-(defn is-initial? [ename date] (sql/select events (sql/where (= :status (statuses :initial)))))
+(defn is-initial? [ename date] 
+   (= (statuses :initial) 
+      (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status))))))
 
 (defn set-status [ename date s]
 

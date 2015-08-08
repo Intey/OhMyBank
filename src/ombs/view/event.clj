@@ -46,6 +46,7 @@
                      ((h/remove-attr :disabled "")  match)
                      ((h/set-attr :disabled "")     match)))
   [:.action.start] (fn [match]
+                     ;(println (str "author: " author " event "event " date " date " initial? " (core/is-initial? event date) ))
                      (if (and (= author (sess/get :username)) (core/is-initial? event date))
                        ((h/remove-attr :disabled "")  match)
                        ((h/set-attr :disabled "")     match)))
