@@ -24,7 +24,7 @@ CREATE TABLE pays(
     [credit] DOUBLE NOT NULL DEFAULT 0
 );
 
-CREATE TABLE new_participants(
+CREATE TABLE participation(
     [uid] INTEGER REFERENCES users(id),
     [eid] INTEGER REFERENCES events(id)
 );
@@ -38,16 +38,6 @@ CREATE VIEW summary
     LEFT JOIN users u
     ON u.id = p.uid
     group by p.eid, p.uid;
-
-CREATE VIEW stakes
-    AS 
-    SELECT e.name event, e.date, e.price, e.author, u.name user
-    FROM events e
-    LEFT JOIN pays p
-    ON e.id = p.eid
-    LEFT JOIN users u
-    ON u.id = p.uid
-    GROUP BY e.name, e.date, u.name;
 
 CREATE VIEW debts
     AS 

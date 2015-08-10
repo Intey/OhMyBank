@@ -47,6 +47,6 @@
 (defn start [{ename :event-name date :date}]
   (db/set-status ename date :in-progress)
   ; calc debts
-  ; move new-participants to pays
+  ; create credits for all participants.
   (redirect "/user"); go to user page in any case
   )

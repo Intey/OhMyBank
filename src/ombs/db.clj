@@ -21,7 +21,6 @@
   (sql/belongs-to users {:fk :uid})
   ) 
 
-(sql/defentity stakes)
 (sql/defentity summary)
 (sql/defentity debts)
 
@@ -75,8 +74,6 @@
   (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
 
 (defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
-
-(defn get-stakes [] (sql/select stakes))
 
 (defn get-usernames [] (sql/select users (sql/fields :name)))
 
