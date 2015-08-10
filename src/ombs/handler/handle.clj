@@ -39,8 +39,9 @@
 
 (defn participate [{ename :event-name date :date price :price }]
   "Add participation of current user and selected event(given as param from post)"
-  (if (isvalid/participation? ename date (sess/get :username))
-    (core/add-participant ename date (sess/get :username)))
+  (let [uname (sess/get :username)]  
+    (if (isvalid/participation? ename date uname)
+      (core/add-participant ename date uname)))
   (redirect "/user")); go to user page in any case
 
 (defn start [{ename :event-name date :date}]
