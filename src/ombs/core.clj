@@ -39,7 +39,7 @@
 (defn user-events [username] (grouper (db/get-events-created-by username)))
 
 (defn need-button? [uname ename edate]
-  (db/participated? uname ename edate))
+  (not (db/participated? uname ename edate)))
   ;(apply
   ;(fn [[k v]] (nil? (some #{uname} v ))) ; is user in participate list?
   ;event-users-pair) )

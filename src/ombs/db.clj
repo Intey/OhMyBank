@@ -69,9 +69,11 @@
   (:id (first (sql/select events (sql/fields :id)
                           (sql/where (and (= :name ename) (= :date date)))))))
 
-(defn participated? [uid eid]
-  "Check participation in event. If user have some payment action on event - he is participated."
-  (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
+(defn participated? 
+ "Check participation in event. If user have some payment action on event - he is participated." 
+  ([uid eid] (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
+  ([uname ename edate] (participated? (get-uid uname) (get-eid ename edate)))
+  )
 
 (defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
 
