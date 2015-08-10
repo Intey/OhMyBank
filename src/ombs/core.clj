@@ -76,3 +76,11 @@
     )
   )
 
+(defn start-event [ename edate]
+  (db/set-status ename edate :in-progress)
+  (println (db/get-participants ename edate))
+  ; calc debts
+  ; calc party-pay.
+  ; 
+  ; create credits for all participants with party-pay.
+  )

@@ -45,8 +45,7 @@
   (redirect "/user")); go to user page in any case
 
 (defn start [{ename :event-name date :date}]
-  (db/set-status ename date :in-progress)
-  ; calc debts
-  ; create credits for all participants.
+  ;isvalid: not started, exists.
+  (core/start-event ename date)
   (redirect "/user"); go to user page in any case
   )

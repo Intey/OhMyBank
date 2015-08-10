@@ -29,6 +29,16 @@ CREATE TABLE participation(
     [eid] INTEGER REFERENCES events(id)
 );
 
+CREATE VIEW participants
+    AS
+    SELECT u.name user, e.name event, e.date [date]
+    FROM participation p
+    LEFT JOIN events e
+    ON e.id = p.eid
+    LEFT JOIN users u
+    ON u.id = p.uid;
+
+
 CREATE VIEW summary
     AS 
     SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits

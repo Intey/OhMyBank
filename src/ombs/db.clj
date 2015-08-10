@@ -25,6 +25,7 @@
 (sql/defentity debts)
 
 (sql/defentity participation)
+(sql/defentity participants)
 
 ; statuses - describe status of event. 
 ;   Initial - created, but not started. Collecting participants.
@@ -136,3 +137,6 @@
 
 (defn get-status [ename date]
   (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status)))))
+
+(defn get-participants [ename edate]
+  (mapv #(first (vals %)) (sql/select participants (sql/fields :user) (sql/where {:event ename :date edate}))))
