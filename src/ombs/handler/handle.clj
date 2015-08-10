@@ -16,7 +16,7 @@
 
 (defn index [& [params]]
   "Handler. show index page with events."
-  (pages/index (assoc params :events (db/get-events-list)))
+  (pages/index)
   )
 
 (defn user [& _]

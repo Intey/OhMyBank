@@ -25,7 +25,7 @@
 (sql/defentity summary)
 (sql/defentity debts)
 
-(sql/defentity new_participants)
+(sql/defentity participation)
 
 ; statuses - describe status of event. 
 ;   Initial - created, but not started. Collecting participants.
@@ -58,7 +58,9 @@
 
 (defn get-event [ename date] (sql/select events (sql/where (and (= :date date) (= :name ename)))))
 
-(defn get-events-list [] (sql/select events))
+(defn get-events [] (sql/select events))
+
+(defn get-active-events [] (sql/select events (sql/where (not= :status (statuses :finished)))))
 
 (defn get-uid [uname]
   (:id (first (sql/select users (sql/fields :id)
@@ -70,7 +72,7 @@
 
 (defn participated? [uid eid]
   "Check participation in event. If user have some payment action on event - he is participated."
-  (not (empty? (sql/select pays (sql/where (and (= :uid uid) (= :eid eid))))))) 
+  (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
 
 (defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
 
@@ -116,11 +118,11 @@
   )
 
 (defn add-participant [event date user]
-  (sql/insert new_participants (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
+  (sql/insert participation (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
   )
 
 (defn get-events-created-by [username]
-  (sql/select events (sql/where (= :author username)) (sql/fields [:name :event] :price :date :author))
+  (sql/select events (sql/where (= :author username)) (sql/fields :name :price :date :author))
   )
 
 (defn is-initial? [ename date] 

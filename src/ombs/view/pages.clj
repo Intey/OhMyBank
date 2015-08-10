@@ -19,7 +19,7 @@
   ;else - redirect
   )
 
-(h/deftemplate index "../resources/public/index.html" [& ctxt]
+(h/deftemplate index "../resources/public/index.html" []
   [:#error] (h/content (errors-string))
   ; hide log and reg forms, show logout form if have username in session
   ;[:#logform] (hide)
@@ -42,7 +42,7 @@
   [:#user] (h/content username)
   [:#error] (h/content (errors-string [:participation :pay]))
   [:.debt] (h/content (str (core/debt username)))
-  [:section.events :> :article] (h/content (map #(event-elem %) (core/stakes)))
+  [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
   ; [:section.new-events :> :article] (h/content (map #(event-elem %) (core/user-events username)))
   )
 
