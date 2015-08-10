@@ -56,7 +56,7 @@
            (sql/limit 1)
            )))
 
-(defn get-event [ename date] (sql/select events (sql/where (and (= :date date) (= :name ename)))))
+(defn get-event [ename date] (first (sql/select events (sql/where (and (= :date date) (= :name ename))))))
 
 (defn get-events [] (sql/select events))
 
@@ -110,8 +110,8 @@
   ) 
 
 (defn credit-payment [eventname date username money] 
-  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money }))
-  )
+  (println (str "credit " eventname " date " date " user " username " money " money ))
+  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money })))
 
 (defn debit-payment [uid eid money]
   (sql/insert pays (sql/values { :uid uid :eid eid :debit money }))

@@ -33,7 +33,7 @@
        (group-by extract-event events)))
 
 (defn events [] 
-  (println (db/get-events)) 
+  ;(println (db/get-events)) 
   (db/get-events))  
 
 (defn user-events [username] (grouper (db/get-events-created-by username)))
@@ -56,7 +56,8 @@
         x))
 
 (defn party-pay [event-price users]
-  (/ (read-string event-price) (count users)))
+  "Simple for common events. For birthday, need more complex realization depends on each user rate."
+  (/ event-price (count users)))
 
 (defn is-initial? [ename date] (db/is-initial? ename date))
 
@@ -78,9 +79,8 @@
 
 (defn start-event [ename edate]
   (db/set-status ename edate :in-progress)
-  (println (db/get-participants ename edate))
-  ; calc debts
-  ; calc party-pay.
-  ; 
-  ; create credits for all participants with party-pay.
+  (let [users (db/get-participants ename edate)
+        party-pay (party-pay (:price (db/get-event ename edate)) users)]
+    (println (str "start adding " users))
+    (doall (map #(db/credit-payment ename edate % party-pay) users)))
   )
