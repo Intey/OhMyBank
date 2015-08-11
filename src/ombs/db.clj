@@ -21,12 +21,17 @@
   (sql/belongs-to users {:fk :uid})
   ) 
 
-(sql/defentity stakes)
 (sql/defentity summary)
 (sql/defentity debts)
 
-(sql/defentity new-participants)
+(sql/defentity participation)
+(sql/defentity participants)
 
+; statuses - describe status of event. 
+;   Initial - created, but not started. Collecting participants.
+;   In-progress - Collecting money! Not full sum payed.
+;   Finished - closed.
+(def statuses {:initial "initial" :finished "finished" :in-progress "in-progress"})
 
 ; ===========================================================================================================
 ; ===========================================================================================================
@@ -37,10 +42,11 @@
                                  :bdate birthdate
                                  :rate rate } )))
 
-(defn add-event [ename price & [date]]
-  (if-not (nil? date)
-    (sql/insert events (sql/values {:name ename :price price :remain price :date date}))
-    (sql/insert events (sql/values {:name ename :price price :remain price }))))
+(defn add-event 
+  ([ename price author date] 
+   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial)})))
+  ([ename price author] 
+   (sql/insert events (sql/values {:name ename :price price :author author :status (statuses :initial)}))))
 
 (defn get-user [uname]
   "Return map of user info"
@@ -50,9 +56,11 @@
            (sql/limit 1)
            )))
 
-(defn get-event [ename date] (sql/select events (sql/where (and (= :date date) (= :name ename)))))
+(defn get-event [ename date] (first (sql/select events (sql/where (and (= :date date) (= :name ename))))))
 
-(defn get-events-list [] (sql/select events))
+(defn get-events [] (sql/select events))
+
+(defn get-active-events [] (sql/select events (sql/where (not= :status (statuses :finished)))))
 
 (defn get-uid [uname]
   (:id (first (sql/select users (sql/fields :id)
@@ -62,13 +70,13 @@
   (:id (first (sql/select events (sql/fields :id)
                           (sql/where (and (= :name ename) (= :date date)))))))
 
-(defn participated? [uid eid]
-  "Check participation in event. If user have some payment action on event - he is participated."
-  (not (empty? (sql/select pays (sql/where (and (= :uid uid) (= :eid eid))))))) 
+(defn participated? 
+ "Check participation in event. If user have some payment action on event - he is participated." 
+  ([uid eid] (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
+  ([uname ename edate] (participated? (get-uid uname) (get-eid ename edate)))
+  )
 
 (defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
-
-(defn get-stakes [] (sql/select stakes) )
 
 (defn get-usernames [] (sql/select users (sql/fields :name)))
 
@@ -102,13 +110,33 @@
   ) 
 
 (defn credit-payment [eventname date username money] 
-  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money }))
-  )
+  (println (str "credit " eventname " date " date " user " username " money " money ))
+  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money })))
 
 (defn debit-payment [uid eid money]
   (sql/insert pays (sql/values { :uid uid :eid eid :debit money }))
   )
 
 (defn add-participant [event date user]
-  (sql/insert new-participants (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
+  (sql/insert participation (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
   )
+
+(defn get-events-created-by [username]
+  (sql/select events (sql/where (= :author username)) (sql/fields :name :price :date :author))
+  )
+
+(defn is-initial? [ename date] 
+   (= (statuses :initial) 
+      (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status))))))
+
+(defn set-status [ename date s]
+
+  (println (str "set status " (statuses s) " to evnt " ename " date " date  ))
+  (sql/update events (sql/set-fields {:status (statuses s)}) 
+              (sql/where {:name ename :date date})) )
+
+(defn get-status [ename date]
+  (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status)))))
+
+(defn get-participants [ename edate]
+  (mapv #(first (vals %)) (sql/select participants (sql/fields :user) (sql/where {:event ename :date edate}))))

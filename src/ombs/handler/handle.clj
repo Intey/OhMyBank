@@ -1,8 +1,8 @@
 (ns ombs.handler.handle
   (:require
     [ombs.view.pages :as pages]
-    [ombs.db :as db]
     [ombs.core :as core]
+    [ombs.db :as db]
     [ombs.validate :as isvalid]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
@@ -16,14 +16,16 @@
 
 (defn index [& [params]]
   "Handler. show index page with events."
-  (pages/index (assoc params :events (db/get-events-list)))
+  (pages/index)
   )
 
 (defn user [& _]
-  (if-let [username (sess/get :username)] ; if any user logged
-    (pages/user (core/stakes))
+  (if-let [username (sess/get :username)] ; if user logged
+    (pages/user username)
     (redirect "/"))
   )
+
+;=========================================== actions on user page ===========================================
 
 (defn pay [{ename :event-name date :date debt :debt :as params}]
   "Add participation of current user and selected event(given as param from post)"
@@ -32,18 +34,18 @@
         eid (db/get-eid ename date)]
     (if (isvalid/stake? eid uid)
       (db/debit-payment uid eid (db/get-debt uname ename date))
-      "validation fails."
-      )
-    (redirect "/user")
-    ))
+      ))
+  (redirect "/user")) ; go to user page in any case
+
 (defn participate [{ename :event-name date :date price :price }]
   "Add participation of current user and selected event(given as param from post)"
-  (let [uname (sess/get :username)
-        uid (db/get-uid uname)
-        eid (db/get-eid ename date)]
-    (if (isvalid/stake? eid uid)
-      "participayed ^_^ . Joke, Just not realized."
-      "validation fails."
-      )
+  (let [uname (sess/get :username)]  
+    (if (isvalid/participation? ename date uname)
+      (core/add-participant ename date uname)))
+  (redirect "/user")); go to user page in any case
 
-    ))
+(defn start [{ename :event-name date :date}]
+  ;isvalid: not started, exists.
+  (core/start-event ename date)
+  (redirect "/user"); go to user page in any case
+  )

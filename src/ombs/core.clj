@@ -1,8 +1,10 @@
 (ns ombs.core
-  "contains main logic"
+  "Contains main logic. No validations. All function hope that you give to it valid data. Use in 
+  handlers, views, etc. "
   (:require [ombs.db :as db]
             [ombs.funcs :as fns]
-            [noir.validation :as valids]
+            [ombs.validate :refer [add-error]]
+            [noir.response :refer [redirect]]
             ))
 
 (defn reg-ok? [username pass1 pass2]
@@ -19,22 +21,25 @@
     0.5
     1.0 ) )
 
-(defn extract-event [m]
+(defn- extract-event [m]
   "Extract event keys from raw result of query participated-list."
-  (select-keys m '(:event :price :date)))
+  (select-keys m '(:name :price :date :author)))
 
-(defn stakes []
+(defn- grouper [events]
   "Reorganize participation result to map, where key - is event, and value - vector of users, that 
   participate this event. Expect input, after using group-by on BD-table 'participants':
   (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
   (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
-       (group-by extract-event (db/get-stakes) ) )
-  )
+       (group-by extract-event events)))
 
-(defn need-button? [uname events]
- (->> events
-      :users
-      (some #{uname}) boolean not))
+(defn events [] 
+  ;(println (db/get-events)) 
+  (db/get-events))  
+
+(defn user-events [username] (grouper (db/get-events-created-by username)))
+
+(defn need-button? [uname ename edate]
+  (not (db/participated? uname ename edate)))
   ;(apply
   ;(fn [[k v]] (nil? (some #{uname} v ))) ; is user in participate list?
   ;event-users-pair) )
@@ -49,3 +54,33 @@
   [x] (if-not (vector? x) 
         (conj [] x)
         x))
+
+(defn party-pay [event-price users]
+  "Simple for common events. For birthday, need more complex realization depends on each user rate."
+  (/ event-price (count users)))
+
+(defn is-initial? [ename date] (db/is-initial? ename date))
+
+(defn- add-in-progress [ename date uname]
+  (println "Add in progress!")
+  (let [message (str "No implementation for participate user " uname " in-progress event " (db/get-event ename date) )]
+    (add-error :participation message))
+    (redirect "/user")
+  )
+
+(defn add-participant [ename date uname]
+  "Hope, that data is ok, and given user can participate in given event."
+  (println (str "core.add-participant:" uname " event:" ename " date:" date))
+  (if (is-initial? ename date)
+    (db/add-participant ename date uname)
+    (add-in-progress ename date uname)
+    )
+  )
+
+(defn start-event [ename edate]
+  (db/set-status ename edate :in-progress)
+  (let [users (db/get-participants ename edate)
+        party-pay (party-pay (:price (db/get-event ename edate)) users)]
+    (println (str "start adding " users))
+    (doall (map #(db/credit-payment ename edate % party-pay) users)))
+  )

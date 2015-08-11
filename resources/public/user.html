@@ -10,6 +10,7 @@
         <span>Welcome, </span><span id="user"></span>
 
         <p> Your summary debt: <span class="debt"></span></p>
+        <h1 id="error"></h1>
 
         <form method="get" id="addeventform" action="/addevent">
             <input type="submit" value="Add event"/>
@@ -20,7 +21,19 @@
         </form>
     </header>
     <main>
-        <!-- inserted from event.html by enlive snippets -->
+        <section class="events">
+            <h2> All Existing Events </h2>
+            <article>
+                <!-- inserted from event.html by enlive snippets -->
+            </article>
+        </section>
+        <section class="new-events">
+            <!-- 
+                <h2> Not started events. </h2>
+                <article>
+                </article>
+            --> 
+        </section>
     </main>
     <!-- Progressive enhancement!
     <script>
