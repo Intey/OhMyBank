@@ -4,6 +4,18 @@
     [ombs.db :as db]
     ))
 
+(def errors 
+  {
+   :event { 
+            :empty-name      "Event name should not be empty"  
+            :zero-price      "Event price should be greater than 0"
+            :empty-date      "Event should have date"                                  
+            :duplicate-event "Event with same name today was created. Use another name"
+            :no-participants "Participants should be checked"                          
+            }
+   }
+  )
+
 (defn errors-string 
   ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
   ([tags] (reduce str (map #(str "|" % "|") (vld/get-errors tags))))
@@ -27,11 +39,10 @@
 
 (defn new-event? [eventname price date users] 
   (vld/clear-errors!)
-  (vld/rule (vld/has-value? eventname) [:event "Event name should not be empty"])
-  (vld/rule (vld/greater-than? price 0) [:event "Event price should be greater than 0"])
-  (vld/rule (vld/has-value? date) [:event "Event should have date"])
-  (vld/rule (empty? (db/get-event eventname date)) [:event "Event with same name today was created. Use another name"])
-  (vld/rule (not (nil? users)) [:event "Participants should be checked"])
+  (create-rule :event [ (vld/has-value? eventname)              (get-in errors [:event :empty-name]) ])
+  (create-rule :event [ (vld/greater-than? price 0)             (get-in errors [:event :zero-price]) ])
+  (create-rule :event [ (vld/has-value? date)                   (get-in errors [:event :empty-date]) ])
+  (create-rule :event [ (empty? (db/get-event eventname date))  (get-in errors [:event :duplicate-event]) ])
   (not (vld/errors? :event)))
 
 (defn new-user? [username pass1 pass2] 

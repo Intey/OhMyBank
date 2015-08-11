@@ -22,12 +22,9 @@ CREATE TABLE pays(
     [credit] DOUBLE NOT NULL DEFAULT 0
 );
 
-CREATE TABLE transfers(
-    [debiter] INTEGER REFERENCES users(id),
-    [crediter] INTEGER REFERENCES users(id),
-    [debit] DOUBLE NOT NULL DEFAULT 0,
-    [credit] DOUBLE NOT NULL DEFAULT 0,
-    UNIQUE(debiter, crediter)
+CREATE TABLE new-participants(
+    [uid] INTEGER REFERENCES users(id),
+    [eid] INTEGER REFERENCES events(id)
 );
 
 CREATE VIEW summary

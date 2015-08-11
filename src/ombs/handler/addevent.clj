@@ -30,6 +30,47 @@
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
   (if (isvalid/new-event? event price date users) 
+    (let [party-pay (/ (read-string price) (count users)) ]
+      (db/add-event event (read-string price) date)
+      ;use 'dorun' for execute lazy function 'db/credit-payment'
+      (dorun 
+        (map 
+          #(db/credit-payment event date % party-pay)
+          (core/as-vec users)))
+      (redirect "/user"))
+    ;if validation fails
+    (addevent-page) ))
+
+(defn init-event [ {event :name price :price date :date users :participants :as params} ]
+  "Add event in events table, with adding participants, and calculating debts."
+  ;valudation
+  (if (isvalid/new-event? event price date users) 
+    (do
+      (db/add-event event (read-string price) date) 
+      (redirect "/user"))
+    ;if validation fails
+    (addevent-page) ))
+
+(defn add-participant [event date user]
+  ;link in temp table event and user
+  (if-not (or (nil? (db/get-event event date)) (nil? (db/get-user user))) 
+    (db/add-participant event date user)
+    ))
+
+(defn finish-event [event date price participants] ; (db/get-participants event date)  
+  (let [ party-pay (core/party-pay price participants) ]
+    (map 
+      #(db/credit-payment event date (:name %) (* party-pay (:rate %)) )
+      ; insert credit record
+      participants
+      )
+    )
+  )
+
+(defn add-birthday [ {event :name price :price date :date users :participants :as params} ]
+  "Add event in events table, with adding participants, and calculating debts."
+  ;valudation
+  (if (isvalid/new-event? event price date users) 
     (let [user-rates (db/get-rates (core/as-vec users))
           party-pay (/ (read-string price) (count users)) ]
       (db/add-event event (read-string price) date)
@@ -55,7 +96,7 @@
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (dorun 
         (map 
-          #(db/credit-payment (db/get-uid %) (db/get-eid event date) (* party-pay (db/get-rate %))) 
+          #(db/credit-payment event date % (* party-pay (db/get-rate %))) 
           (core/as-vec users)))
       (println (str "rates " user-rates " pp " party-pay " users " users))
       (redirect "/user"))
