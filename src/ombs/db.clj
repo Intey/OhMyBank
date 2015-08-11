@@ -76,8 +76,6 @@
   ([uname ename edate] (participated? (get-uid uname) (get-eid ename edate)))
   )
 
-(defn event-price [id] (:price (first (sql/select events (sql/where (= :id id)) (sql/fields [:price])))))
-
 (defn get-usernames [] (sql/select users (sql/fields :name)))
 
 (defn get-rate [uname] (:rate (first (sql/select users (sql/fields :rate) (sql/where (= :name uname))))))
