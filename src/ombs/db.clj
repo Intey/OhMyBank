@@ -109,10 +109,6 @@
   (sql/insert participation (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
   )
 
-(defn get-events-created-by [username]
-  (sql/select events (sql/where (= :author username)) (sql/fields :name :price :date :author))
-  )
-
 (defn is-initial? [ename date] 
    (= (statuses :initial) 
       (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status))))))

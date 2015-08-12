@@ -24,8 +24,6 @@
   ;(println (db/get-events)) 
   (db/get-events))  
 
-(defn user-events [username] (grouper (db/get-events-created-by username)))
-
 (defn need-button? [uname ename edate]
   (not (db/participated? uname ename edate)))
   ;(apply
