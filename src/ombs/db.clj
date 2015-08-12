@@ -82,16 +82,6 @@
 
 (defn get-rates [usernames] (map #(get-rate %) usernames))
 
-(defn get-credit [uid eid]
-  ; sum of all credits and debits in pays for current user and event. 
-  (if-let [summary 
-           (:credit (first (sql/select pays (sql/where (and (= :eid eid) (= :uid uid))) 
-                              (sql/aggregate (sum :credit) :credit))))]
-    summary
-    0.0 ; if value - nil, return 0
-    )
-  )
-
 (defn get-debt 
   "sum of all credits and debits in pays for current user and event. "
   ; full debt
@@ -119,16 +109,11 @@
   (sql/insert participation (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
   )
 
-(defn get-events-created-by [username]
-  (sql/select events (sql/where (= :author username)) (sql/fields :name :price :date :author))
-  )
-
 (defn is-initial? [ename date] 
    (= (statuses :initial) 
       (:status (first (sql/select events (sql/where {:name ename :date date} ) (sql/fields :status))))))
 
 (defn set-status [ename date s]
-
   (println (str "set status " (statuses s) " to evnt " ename " date " date  ))
   (sql/update events (sql/set-fields {:status (statuses s)}) 
               (sql/where {:name ename :date date})) )

@@ -9,11 +9,6 @@
     [noir.validation :as vld]
     ))
 
-(defn print-it
-  "just print request. Debug method."
-  [request]
-  (str request))
-
 (defn index [& [params]]
   "Handler. show index page with events."
   (pages/index)
