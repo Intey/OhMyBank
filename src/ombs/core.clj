@@ -7,11 +7,7 @@
             [noir.response :refer [redirect]]
             ))
 
-(defn rate [student?]
-  "Return rate for user. student - 0.5; else - 1."
-  (if (= "on" student?)
-    0.5
-    1.0 ) )
+(defn rate [student?] (if (= student? "on") 0.5 1.0 ) )
 
 (defn- extract-event [m]
   "Extract event keys from raw result of query participated-list."

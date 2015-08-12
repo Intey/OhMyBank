@@ -22,12 +22,12 @@
 
 ;=========================================== actions on user page ===========================================
 
-(defn pay [{ename :event-name date :date debt :debt :as params}]
+(defn pay [{ename :event-name date :date :as params}]
   "Add participation of current user and selected event(given as param from post)"
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         eid (db/get-eid ename date)]
-    (if (isvalid/stake? eid uid)
+    (if (isvalid/ids? eid uid)
       (db/debit-payment uid eid (db/get-debt uname ename date))
       ))
   (redirect "/user")) ; go to user page in any case

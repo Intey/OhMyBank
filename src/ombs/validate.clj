@@ -33,12 +33,6 @@
 
 (defn add-error [tag text] (vld/set-error tag text))
 
-
-(defn registration? [params]
-  (vld/clear-errors!)
-  ; there your code !
-  (not (vld/errors? :ename :eprice :edate :event))) 
-
 (defn new-event? [eventname price date] 
   (vld/clear-errors!)
   (create-rule :event [ (vld/has-value? eventname)              (get-in errors [:event :empty-name]) ])
@@ -69,7 +63,8 @@
   
   )
 
-(defn stake? [eid uid]
+(defn ids? [eid uid]
+  "Check, if id's is correct. Used with (db/get-*id)"
 ;  (create-validator :pay [[ (vld/has-value? uid) "User not found in database" ]
 ;                          [ (vld/has-value? eid) "Event not found in database"] ])
 ;
