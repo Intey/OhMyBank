@@ -1,0 +1,29 @@
+digraph g {
+subgraph cluster1 {
+label="ombs.validate"
+G0 [shape=ellipse,style=bold,label="errors-string"];
+G1 [shape=box,label="noir.validation\n\nget-errors\nclear-errors!\nhas-value?\ngreater-than?\nerrors?\nrule\nset-error"];
+G2 [shape=ellipse,style=bold,label="errors"];
+G3 [shape=ellipse,style=bold,label="participation?"];
+G4 [shape=ellipse,style=bold,label="add-error"];
+G5 [shape=ellipse,style=bold,label="new-event?"];
+G6 [shape=ellipse,style=bold,label="login?"];
+G7 [shape=ellipse,style=bold,label="stake?"];
+G8 [shape=ellipse,style=bold,label="registration?"];
+G9 [shape=box,label="ombs.db\n\nget-event\nget-user\nget-status\nstatuses"];
+G10 [shape=ellipse,style=bold,label="new-user?"];
+}
+G0->G1 [style=dotted,penwidth=3];
+G5->G1 [style=dotted,penwidth=3];
+G5->G2 [penwidth=3];
+G5->G9 [style=dotted,penwidth=3];
+G10->G1 [style=dotted,penwidth=3];
+G10->G9 [style=dotted,penwidth=3];
+G3->G1 [style=dotted,penwidth=3];
+G3->G9 [style=dotted,penwidth=3];
+G7->G1 [style=dotted,penwidth=3];
+G8->G1 [style=dotted,penwidth=3];
+G4->G1 [style=dotted,penwidth=3];
+G6->G1 [style=dotted,penwidth=3];
+G6->G9 [style=dotted,penwidth=3];
+}

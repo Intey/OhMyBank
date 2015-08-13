@@ -1,0 +1,53 @@
+digraph g {
+subgraph cluster1 {
+label="ombs.db"
+G0 [shape=ellipse,style=bold,label="get-eid"];
+G1 [shape=ellipse,style=bold,label="participated?"];
+G2 [shape=ellipse,style=bold,label="get-rate"];
+G3 [shape=ellipse,style=bold,label="add-event"];
+G4 [shape=box,label="korma.core\n\nupdate\nset-fields\nwhere\ninsert\nvalues\nselect\nfields\naggregate\nlimit"];
+G5 [shape=ellipse,style=bold,label="set-status"];
+G6 [shape=ellipse,style=bold,label="credit-payment"];
+G7 [shape=ellipse,style=bold,label="get-debt"];
+G8 [shape=ellipse,style=bold,label="get-event"];
+G9 [shape=ellipse,style=bold,label="get-usernames"];
+G10 [shape=ellipse,style=bold,label="get-status"];
+G11 [shape=ellipse,style=bold,label="get-participants"];
+G12 [shape=ellipse,style=bold,label="add-user"];
+G13 [shape=ellipse,style=bold,label="statuses"];
+G14 [shape=ellipse,style=bold,label="debit-payment"];
+G15 [shape=ellipse,style=bold,label="add-participant"];
+G16 [shape=ellipse,style=bold,label="get-user"];
+G17 [shape=ellipse,style=bold,label="get-active-events"];
+G18 [shape=ellipse,style=bold,label="get-uid"];
+G19 [shape=ellipse,style=bold,label="get-rates"];
+G20 [shape=ellipse,style=bold,label="get-events"];
+G21 [shape=ellipse,style=bold,label="is-initial?"];
+}
+G5->G13 [penwidth=3];
+G5->G4 [style=dotted,penwidth=3];
+G14->G4 [style=dotted,penwidth=3];
+G6->G4 [style=dotted,penwidth=3];
+G20->G4 [style=dotted,penwidth=3];
+G11->G4 [style=dotted,penwidth=3];
+G7->G4 [style=dotted,penwidth=3];
+G17->G4 [style=dotted,penwidth=3];
+G17->G13 [penwidth=3];
+G9->G4 [style=dotted,penwidth=3];
+G21->G13 [penwidth=3];
+G21->G4 [style=dotted,penwidth=3];
+G8->G4 [style=dotted,penwidth=3];
+G15->G4 [style=dotted,penwidth=3];
+G19->G2 [penwidth=3];
+G1->G4 [style=dotted,penwidth=3];
+G1->G1 [penwidth=3];
+G1->G18 [penwidth=3];
+G1->G0 [penwidth=3];
+G16->G4 [style=dotted,penwidth=3];
+G18->G4 [style=dotted,penwidth=3];
+G12->G4 [style=dotted,penwidth=3];
+G3->G4 [style=dotted,penwidth=3];
+G10->G4 [style=dotted,penwidth=3];
+G2->G4 [style=dotted,penwidth=3];
+G0->G4 [style=dotted,penwidth=3];
+}

@@ -34,7 +34,10 @@
             :plugins [ [lein-ring "0.8.8"]
                       [lein-ancient "0.6.6"]
                       [ragtime/ragtime.lein "0.3.8"]
-                      [speclj "3.2.0"] ]
+                      [speclj "3.2.0"] 
+                      [lein-gossip "0.1.0-SNAPSHOT"]
+                      ]
+
             :test-paths ["spec"]
             :ragtime {:migrations ragtime.sql.files/migrations
                       :database "jdbc:sqlite:database.db" }

@@ -1,0 +1,27 @@
+digraph g {
+subgraph cluster1 {
+label="ombs.handler.auth"
+G0 [shape=box,label="ombs.core\n\nrate"];
+G1 [shape=ellipse,style=bold,label="reg-page"];
+G2 [shape=box,label="ombs.view.pages\n\nregister"];
+G3 [shape=ellipse,style=bold,label="register"];
+G4 [shape=box,label="noir.session\n\nput!\nclear!"];
+G5 [shape=ellipse,style=bold,label="login"];
+G6 [shape=ellipse,style=bold,label="logout"];
+G7 [shape=box,label="ombs.handler.handle\n\nindex"];
+G8 [shape=ellipse,style=bold,label="log-user"];
+G9 [shape=box,label="ombs.validate\n\nnew-user?\nlogin?"];
+G10 [shape=box,label="ombs.db\n\nadd-user"];
+}
+G1->G2 [style=dotted,penwidth=3];
+G8->G4 [style=dotted,penwidth=3];
+G3->G9 [style=dotted,penwidth=3];
+G3->G10 [style=dotted,penwidth=3];
+G3->G0 [style=dotted,penwidth=3];
+G3->G8 [penwidth=3];
+G3->G2 [style=dotted,penwidth=3];
+G5->G9 [style=dotted,penwidth=3];
+G5->G8 [penwidth=3];
+G5->G7 [style=dotted,penwidth=3];
+G6->G4 [style=dotted,penwidth=3];
+}
