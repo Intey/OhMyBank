@@ -43,6 +43,5 @@
   [:#error] (h/content (errors-string [:participation :pay]))
   [:.debt] (h/content (str (core/debt username)))
   [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
-  ; [:section.new-events :> :article] (h/content (map #(event-elem %) (core/user-events username)))
   )
 

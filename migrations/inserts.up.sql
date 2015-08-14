@@ -19,14 +19,10 @@ VALUES
 
 INSERT 
 INTO 
-pays
-                (eid,   uid,    debit,  credit) 
+participation
+                (uid,   eid)
 VALUES
-                (1,     1,      0,      124),   -- participate
-                (2,     1,      0,      25),    -- participate
-                (2,     2,      0,      25),    -- participate
-                (1,     1,      100,    0),     -- pay
-                (1,     1,      24,     0),     -- pay
-                (2,     2,      25,     0)      -- pay
-                ;
-                
+                (1,     1),
+                (1,     2),
+                (2,     1),
+                (2,     3);
