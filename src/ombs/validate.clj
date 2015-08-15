@@ -3,9 +3,10 @@
     [noir.validation :as vld]
     [ombs.db :as db]
     [clojure.pprint :refer [pprint]]
+    [clojure.walk :refer [macroexpand-all]]
     ))
 
-(def- errors
+(def errors
   {
    :event {
            :empty-name      "Event name should not be empty"
@@ -16,29 +17,27 @@
            :unexist         "Event does not exist!"      
            :finished        "Event is history."
            }
-   }
-  :register {
-             :short-pass      "Password should be longer than 7 chars"  
-             :notmatch-pass   "Password doesn't match"                        
-             }
-  :user {
-         :empty-name "Username can't be empty"
-         :not-found "User not found" 
-         :exists "Username already used!"  
-         }
-  :login {
-          :invalid "Incorrect Login or password"
-          } 
+   :register {
+              :short-pass      "Password should be longer than 7 chars"  
+              :notmatch-pass   "Password doesn't match"                        
+              }
+   :user {
+          :empty-name "Username can't be empty"
+          :not-found "User not found" 
+          :exists "Username already used!"  
+          }
+   :login {
+           :invalid "Incorrect Login or password"
+           }
+   } 
   )
 
-(defn- message [&tags] (message (vec tags)))
+(defn- message [ & tgs ] (get-in errors (vec tgs)))
 
 (defn errors-string
   ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
-  ([tags] (reduce str (map #(str "|" % "|") (let [errs (vld/get-errors tags)]
-                                              (println (str "errs: " errs))
-                                              errs
-                                              )))))
+  ([tags] (reduce str (map #(str "|" % "|") (vld/get-errors tags)))
+   ))
 
 (defmacro create-rule [tag data]
   `(vld/rule ~@(list (first data)) [~tag ~(last data)] )
@@ -51,7 +50,7 @@
   [tag ve-pairs]
   `(do
      (vld/clear-errors!)
-     ~@(map #(macroexpand (list 'create-rule tag %)) ve-pairs)
+     ~@(map #(list 'create-rule tag %) ve-pairs)
      (not (vld/errors? ~tag)))
   )
 
@@ -78,23 +77,25 @@
 (defn login? [username password]
   (create-validator :login 
                     [[ (vld/has-value? username) (message :user :empty-name)]
-                     [ (empty? (db/get-user username)) (message :user :unexist)]
-                     [ (= password (:password (db/get-user username))) :login :invalid]
-                     ]))
+                     [ (vld/has-value? (db/get-user username)) (message :user :not-found)]
+                     [ (= password (:password (db/get-user username))) (message :login :invalid)]
+                     ])
+  )
 
 (defn ids? [eid uid]
   "Check, if id's is correct. Used with (db/get-*id)"
   (create-validator :pay 
                     [
-                     [(nil? uid) (message :user :empty-name)]
-                     [(nil? eid) (message :event :unexist)]     
-                     ]))
+                     [(not= nil uid) (message :user :empty-name)]
+                     [(not= nil eid) (message :event :unexist)]     
+                     ])
+  )
 
 (defn participation? [ename date uname]
   (create-validator :participation 
                     [
+                     [(not= (db/get-status ename date) (db/statuses :finished)) (message :event :finished)]   
                      [(vld/has-value? ename) (message :event :empty-name)]                                        
                      [(vld/has-value? date) (message :event :empty-date)]                                        
                      [(vld/has-value? uname) (message :user :empty-name)]                                         
-                     [(not= (db/get-status ename date) (db/statuses :finished)) ]  
                      ]))
