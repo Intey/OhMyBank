@@ -5,17 +5,33 @@
     [clojure.pprint :refer [pprint]]
     ))
 
-(def errors
+(def- errors
   {
    :event {
-            :empty-name      "Event name should not be empty"
-            :zero-price      "Event price should be greater than 0"
-            :empty-date      "Event should have date"
-            :duplicate-event "Event with same name today was created. Use another name"
-            :no-participants "Participants should be checked"
-            }
+           :empty-name      "Event name should not be empty"
+           :zero-price      "Event price should be greater than 0"
+           :empty-date      "Event should have date"
+           :duplicate-event "Event with same name today was created. Use another name"
+           :no-participants "Participants should be checked"
+           :unexist         "Event does not exist!"      
+           :finished        "Event is history."
+           }
    }
+  :register {
+             :short-pass      "Password should be longer than 7 chars"  
+             :notmatch-pass   "Password doesn't match"                        
+             }
+  :user {
+         :empty-name "Username can't be empty"
+         :not-found "User not found" 
+         :exists "Username already used!"  
+         }
+  :login {
+          :invalid "Incorrect Login or password"
+          } 
   )
+
+(defn- message [&tags] (message (vec tags)))
 
 (defn errors-string
   ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
@@ -44,41 +60,41 @@
 (defn new-event? [eventname price date]
   (create-validator :event 
                     [
-                     [ (vld/has-value? eventname)              (get-in errors [:event :empty-name])      ]
-                     [ (vld/greater-than? price 0)             (get-in errors [:event :zero-price])      ]
-                     [ (vld/has-value? date)                   (get-in errors [:event :empty-date])      ]
-                     [ (empty? (db/get-event eventname date))  (get-in errors [:event :duplicate-event]) ]
+                     [ (vld/has-value? eventname)              (message :event :empty-name)      ]
+                     [ (vld/greater-than? price 0)             (message :event :zero-price)      ]
+                     [ (vld/has-value? date)                   (message :event :empty-date)      ]
+                     [ (empty? (db/get-event eventname date))  (message :event :duplicate-event) ]
                      ]))
 
 (defn new-user? [username pass1 pass2]
   (create-validator :register 
                     [
-                     [(vld/has-value? username) "Username can't be empty"]
-                     [(>= (count pass1) 8) "Password should be longer than 7 chars"]  
-                     [(= pass1 pass2) "Password doesn't match"]                        
-                     [(empty? (db/get-user username)) "Username already used!" ] 
+                     [(vld/has-value? username) (message :user :empty-name)]
+                     [(>= (count pass1) 8) (message :register :short-pass)]  
+                     [(= pass1 pass2) (message :register :notmatch-pass)]                        
+                     [(empty? (db/get-user username)) (message :user :exists) ] 
                      ]))
 
 (defn login? [username password]
   (create-validator :login 
-                    [[ (vld/has-value? username)                       "Username can't be empty" ]
-                     [ (vld/has-value? (:name (db/get-user username))) "User not found"]
-                     [ (= password (:password (db/get-user username))) "Incorrect Login or password"]
+                    [[ (vld/has-value? username) (message :user :empty-name)]
+                     [ (empty? (db/get-user username)) (message :user :unexist)]
+                     [ (= password (:password (db/get-user username))) :login :invalid]
                      ]))
 
 (defn ids? [eid uid]
   "Check, if id's is correct. Used with (db/get-*id)"
   (create-validator :pay 
                     [
-                     [(nil? uid) "User not exists."]
-                     [(nil? eid) "Event does not exist!" ]     
+                     [(nil? uid) (message :user :empty-name)]
+                     [(nil? eid) (message :event :unexist)]     
                      ]))
 
 (defn participation? [ename date uname]
   (create-validator :participation 
                     [
-                     [(vld/has-value? ename) "Event name is empty"]                                        
-                     [(vld/has-value? date) "Event date is empty"]                                        
-                     [(vld/has-value? uname) "Username is empty"]                                         
-                     [(not= (db/get-status ename date) (db/statuses :finished)) "Event already finished"]  
+                     [(vld/has-value? ename) (message :event :empty-name)]                                        
+                     [(vld/has-value? date) (message :event :empty-date)]                                        
+                     [(vld/has-value? uname) (message :user :empty-name)]                                         
+                     [(not= (db/get-status ename date) (db/statuses :finished)) ]  
                      ]))
