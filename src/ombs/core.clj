@@ -24,11 +24,7 @@
   ;(println (db/get-events)) 
   (db/get-events))  
 
-(defn need-button? [uname ename edate]
-  (not (db/participated? uname ename edate)))
-  ;(apply
-  ;(fn [[k v]] (nil? (some #{uname} v ))) ; is user in participate list?
-  ;event-users-pair) )
+(defn participated? [uname ename edate] (db/participated? uname ename edate))
 
 (defn debt 
   ([username] (db/get-debt username))
