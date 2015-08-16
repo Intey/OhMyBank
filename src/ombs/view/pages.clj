@@ -5,6 +5,9 @@
     [ombs.validate :refer [errors-string]]
     [ombs.core :as core]
     [ombs.view.event :refer [event-elem]]
+    [clj-time.format :refer [formatter unparse]]
+    [clj-time.local :refer [local-now]]
+    [clj-time.core :refer [date-time]]
     ;[noir.util.anti-forgery :refer [anti-forgery-field]] ; security - need, add field fo srcf defence
 
     ) )
@@ -35,3 +38,19 @@
   [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
   )
 
+; ============================= add event page ================================
+
+; Helpers, for creation list of user for participation
+(def usercheckbox-sel [:.users] )
+
+(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}] 
+  [:.userbox] (h/do-> 
+                (h/content username)  
+                (h/set-attr :value username)))
+
+(h/deftemplate addevent "../resources/public/addevent.html"
+  [users]
+  [:.users] (h/content ( map #(usercheckbox-elem %) users) )
+  [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
+  [:#error] (h/content (errors-string :event))
+  )

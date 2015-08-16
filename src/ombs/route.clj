@@ -18,26 +18,26 @@
     [noir.response :refer [redirect]]
 
     ; request handlers. Prepare data, and call views. 
-    [ombs.handler.handle :refer [index user]]
+    [ombs.handler.handle :as pages]
     [ombs.handler.event :refer [pay participate start]]
-    [ombs.handler.addevent :refer [addevent-page init-event]]
+    [ombs.handler.addevent :refer [ init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
 
 (defroutes main-routes
-  (GET  "/" [params] index)
+  (GET  "/" [_] (pages/index))
 
   (POST "/login" request login)
   (POST "/logout" request logout)
 
   (POST "/register" {params :params} (register params))
-  (GET  "/register" [_] reg-page)
+  (GET  "/register" [_] (reg-page))
 
 
-  (GET "/addevent" [_] addevent-page)
+  (GET "/addevent" [_] (pages/addevent))
   (POST "/addevent" {params :params} (init-event params))
 
-  (GET  "/user" [_] user)
+  (GET  "/user" [_] (pages/user))
 
   (POST "/act" {params :params} 
         (case (:action params) 

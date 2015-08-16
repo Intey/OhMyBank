@@ -5,24 +5,8 @@
     [noir.validation :as vld]  
     [ombs.core :as core]
     [ombs.validate :refer [errors-string]]
-    [clj-time.format :refer [formatter unparse]]
-    [clj-time.local :refer [local-now]]
-    [clj-time.core :refer [date-time]]
     ))
 
-; Helpers, for creation list of user for participation
-(def usercheckbox-sel [:.users] )
-(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}] 
-  [:.userbox] (h/do-> 
-                (h/content username)  
-                (h/set-attr :value username)))
-
-(h/deftemplate addevent-page "../resources/public/addevent.html"
-  [users]
-  [:.users] (h/content ( map #(usercheckbox-elem %) users) )
-  [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
-  [:#error] (h/content (errors-string :event))
-  )
 
 (def event-sel [:.event])
 

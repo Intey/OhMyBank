@@ -1,15 +1,12 @@
 (ns ombs.handler.addevent
   (:require 
     [ombs.db :as db]
-    [ombs.view.event :as ve]
     [ombs.core :as core]
     [ombs.validate :as isvalid]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
-    ))
-
-(defn addevent-page [& [params]]
-    (ve/addevent-page (db/get-usernames) )
+    [ombs.view.pages :refer [addevent] :rename {addevent addevent-page}] 
+    )
   )
 
 (defn party-pay [participants-count eventprice]
