@@ -58,17 +58,6 @@
     (db/add-participant event date user)
     ))
 
-(defn finish-event [event date price participants] ; (db/get-participants event date)  
-  (let [ party-pay (core/party-pay price participants) ]
-    ; insert credit record for each user
-    (dorun 
-      (map 
-        #(db/credit-payment event date (:name %) (* party-pay (:rate %)) )
-        participants
-        ))
-    )
-  )
-
 (defn add-birthday [ {event :name price :price date :date users :participants :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation

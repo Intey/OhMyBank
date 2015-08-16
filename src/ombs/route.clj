@@ -18,7 +18,8 @@
     [noir.response :refer [redirect]]
 
     ; request handlers. Prepare data, and call views. 
-    [ombs.handler.handle :refer [index user pay participate start]]
+    [ombs.handler.handle :refer [index user]]
+    [ombs.handler.event :refer [pay participate start]]
     [ombs.handler.addevent :refer [addevent-page init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
@@ -42,8 +43,8 @@
         (case (:action params) 
           "pay" (pay params)
           "participate" (participate params)
-          "start" (start params)
-          ))
+          "start" (start params)))
+
   ;payment controlling
   ;(POST "/confirm {params :params} (confirm-payment)
 
