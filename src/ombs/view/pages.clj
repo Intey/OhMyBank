@@ -9,16 +9,6 @@
 
     ) )
 
-; (defmacro create-error [tag content] `({:tag p :content ("message")}) )
-
-(defmacro defpage [pname rules & body]
-  "Marco for declaring pages. Incapsulate validating fields. 
-  Redirect on self, when validation fails with attaching errors messages."
-  ;validate rules
-  ;if ok - body
-  ;else - redirect
-  )
-
 (h/deftemplate index "../resources/public/index.html" []
   [:#error] (h/content (errors-string))
   ; hide log and reg forms, show logout form if have username in session
