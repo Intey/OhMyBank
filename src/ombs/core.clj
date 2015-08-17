@@ -9,25 +9,23 @@
 
 (defn rate [student?] (if (= student? "on") 0.5 1.0 ) )
 
-(defn- extract-event [m]
+(defn- ^:deprecated extract-event [m]
   "Extract event keys from raw result of query participated-list."
   (select-keys m '(:name :price :date :author)))
 
-(defn- grouper [events]
+(defn- ^:deprecated grouper [events]
   "Reorganize participation result to map, where key - is event, and value - vector of users, that 
   participate this event. Expect input, after using group-by on BD-table 'participants':
   (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
   (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
        (group-by extract-event events)))
 
-(defn events [] 
-  ;(println (db/get-events)) 
-  (db/get-events))  
+(defn events [] (db/get-events))  
 
 (defn participated? [uname ename edate] (db/participated? uname ename edate))
 
 (defn debt 
-  ([username] (db/get-debt username))
+  ([username] (db/get-debt username)) ; full user debt on all events
   ([username event date] (db/get-debt username event date))
   )
 

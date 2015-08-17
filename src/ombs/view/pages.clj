@@ -12,6 +12,8 @@
 
     ) )
 
+; ============================= index page ================================
+
 (h/deftemplate index "../resources/public/index.html" []
   [:#error] (h/content (errors-string))
   ; hide log and reg forms, show logout form if have username in session
@@ -19,6 +21,8 @@
   ;[:#regform] (hide)
   ;[:#logout]  (unhide)
   )
+
+; ============================= register page ================================
 
 ;Generate register page. If in given params founded keys for this page - fill fields with founded values
 (h/deftemplate register "../resources/public/register.html" [params]
@@ -30,6 +34,8 @@
                      (h/set-attr :checked "on")  ; check
                      (h/set-attr "" "") )        ; unckeck
   )
+
+; ============================= user page ================================
 
 (h/deftemplate user "../resources/public/user.html" [username]
   [:#user] (h/content username)
