@@ -8,14 +8,22 @@
     ))
 
 
+
+(def parts-row-sel [:#parts-row])
+(h/defsnippet parts-sn "../resources/public/parts.html" parts-row-sel [parts] [:.parts] (h/set-attr :value (str parts)))
+
 (def event-sel [:.event])
 
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status]}]
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
   [:.name]   (h/set-attr :value name)
   [:.date]   (h/set-attr :value date)
   [:.author] (h/set-attr :value author)
   [:.price]  (h/set-attr :value (str price))
   [:.debt]   (h/set-attr :value (core/debt (sess/get :username) name date))
+  [:#parts-row]  (fn [match]
+                   (if  (= 1 parts) 
+                     ((h/set-attr :hidden "")  match)
+                     ((h/content (parts-sn parts)) match)))
   [:.action.participate] (fn [match]
                (if (and 
                      (not (core/participated? (sess/get :username) name date))
@@ -23,12 +31,14 @@
                      )  ;if user participated in name
                  ((h/remove-attr :disabled "")  match)
                  ((h/set-attr :disabled "")     match)))
+
   [:.action.pay] (fn [match]
                    (if (and 
                          (core/participated? (sess/get :username) name date)
                          (not= (core/debt (sess/get :username) name date) 0.0)) ; have debt
                      ((h/remove-attr :disabled "")  match)
                      ((h/set-attr :disabled "")     match))) 
+
   [:.action.start] (fn [match]
                      ;(println (str "author: " author " name "name " date " date " initial? " (core/is-initial? name date) ))
                      (if (and (= author (sess/get :username)) 

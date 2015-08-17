@@ -43,10 +43,10 @@
                                  :rate rate } )))
 
 (defn add-event 
-  ([ename price author date] 
-   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial)})))
-  ([ename price author] 
-   (sql/insert events (sql/values {:name ename :price price :author author :status (statuses :initial)}))))
+  ([ename price author date parts] 
+   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts parts})))
+  ([ename price author parts] 
+   (sql/insert events (sql/values {:name ename :price price :author author :status (statuses :initial) :parts parts}))))
 
 (defn get-user [uname]
   "Return map of user info"

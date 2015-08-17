@@ -24,12 +24,12 @@
 ; Solutions:
 ; * Form should return always vector
 ; * convert value to vector
-(defn addevent [ {event :name price :price date :date users :participants :as params} ]
+(defn addevent [ {event :name price :price date :date users :participants parts :parts :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
   (if (isvalid/new-event? event price date) 
     (let [party-pay (core/party-pay price users)]
-      (db/add-event event (read-string price) (sess/get :username) date)
+      (db/add-event event (read-string price) (sess/get :username) date parts)
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (dorun 
         (map 
@@ -39,12 +39,12 @@
     ;if validation fails
     (addevent-page) ))
 
-(defn init-event [ {event :name price :price date :date users :participants :as params} ]
+(defn init-event [ {event :name price :price date :date users :participants parts :parts :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
   (if (isvalid/new-event? event price date) 
     (do
-      (db/add-event event (read-string price) (sess/get :username) date) 
+      (db/add-event event (read-string price) (sess/get :username) date parts) 
       (redirect "/user"))
     ;if validation fails
     (addevent-page) ))
@@ -55,13 +55,13 @@
     (db/add-participant event date user)
     ))
 
-(defn add-birthday [ {event :name price :price date :date users :participants :as params} ]
+(defn add-birthday [ {event :name price :price date :date users :participants parts :parts :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
   (if (isvalid/new-event? event price date users) 
     (let [user-rates (db/get-rates (core/as-vec users))
           party-pay (/ (read-string price) (reduce + user-rates)) ]
-      (db/add-event event (read-string price) (sess/get :username) date)
+      (db/add-event event (read-string price) (sess/get :username) date parts)
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (dorun 
         (map 
