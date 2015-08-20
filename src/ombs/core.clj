@@ -9,30 +9,23 @@
 
 (defn rate [student?] (if (= student? "on") 0.5 1.0 ) )
 
-(defn- ^:deprecated extract-event [m]
-  "Extract event keys from raw result of query participated-list."
-  (select-keys m '(:name :price :date :author)))
-
-(defn- ^:deprecated grouper [events]
-  "Reorganize participation result to map, where key - is event, and value - vector of users, that 
-  participate this event. Expect input, after using group-by on BD-table 'participants':
-  (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
-  (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
-       (group-by extract-event events)))
-
 (defn events [] (db/get-events))  
 
 (defn participated? [uname ename edate] (db/participated? uname ename edate))
 
 (defn debt 
   ([username] (db/get-debt username)) ; full user debt on all events
-  ([username event date] (db/get-debt username event date))
-  )
+  ([username event date] (db/get-debt username event date)))
 
+(defn part-price [event-price parts] (/ event-price parts))
+
+(defn parts-price [ename date parts]
+  (* parts (core/part-price (db/get-price ename date) (db/get-parts ename date))))   
 
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."
-  (/ event-price (count users)))
+  (part-pay event-price (count users)))
+
 
 (defn is-initial? [ename date] (db/is-initial? ename date))
 
@@ -59,3 +52,14 @@
     (println (str "start adding " users))
     (doall (map #(db/credit-payment ename edate % party-pay) users)))
   )
+
+(defn- ^:deprecated extract-event [m]
+  "Extract event keys from raw result of query participated-list."
+  (select-keys m '(:name :price :date :author)))
+
+(defn- ^:deprecated grouper [events]
+  "Reorganize participation result to map, where key - is event, and value - vector of users, that 
+  participate this event. Expect input, after using group-by on BD-table 'participants':
+  (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
+  (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
+       (group-by extract-event events)))
