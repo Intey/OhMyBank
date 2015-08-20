@@ -10,10 +10,10 @@
 
 
 (def parts-row-sel [:#parts-row])
-(h/defsnippet parts-sn "../resources/public/parts.html" parts-row-sel [parts] [:.parts] (h/set-attr :value (str parts)))
+(h/defsnippet parts-sn "../resources/public/parts.html" parts-row-sel [parts] 
+  [:.parts] (h/set-attr :value (str parts)))
 
 (def event-sel [:.event])
-
 (h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
   [:.name]   (h/set-attr :value name)
   [:.date]   (h/set-attr :value date)

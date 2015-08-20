@@ -30,6 +30,11 @@ CREATE TABLE participation(
     [eid] INTEGER REFERENCES events(id)
 );
 
+CREATE TABLE goods(
+    [eid] INTEGER REFERENCES events(id),
+    [rest] INTEGER NOT NULL
+);
+
 CREATE VIEW participants
     AS
     SELECT u.name user, e.name event, e.date [date]

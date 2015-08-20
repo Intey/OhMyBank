@@ -21,6 +21,9 @@
   (sql/belongs-to users {:fk :uid})
   ) 
 
+(sql/defentity goods
+  (sql/belongs-to events {:fk :eid}))
+
 (sql/defentity summary)
 (sql/defentity debts)
 
@@ -140,3 +143,6 @@
 (defn get-participants [ename edate]
   (mapv #(first (vals %)) (sql/select participants (sql/fields :user) 
                                       (sql/where {:event ename :date edate}))))
+
+(defn add-goods [ename date parts]
+  (sql/insert goods (sql/values {:eid (get-eid ename date) :parts parts})))

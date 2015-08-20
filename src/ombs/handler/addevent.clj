@@ -50,12 +50,6 @@
     ;if validation fails
     (addevent-page) ))
 
-(defn add-participant [event date user]
-  ;link in temp table event and user
-  (if-not (or (nil? (db/get-event event date)) (nil? (db/get-user user))) 
-    (db/add-participant event date user)
-    ))
-
 (defn add-birthday [ {event :name price :price date :date users :participants parts :parts :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
@@ -74,3 +68,8 @@
        
     )
   )
+
+(defn add-good [ {event :name price :price date :date users :participants parts :parts :as params} ]
+  (addevent params)
+  (db/add-goods event date parts) 
+ )
