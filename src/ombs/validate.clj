@@ -14,8 +14,9 @@
            :empty-date      "Event should have date"
            :duplicate-event "Event with same name today was created. Use another name"
            :no-participants "Participants should be checked"
-           :unexist         "Event does not exist!"      
-           :finished        "Event is history."
+           :unexist         "Event does not exist"      
+           :finished        "Event is history"
+           :parts-count     "Event have less parts that given"
            }
    :register {
               :short-pass      "Password should be longer than 7 chars"  
@@ -24,7 +25,7 @@
    :user {
           :empty-name "Username can't be empty"
           :not-found "User not found" 
-          :exists "Username already used!"  
+          :exists "Username already used"  
           }
    :login {
            :invalid "Incorrect Login or password"
@@ -82,6 +83,15 @@
                      ])
   )
 
+(defn participation? [ename date uname]
+  (create-validator :participation 
+                    [
+                     [(not= (db/get-status ename date) (db/statuses :finished)) (message :event :finished)]   
+                     [(vld/has-value? ename) (message :event :empty-name)]                                        
+                     [(vld/has-value? date) (message :event :empty-date)]                                        
+                     [(vld/has-value? uname) (message :user :empty-name)]                                         
+                     ]))
+
 (defn ids? [eid uid]
   "Check, if id's is correct. Used with (db/get-*id)"
   (create-validator :pay 
@@ -91,11 +101,10 @@
                      ])
   )
 
-(defn participation? [ename date uname]
-  (create-validator :participation 
+(defn parts? [ename date parts]
+  (create-validator :pay
                     [
-                     [(not= (db/get-status ename date) (db/statuses :finished)) (message :event :finished)]   
-                     [(vld/has-value? ename) (message :event :empty-name)]                                        
-                     [(vld/has-value? date) (message :event :empty-date)]                                        
-                     [(vld/has-value? uname) (message :user :empty-name)]                                         
-                     ]))
+                     [(< parts (db/get-parts ename date)) (message :event :parts-count)]
+                     ]
+                    )
+  )

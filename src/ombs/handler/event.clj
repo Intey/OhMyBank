@@ -8,10 +8,12 @@
     ))
 
 (defn pay [{ename :event-name date :date parts :parts :as params}]
-  "Add participation of current user and selected event(given as param from post)"
+  "Add participation of current user and selected event(given as param from post). 
+  Parts in params is count of parts, that user want to pay"
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
-        eid (db/get-eid ename date)]
+        eid (db/get-eid ename date)
+        parts (read-string parts)]
     (println (str "pay parts: " parts)) 
     (when (isvalid/ids? eid uid) 
       (if (> parts 1)

@@ -20,11 +20,11 @@
 (defn part-price [event-price parts] (/ event-price parts))
 
 (defn parts-price [ename date parts]
-  (* parts (core/part-price (db/get-price ename date) (db/get-parts ename date))))   
+  (* parts (part-price (db/get-price ename date) (db/get-parts ename date))))   
 
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."
-  (part-pay event-price (count users)))
+  (part-price event-price (count users)))
 
 
 (defn is-initial? [ename date] (db/is-initial? ename date))

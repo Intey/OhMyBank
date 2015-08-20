@@ -90,8 +90,8 @@
                              (sql/where (and (= :date date) (= :name ename))))))) 
 
 (defn get-parts [ename date] 
-  (read-string (:parts (first (sql/select events (sql/fields :parts)
-                             (sql/where (and (= :date date) (= :name ename)))))))) 
+  (:parts (first (sql/select events (sql/fields :parts)
+                             (sql/where (and (= :date date) (= :name ename))))))) 
 
 
 (defn get-status [ename date] 
