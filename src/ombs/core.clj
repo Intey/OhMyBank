@@ -29,11 +29,6 @@
   ([username event date] (db/get-debt username event date))
   )
 
-(defn as-vec
-  "get a vector or value and represents it as vector. [1 2 3] -> [1 2 3]; 1 -> [1]"
-  [x] (if-not (vector? x) 
-        (conj [] x)
-        x))
 
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."

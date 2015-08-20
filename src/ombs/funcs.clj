@@ -5,3 +5,9 @@
   [v coll]
   (boolean (some #(= v %) coll))
   )
+
+(defn as-vec
+  "get a vector or value and represents it as vector. [1 2 3] -> [1 2 3]; 1 -> [1]"
+  [x] (if-not (vector? x) 
+        (conj [] x)
+        x))
