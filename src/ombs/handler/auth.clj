@@ -2,7 +2,6 @@
   (:require  
     [ombs.view.pages :as page]
     [ombs.db :as db]
-    [ombs.handler.handle :as handler]
     [ombs.core :as core]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
@@ -32,7 +31,7 @@
 (defn login [ { {uname :username pass :password :as params} :params} ]
   (if (isvalid/login? uname pass)
     (log-user uname)
-    (handler/index))
+    (page/index))
   )
 
 (defn logout [& _]
