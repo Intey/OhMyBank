@@ -1,4 +1,4 @@
-(ns ombs.handler.event
+(ns ombs.handler.eventacts
   (:require
     [ombs.core :as core]
     [ombs.db :as db]

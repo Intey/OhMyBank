@@ -19,8 +19,8 @@
 
     ; request handlers. Prepare data, and call views. 
     [ombs.handler.pages :as pages]
-    [ombs.handler.event :refer [pay participate start]]
-    [ombs.handler.addevent :refer [ init-event]]
+    [ombs.handler.eventacts :refer [pay participate start]]
+    [ombs.handler.addevent :refer [init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     ))
 
