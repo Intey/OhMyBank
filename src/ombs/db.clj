@@ -144,5 +144,21 @@
   (mapv #(first (vals %)) (sql/select participants (sql/fields :user) 
                                       (sql/where {:event ename :date edate}))))
 
+
+;============================================== GOODS  =================================================
+
+;2 transacts
 (defn add-goods [ename date parts]
-  (sql/insert goods (sql/values {:eid (get-eid ename date) :parts parts})))
+  (sql/insert goods (sql/values {:eid (get-eid ename date) :rest parts})))
+
+;2 transacts
+(defn get-rest-parts [ename date]
+  (:rest (first (sql/select goods (sql/fields :rest)
+                            (sql/where {:eid (get-eid ename date)})))))
+
+;3 transacts
+(defn shrink-goods [ename date parts]
+  (sql/update goods (sql/set-fields {:rest (get-parts ename date)}) 
+              (sql/where {:eid (get-eid ename date)})    
+              )
+  )

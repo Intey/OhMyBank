@@ -7,6 +7,8 @@
     [noir.response :refer [redirect] ]
     ))
 
+(defn- finish [ename date] (db/set-status ename date :finished))
+
 (defn pay [{ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from post). 
   Parts in params is count of parts, that user want to pay"
@@ -17,8 +19,12 @@
     (println (str "pay parts: " parts)) 
     (when (isvalid/ids? eid uid) 
       (if (> parts 1)
-        (when (isvalid/parts? ename date parts) ; check if parts > than free parts
-          (db/debit-payment uid eid (core/parts-price ename date parts)))
+        (do
+          (isvalid/parts? ename date parts) ; check if parts > than free parts
+          (db/debit-payment uid eid (core/parts-price ename date parts))
+          (db/shrink-goods ename date parts)
+          (when (= parts (db/get-rest-parts ename date))
+            (finish ename date) ))
         (db/debit-payment uid eid (db/get-debt uname ename date))) ) )
   (redirect "/user")) ; go to user page in any case
 

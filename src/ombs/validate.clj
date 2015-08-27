@@ -2,8 +2,7 @@
   (:require
     [noir.validation :as vld]
     [ombs.db :as db]
-    [clojure.pprint :refer [pprint]]
-    [clojure.walk :refer [macroexpand-all]]
+    [noir.response :refer [redirect]]
     ))
 
 (def errors
@@ -104,7 +103,8 @@
 (defn parts? [ename date parts]
   (create-validator :pay
                     [
-                     [(< parts (db/get-parts ename date)) (message :event :parts-count)]
+                     [(<= parts (db/get-rest-parts ename date)) (message :event :parts-count)]
                      ]
                     )
+  (redirect "/user")
   )
