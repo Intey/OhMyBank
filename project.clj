@@ -36,6 +36,7 @@
                       [ragtime/ragtime.lein "0.3.8"]
                       [speclj "3.2.0"] 
                       [lein-gossip "0.1.0-SNAPSHOT"]
+                      [cider/cider-nrepl "0.9.1"]
                       ]
 
             :test-paths ["spec"]
