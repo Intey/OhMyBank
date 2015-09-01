@@ -53,6 +53,9 @@
     (doall (map #(db/credit-payment ename edate % party-pay) users)))
   )
 
+(defn participants-count [ename date]
+  (count (db/get-participants ename date)))
+
 (defn- ^:deprecated extract-event [m]
   "Extract event keys from raw result of query participated-list."
   (select-keys m '(:name :price :date :author)))

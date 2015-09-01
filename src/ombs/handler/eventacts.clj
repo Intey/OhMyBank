@@ -20,12 +20,12 @@
     (when (isvalid/ids? eid uid) 
       (if (> parts 1)
         (do
-          (isvalid/parts? ename date parts) ; check if parts > than free parts
+          (isvalid/parts? ename date parts) ; check if parts >= than free parts
           (db/debit-payment uid eid (core/parts-price ename date parts))
-          (db/shrink-goods ename date parts)
-          (when (= parts (db/get-rest-parts ename date))
-            (finish ename date) ))
-        (db/debit-payment uid eid (db/get-debt uname ename date))) ) )
+          (db/shrink-goods ename date parts))
+        (db/debit-payment uid eid (db/get-debt uname ename date)))  
+      (when (= 0 (db/get-rest-parts ename date))
+        (finish ename date) ))) 
   (redirect "/user")) ; go to user page in any case
 
 (defn participate [{ename :event-name date :date}]

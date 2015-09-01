@@ -158,7 +158,9 @@
 
 ;3 transacts
 (defn shrink-goods [ename date parts]
-  (sql/update goods (sql/set-fields {:rest (get-parts ename date)}) 
+  "Sub count parst from database"
+  (println (str "shrink goods on" parts))
+  (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)}) 
               (sql/where {:eid (get-eid ename date)})    
               )
   )

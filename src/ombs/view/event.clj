@@ -42,7 +42,9 @@
   [:.action.start] (fn [match]
                      ;(println (str "author: " author " name "name " date " date " initial? " (core/is-initial? name date) ))
                      (if (and (= author (sess/get :username)) 
-                              (core/is-initial? name date))
+                              (core/is-initial? name date)
+                              (> (core/participants-count name date) 0)
+                              )
                        ((h/remove-attr :disabled "")  match)
                        ((h/set-attr :disabled "")     match)))
   
