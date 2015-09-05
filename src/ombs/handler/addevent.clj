@@ -33,7 +33,7 @@
   "Add event in events table, with adding participants, and calculating debts."
   (if (isvalid/new-event? event price date) 
     (do
-      (if (>= (read-string parts) 1) 
+      (if (>= (read-string parts) 0) 
         (add-good params)
         (db/add-event event (read-string price) (sess/get :username) date parts)) 
       (redirect "/user"))

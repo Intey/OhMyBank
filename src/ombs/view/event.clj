@@ -10,7 +10,7 @@
 
 
 (def parts-row-sel [:#parts-row])
-(h/defsnippet parts-sn "../resources/public/parts.html" parts-row-sel [parts] 
+(h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts] 
   [:.parts] (h/set-attr :value (str parts)))
 
 (def event-sel [:.event])
@@ -23,7 +23,7 @@
   [:#parts-row]  (fn [match]
                    (if  (= 0 parts) 
                      ((h/set-attr :hidden "")  match)
-                     ((h/content (parts-sn parts)) match)))
+                     ((h/content (parts-snip parts)) match)))
   [:.action.participate] (fn [match]
                (if (and 
                      (not (core/participated? (sess/get :username) name date))

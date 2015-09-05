@@ -7,7 +7,7 @@
 (defn participated? 
   "Check participation in event. If user have some payment action on event - he is participated." 
   ([uid eid] 
-   (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
+   (not (empty? (sql/select participation (sql/where (and (= :users_id uid) (= :events_id eid))))))) 
   ([uname ename edate] 
    (participated? (get-uid uname) (get-eid ename edate))))
 
@@ -27,14 +27,14 @@
 
 (defn credit-payment [eventname date username money] 
   (println (str "credit " eventname " date " date " user " username " money " money ))
-  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money })))
+  (sql/insert pays (sql/values { :users_id (get-uid username) :events_id (get-eid eventname date) :credit money })))
 
 (defn debit-payment [uid eid money]
-  (sql/insert pays (sql/values { :uid uid :eid eid :debit money }))
+  (sql/insert pays (sql/values { :users_id uid :events_id eid :debit money }))
   )
 
 (defn add-participant [event date user]
-  (sql/insert participation (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
+  (sql/insert participation (sql/values {:events_id (get-eid event date) :users_id (get-uid user)}))
   )
 
 (defn get-participants [ename edate]

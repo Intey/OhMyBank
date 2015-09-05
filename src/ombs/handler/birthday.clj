@@ -1,6 +1,7 @@
 (ns ombs.handler.birthday
   (:require 
     [ombs.dbold :as db]
+    [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
     [ombs.funcs :as funcs]
     [noir.session :as sess]
@@ -24,7 +25,7 @@
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (dorun 
         (map 
-          #(db/credit-payment event date % (* party-pay (db/get-rate %))) 
+          #(dbpay/credit-payment event date % (* party-pay (db/get-rate %))) 
           (funcs/as-vec users)))
       (println (str "rates " user-rates " pp " party-pay " users " users))
       (redirect "/user"))
