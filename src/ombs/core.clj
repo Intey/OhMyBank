@@ -1,7 +1,8 @@
 (ns ombs.core
   "Contains main logic. No validations. All function hope that you give to it valid data. Use in 
   handlers, views, etc. "
-  (:require [ombs.db :as db]
+  (:require [ombs.dbold :as db]
+            [ombs.db.payment :as dbpay]
             [ombs.funcs :as fns]
             [ombs.validate :refer [add-error]]
             [noir.response :refer [redirect]]
@@ -11,11 +12,11 @@
 
 (defn events [] (db/get-events))  
 
-(defn participated? [uname ename edate] (db/participated? uname ename edate))
+(defn participated? [uname ename edate] (dbpay/participated? uname ename edate))
 
 (defn debt 
-  ([username] (db/get-debt username)) ; full user debt on all events
-  ([username event date] (db/get-debt username event date)))
+  ([username] (dbpay/get-debt username)) ; full user debt on all events
+  ([username event date] (dbpay/get-debt username event date)))
 
 (defn part-price [event-price parts] (/ event-price parts))
 
@@ -40,21 +41,21 @@
   "Hope, that data is ok, and given user can participate in given event."
   (println (str "core.add-participant:" uname " event:" ename " date:" date))
   (if (is-initial? ename date)
-    (db/add-participant ename date uname)
+    (dbpay/add-participant ename date uname)
     (add-in-progress ename date uname)
     )
   )
 
 (defn start-event [ename edate]
   (db/set-status ename edate :in-progress)
-  (let [users (db/get-participants ename edate)
+  (let [users (dbpay/get-participants ename edate)
         party-pay (party-pay (:price (db/get-event ename edate)) users)]
     (println (str "start adding " users))
-    (doall (map #(db/credit-payment ename edate % party-pay) users)))
+    (doall (map #(dbpay/credit-payment ename edate % party-pay) users)))
   )
 
 (defn participants-count [ename date]
-  (count (db/get-participants ename date)))
+  (count (dbpay/get-participants ename date)))
 
 (defn- ^:deprecated extract-event [m]
   "Extract event keys from raw result of query participated-list."

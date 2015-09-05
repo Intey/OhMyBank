@@ -1,7 +1,7 @@
 (ns ombs.handler.auth
   (:require  
     [ombs.view.pages :as page]
-    [ombs.db :as db]
+    [ombs.dbold :as db]
     [ombs.core :as core]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]

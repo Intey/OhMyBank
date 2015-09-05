@@ -1,7 +1,8 @@
 (ns ombs.handler.eventacts
   (:require
     [ombs.core :as core]
-    [ombs.db :as db]
+    [ombs.dbold :as db]
+    [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
@@ -9,6 +10,7 @@
 
 (defn- finish [ename date] (db/set-status ename date :finished))
 
+(declare process-it)
 (defn pay [{ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from post). 
   Parts in params is count of parts, that user want to pay"
@@ -16,18 +18,20 @@
         uid (db/get-uid uname)
         eid (db/get-eid ename date)
         parts (read-string parts)]
-    (println (str "pay parts: " parts)) 
     (when (isvalid/ids? eid uid) 
-      (if (> parts 1)
-        (do
-          (isvalid/parts? ename date parts) ; check if parts >= than free parts
-          (db/debit-payment uid eid (core/parts-price ename date parts))
-          (db/shrink-goods ename date parts))
-        (db/debit-payment uid eid (db/get-debt uname ename date)))  
+      (if (>= parts 1)
+        (process-it ename date parts uname uid eid)
+        (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date))) ;TODO: if < 0 ?
       (when (= 0 (db/get-rest-parts ename date))
         (finish ename date) ))) 
   (redirect "/user")) ; go to user page in any case
 
+(defn process-it [ename date parts uname uid eid]
+  (println "processing " ename " " date " " parts " " uname)
+  (when (isvalid/parts? ename date parts) ; check if parts >= than free parts
+    (dbpay/debit-payment uid eid (core/parts-price ename date parts))
+    (db/shrink-goods ename date parts))
+  )
 (defn participate [{ename :event-name date :date}]
   "Add participation of current user and selected event(given as param from post)"
   (let [uname (sess/get :username)]  

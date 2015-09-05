@@ -1,4 +1,4 @@
-(ns ombs.db
+(ns ombs.dbold
   (:require [korma.db :as kdb]
             [korma.core :as sql]))
 
@@ -107,44 +107,6 @@
                                   (sql/where {:name ename :date date} ) )))))
 
 ;============================================ EVENT & USER ===============================================
-(defn participated? 
-  "Check participation in event. If user have some payment action on event - he is participated." 
-  ([uid eid] 
-   (not (empty? (sql/select participation (sql/where (and (= :uid uid) (= :eid eid))))))) 
-  ([uname ename edate] 
-   (participated? (get-uid uname) (get-eid ename edate))))
-
-(defn get-debt 
-  "sum of all credits and debits in pays for current user and event. "
-  ; full debt
-  ([username]
-  (if-let [summary (:debt (first (sql/select debts (sql/where (= username :user)) (sql/aggregate (sum :debt) :debt))))]
-    summary 
-    0.0))
-  ; debt on some event
-  ([username event date]
-  (if-let [summary (:debt (first (sql/select debts (sql/where (and (= username :user) (= event :event) (= date :date))))))]
-    summary 
-    0.0))
-  ) 
-
-(defn credit-payment [eventname date username money] 
-  (println (str "credit " eventname " date " date " user " username " money " money ))
-  (sql/insert pays (sql/values { :uid (get-uid username) :eid (get-eid eventname date) :credit money })))
-
-(defn debit-payment [uid eid money]
-  (sql/insert pays (sql/values { :uid uid :eid eid :debit money }))
-  )
-
-(defn add-participant [event date user]
-  (sql/insert participation (sql/values {:eid (get-eid event date) :uid (get-uid user)}))
-  )
-
-(defn get-participants [ename edate]
-  (mapv #(first (vals %)) (sql/select participants (sql/fields :user) 
-                                      (sql/where {:event ename :date edate}))))
-
-
 ;============================================== GOODS  =================================================
 
 ;2 transacts

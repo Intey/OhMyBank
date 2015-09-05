@@ -1,7 +1,7 @@
 (ns ombs.validate
   (:require
     [noir.validation :as vld]
-    [ombs.db :as db]
+    [ombs.dbold :as db]
     [noir.response :refer [redirect]]
     ))
 
@@ -104,7 +104,6 @@
   (create-validator :pay
                     [
                      [(<= parts (db/get-rest-parts ename date)) (message :event :parts-count)]
-                     ]
-                    )
+                     ])
   (redirect "/user")
   )

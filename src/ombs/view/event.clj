@@ -21,7 +21,7 @@
   [:.price]  (h/set-attr :value (str price))
   [:.debt]   (h/set-attr :value (core/debt (sess/get :username) name date))
   [:#parts-row]  (fn [match]
-                   (if  (= 1 parts) 
+                   (if  (= 0 parts) 
                      ((h/set-attr :hidden "")  match)
                      ((h/content (parts-sn parts)) match)))
   [:.action.participate] (fn [match]

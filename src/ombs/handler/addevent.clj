@@ -1,6 +1,7 @@
 (ns ombs.handler.addevent
   (:require 
-    [ombs.db :as db]
+    [ombs.dbold :as db]
+    [ombs.db.payment :as dbpay]
     [ombs.core :as core]
     [ombs.funcs :as funcs]
     [ombs.validate :as isvalid]
@@ -22,7 +23,7 @@
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (if (and withcredits? (> (count users) 0))
         (let [party-pay (core/party-pay price users)] 
-          (dorun (map #(db/credit-payment event date % party-pay) 
+          (dorun (map #(dbpay/credit-payment event date % party-pay) 
                       (funcs/as-vec users)))))
       true) ; all is ok
     false)) ; validation fail
@@ -32,7 +33,7 @@
   "Add event in events table, with adding participants, and calculating debts."
   (if (isvalid/new-event? event price date) 
     (do
-      (if (> (read-string parts) 1) 
+      (if (>= (read-string parts) 1) 
         (add-good params)
         (db/add-event event (read-string price) (sess/get :username) date parts)) 
       (redirect "/user"))
