@@ -19,19 +19,19 @@ CREATE TABLE users(
     [balance] DOUBLE NOT NULL DEFAULT 0);
 
 CREATE TABLE pays(
-    [uid] INTEGER REFERENCES users(id),
-    [eid] INTEGER REFERENCES events(id),
+    [users_id] INTEGER REFERENCES users(id),
+    [events_id] INTEGER REFERENCES events(id),
     [debit] DOUBLE NOT NULL DEFAULT 0,
     [credit] DOUBLE NOT NULL DEFAULT 0
 );
 
 CREATE TABLE participation(
-    [uid] INTEGER REFERENCES users(id),
-    [eid] INTEGER REFERENCES events(id)
+    [users_id] INTEGER REFERENCES users(id),
+    [events_id] INTEGER REFERENCES events(id)
 );
 
 CREATE TABLE goods(
-    [eid] INTEGER REFERENCES events(id),
+    [events_id] INTEGER REFERENCES events(id),
     [rest] INTEGER NOT NULL
 );
 
@@ -40,9 +40,9 @@ CREATE VIEW participants
     SELECT u.name user, e.name event, e.date [date]
     FROM participation p
     LEFT JOIN events e
-    ON e.id = p.eid
+    ON e.id = p.events_id
     LEFT JOIN users u
-    ON u.id = p.uid;
+    ON u.id = p.users_id;
 
 
 CREATE VIEW summary
@@ -50,10 +50,10 @@ CREATE VIEW summary
     SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
     FROM events e
     LEFT JOIN pays p 
-    ON e.id = p.eid
+    ON e.id = p.events_id
     LEFT JOIN users u
-    ON u.id = p.uid
-    group by p.eid, p.uid;
+    ON u.id = p.users_id
+    group by p.events_id, p.users_id;
 
 CREATE VIEW debts
     AS 

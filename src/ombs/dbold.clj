@@ -9,20 +9,23 @@
 ; about many-to-many https://groups.google.com/d/msg/sqlkorma/r3kR6DyQZHo/RrQS_J8kkQ8J
 
 (declare events)
+(declare goods)
 
 (sql/defentity users
-  (sql/many-to-many events :pays {:lfk :uid :rfk :eid}))
+  (sql/many-to-many events :pays {:lfk :users_id :rfk :events_id}))
 
 (sql/defentity events
-  (sql/many-to-many users :pays {:lfk :eid :rfk :uid}))
+  (sql/many-to-many users :pays {:lfk :events_id :rfk :users_id})
+  (sql/has-one goods)
+  )
 
 (sql/defentity pays
-  (sql/belongs-to events {:fk :eid})
-  (sql/belongs-to users {:fk :uid})
+  (sql/belongs-to events {:fk :events_id})
+  (sql/belongs-to users {:fk :users_id})
   ) 
 
 (sql/defentity goods
-  (sql/belongs-to events {:fk :eid}))
+  (sql/has-many events {:fk :events_id}))
 
 (sql/defentity summary)
 (sql/defentity debts)
@@ -74,7 +77,11 @@
   (sql/update events (sql/set-fields {:status (statuses s)}) 
               (sql/where {:name ename :date date})) )
 
-(defn get-events [] (sql/select events))
+(defn get-events [] 
+  (sql/select events 
+              (sql/fields :name :date :price :author :status )   
+              (sql/with goods (sql/fields [:rest :parts]))
+              ))
 
 (defn get-active-events [] 
   (sql/select events 
@@ -111,18 +118,18 @@
 
 ;2 transacts
 (defn add-goods [ename date parts]
-  (sql/insert goods (sql/values {:eid (get-eid ename date) :rest parts})))
+  (sql/insert goods (sql/values {:events_id (get-eid ename date) :rest parts})))
 
 ;2 transacts
 (defn get-rest-parts [ename date]
   (:rest (first (sql/select goods (sql/fields :rest)
-                            (sql/where {:eid (get-eid ename date)})))))
+                            (sql/where {:events_id (get-eid ename date)})))))
 
 ;3 transacts
 (defn shrink-goods [ename date parts]
   "Sub count parst from database"
   (println (str "shrink goods on" parts))
   (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)}) 
-              (sql/where {:eid (get-eid ename date)})    
+              (sql/where {:events_id (get-eid ename date)})    
               )
   )

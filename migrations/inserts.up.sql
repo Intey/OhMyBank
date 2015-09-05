@@ -14,11 +14,11 @@ VALUES
                 ;
 
 INSERT INTO goods
-                (eid,   rest)
+                (events_id,   rest)
 VALUES
                 (3,     8);
 INSERT INTO participation
-                (uid,   eid)
+                (users_id,   events_id)
 VALUES
                 (1,     1),
                 (1,     3),
