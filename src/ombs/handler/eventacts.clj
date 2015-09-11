@@ -42,5 +42,4 @@
 (defn start [{ename :event-name date :date}]
   ;isvalid: not started, exists.
   (core/start-event ename date)
-  (redirect "/user"); go to user page in any case
-  )
+  (redirect "/user")); go to user page in any case 

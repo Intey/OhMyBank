@@ -15,6 +15,7 @@
 (defn participated? [uname ename edate] (dbpay/participated? uname ename edate))
 
 (defn debt 
+  "return debt count for user on event. If it's partial event, so ve use on the fly calculations."
   ([username] (dbpay/get-debt username)) ; full user debt on all events
   ([username event date] (dbpay/get-debt username event date)))
 
@@ -42,17 +43,14 @@
   (println (str "core.add-participant:" uname " event:" ename " date:" date))
   (if (is-initial? ename date)
     (dbpay/add-participant ename date uname)
-    (add-in-progress ename date uname)
-    )
-  )
+    (add-in-progress ename date uname)))
 
 (defn start-event [ename edate]
   (db/set-status ename edate :in-progress)
   (let [users (dbpay/get-participants ename edate)
         party-pay (party-pay (:price (db/get-event ename edate)) users)]
-    (println (str "start adding " users))
-    (doall (map #(dbpay/credit-payment ename edate % party-pay) users)))
-  )
+    (if (= (db/get-parts ename edate) 0); create debts only when event not partial
+      (doall (map #(dbpay/credit-payment ename edate % party-pay) users)))))
 
 (defn participants-count [ename date]
   (count (dbpay/get-participants ename date)))
