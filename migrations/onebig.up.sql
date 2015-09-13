@@ -27,7 +27,8 @@ CREATE TABLE pays(
 
 CREATE TABLE participation(
     [users_id] INTEGER REFERENCES users(id),
-    [events_id] INTEGER REFERENCES events(id)
+    [events_id] INTEGER REFERENCES events(id),
+    UNIQUE([users_id], [events_id])
 );
 
 CREATE TABLE goods(
