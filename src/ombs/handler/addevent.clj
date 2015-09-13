@@ -15,7 +15,10 @@
 ; Solutions:
 ; * Form should return always vector
 ; * convert value to vector
-(defn- addevent [ {event :name price :price date :date users :participants parts :parts :as params} & [withcredits?] ]
+(defn- addevent [ {event :name price :price date :date parts :parts
+                   users :participants
+                   :as params} 
+                 & [withcredits?] ]
   "Add event in events table, with adding participants, and calculating debts."
   (if (isvalid/new-event? event price date) 
     (do
@@ -29,7 +32,9 @@
     false)) ; validation fail
 
 (declare add-good)
-(defn init-event [ {event :name price :price date :date users :participants parts :parts :as params} ]
+(defn init-event [ {event :name price :price date :date parts :parts 
+                    users :participants
+                    :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   (if (isvalid/new-event? event price date) 
     (do
