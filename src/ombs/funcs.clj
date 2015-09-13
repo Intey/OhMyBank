@@ -11,3 +11,6 @@
   [x] (if-not (vector? x) 
         (conj [] x)
         x))
+
+(defn parse-int [s]
+   (when-let [r (re-find  #"\d+" s )] (Integer. r)))
