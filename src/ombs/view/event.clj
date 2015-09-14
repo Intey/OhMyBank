@@ -18,6 +18,25 @@
     ((h/remove-attr :disabled "")  match)
     ((h/set-attr :disabled "")     match)) )
 
+(defn start-action [name date author match]
+  (if (and (= author (sess/get :username)) 
+           (core/is-initial? name date)
+           (> (core/participants-count name date) 0))
+    ((h/remove-attr :disabled "")  match)
+    ((h/set-attr :disabled "")     match)) )
+
+(defn fill-parts [parts match]
+  (if (nil? parts) 
+    ((h/set-attr :hidden "") match) 
+    (h/content (parts-snip parts)) match))  
+
+(defn participate-action [name date status match]
+  (if (and 
+        (not (core/participated? (sess/get :username) name date))
+        (not= status "finished"))
+    ((h/remove-attr :disabled "")  match)
+    ((h/set-attr :disabled "")     match)))
+
 (def event-sel [:.event])
 (h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
   [:.name]   (h/set-attr :value name)
@@ -25,26 +44,7 @@
   [:.author] (h/set-attr :value author)
   [:.price]  (h/set-attr :value (str price))
   [:.debt]   (h/set-attr :value (core/debt (sess/get :username) name date))
-  [:#parts-row]  (fn [match]
-                   (if  (= 0 parts) 
-                     ((h/set-attr :hidden "")  match)
-                     ((h/content (parts-snip parts)) match)))
-  [:.action.participate] (fn [match]
-               (if (and 
-                     (not (core/participated? (sess/get :username) name date))
-                     (not= status "finished") ; not finished
-                     )  ;if user participated in name
-                 ((h/remove-attr :disabled "")  match)
-                 ((h/set-attr :disabled "")     match)))
-
+  [:#parts-row]  (partial fill-parts parts)
+  [:.action.participate] (partial participate-action name date status)
   [:.action.pay] (partial pay-action name date)
-  [:.action.start] (fn [match]
-                     ;(println (str "author: " author " name "name " date " date " initial? " (core/is-initial? name date) ))
-                     (if (and (= author (sess/get :username)) 
-                              (core/is-initial? name date)
-                              (> (core/participants-count name date) 0)
-                              )
-                       ((h/remove-attr :disabled "")  match)
-                       ((h/set-attr :disabled "")     match)))
-  
-  )
+  [:.action.start] (partial start-action name date author))
