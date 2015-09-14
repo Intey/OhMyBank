@@ -30,6 +30,7 @@
 
 
 (defn is-initial? [ename date] (db/is-initial? ename date))
+(defn is-active? [ename date] (= (db/get-status ename date) (:in-progress db/statuses)))
 
 (defn- add-in-progress [ename date uname]
   (println "Add in progress!")

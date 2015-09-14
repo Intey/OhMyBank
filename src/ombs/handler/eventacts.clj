@@ -33,7 +33,7 @@
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         eid (db/get-eid ename date)
-        parts parts]
+        parts (parse-int parts)]
     (when (isvalid/ids? eid uid) 
       (if (>= parts 1)
         (process-it ename date parts uname)

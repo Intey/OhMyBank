@@ -8,6 +8,7 @@
   "Check participation in event. If user have some payment action on event - he is participated." 
   ([uid eid] 
    (not (empty? (sql/select participation (sql/where (and (= :users_id uid) (= :events_id eid))))))) 
+
   ([uname ename edate] 
    (participated? (get-uid uname) (get-eid ename edate))))
 

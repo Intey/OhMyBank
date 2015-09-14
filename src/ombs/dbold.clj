@@ -100,8 +100,8 @@
                              (sql/where (and (= :date date) (= :name ename))))))) 
 
 (defn get-parts [ename date] 
-  (:parts (first (sql/select events (sql/fields :parts)
-                             (sql/where (and (= :date date) (= :name ename))))))) 
+  (:rest (first (sql/select goods (sql/fields :rest)
+                             (sql/where {:events_id (get-eid ename date)}))))) 
 
 
 (defn get-status [ename date] 
