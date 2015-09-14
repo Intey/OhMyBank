@@ -113,6 +113,9 @@
       (:status (first (sql/select events (sql/fields :status) 
                                   (sql/where {:name ename :date date} ) )))))
 
+(defn can-finish? [ename date]
+  (println "result: " (replace (first (sql/select summary (sql/where {:event ename :date date}))) [:debits :credits]))
+  (zero? (reduce - (replace (first (sql/select summary (sql/where {:event ename :date date}))) [:debits :credits]))))
 ;============================================== GOODS  =================================================
 
 ;2 transacts

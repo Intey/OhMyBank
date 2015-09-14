@@ -19,9 +19,10 @@
 
     ; request handlers. Prepare data, and call views. 
     [ombs.handler.pages :as pages]
-    [ombs.handler.eventacts :refer [pay participate start]]
+    [ombs.handler.eventacts :refer [pay pay-part participate start]]
     [ombs.handler.addevent :refer [init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
+    [ombs.funcs :refer [parse-int]]
     ))
 
 (defroutes main-routes
@@ -41,7 +42,11 @@
 
   (POST "/act" {params :params} 
         (case (:action params) 
-          "pay" (pay params)
+          "pay" (if-let [parts (parse-int (:parts params))] 
+                   (do (println "go to pay-parts with: " params) 
+                       (pay-part params))
+                   (do (println "go to pay with: " params) 
+                       (pay params)))
           "participate" (participate params)
           "start" (start params)))
 
