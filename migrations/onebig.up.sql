@@ -50,7 +50,7 @@ CREATE VIEW summary
     AS 
     SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
     FROM events e
-    LEFT JOIN pays p 
+    JOIN pays p 
     ON e.id = p.events_id
     LEFT JOIN users u
     ON u.id = p.users_id
