@@ -7,11 +7,16 @@
     [ombs.validate :refer [errors-string]]
     ))
 
-
-
 (def parts-row-sel [:#parts-row])
 (h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts] 
   [:.parts] (h/set-attr :value (str parts)))
+
+(defn pay-action [name date match] 
+  (if (and 
+        (core/participated? (sess/get :username) name date)
+        (core/is-active? name date) ) ; have debt
+    ((h/remove-attr :disabled "")  match)
+    ((h/set-attr :disabled "")     match)) )
 
 (def event-sel [:.event])
 (h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
@@ -32,13 +37,7 @@
                  ((h/remove-attr :disabled "")  match)
                  ((h/set-attr :disabled "")     match)))
 
-  [:.action.pay] (fn [match]
-                   (if (and 
-                         (core/participated? (sess/get :username) name date)
-                         (not= (core/debt (sess/get :username) name date) 0.0)) ; have debt
-                     ((h/remove-attr :disabled "")  match)
-                     ((h/set-attr :disabled "")     match))) 
-
+  [:.action.pay] (partial pay-action name date)
   [:.action.start] (fn [match]
                      ;(println (str "author: " author " name "name " date " date " initial? " (core/is-initial? name date) ))
                      (if (and (= author (sess/get :username)) 
