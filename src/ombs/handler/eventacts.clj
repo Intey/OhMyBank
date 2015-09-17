@@ -44,9 +44,12 @@
 
 (defn process-it [ename date parts uname]
   (println "processing " ename " " date " " parts " " uname)
-  (when (isvalid/parts? ename date parts) ; check if parts >= than free parts
-    (dbpay/debit-payment (db/get-uid uname) (db/get-eid ename date) (core/parts-price ename date parts))
-    (db/shrink-goods ename date parts)))
+  (if (isvalid/parts? ename date parts) ; its check if parts >= than free parts
+    (do 
+      (dbpay/debit-payment (db/get-uid uname) (db/get-eid ename date) (core/parts-price ename date parts))
+      (db/shrink-goods ename date parts))
+    (redirect "/user")
+    ))
 
 (defn participate [{ename :event-name date :date}]
   "Add participation of current user and selected event(given as param from
