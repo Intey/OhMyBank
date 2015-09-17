@@ -51,6 +51,7 @@
   `(do
      (vld/clear-errors!)
      ~@(map #(list 'create-rule tag %) ve-pairs)
+     (println "validator errors " (errors-string ~tag) " on tags:" ~tag)
      (not (vld/errors? ~tag)))
   )
 
@@ -103,7 +104,6 @@
 (defn parts? [ename date parts]
   (create-validator :pay
                     [
-                     [(<= parts (db/get-rest-parts ename date)) (message :event :parts-count)]
+                     [(vld/less-than? parts (db/get-rest-parts ename date)) (message :event :parts-count)]
                      ])
-  (redirect "/user")
   )
