@@ -1,6 +1,8 @@
 (ns ombs.dbold
   (:require [korma.db :as kdb]
-            [korma.core :as sql]))
+            [korma.core :as sql]
+            [ombs.funcs :as f]
+            ))
 
 (kdb/defdb korma-db (kdb/sqlite3
                       { :db "database.db"
@@ -70,18 +72,20 @@
 (defn add-event 
   ([ename price author date parts] 
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts parts})))
-  ([ename price author parts] 
-   (sql/insert events (sql/values {:name ename :price price :author author :status (statuses :initial) :parts parts}))))
+  ([ename price author date]
+   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) }))))
 
 (defn set-status [ename date s]
   (sql/update events (sql/set-fields {:status (statuses s)}) 
               (sql/where {:name ename :date date})) )
 
 (defn get-events [] 
-  (sql/select events 
-              (sql/fields :name :date :price :author :status )   
-              (sql/with goods (sql/fields [:rest :parts]))
-              ))
+  (map 
+    #(update % :parts f/nil-fix)
+    (sql/select events 
+                (sql/fields :name :date :price :author :status )   
+                (sql/with goods (sql/fields [:rest :parts]))
+                )))
 
 (defn get-active-events [] 
   (sql/select events 
