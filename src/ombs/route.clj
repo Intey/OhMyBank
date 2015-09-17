@@ -43,10 +43,8 @@
   (POST "/act" {params :params} 
         (case (:action params) 
           "pay" (if-let [parts (parse-int (:parts params))] 
-                   (do (println "go to pay-parts with: " params) 
-                       (pay-part params))
-                   (do (println "go to pay with: " params) 
-                       (pay params)))
+                  (pay-part params)
+                  (pay params))
           "participate" (participate params)
           "start" (start params)))
 
