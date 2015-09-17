@@ -26,9 +26,9 @@
     ((h/set-attr :disabled "")     match)) )
 
 (defn fill-parts [parts match]
-  (if (nil? parts) 
-    ((h/set-attr :hidden "") match) 
-    (h/content (parts-snip parts)) match))  
+  (if (= 0 parts) 
+    nil
+    ((h/content (parts-snip parts)) match)))  
 
 (defn participate-action [name date status match]
   (if (and 
@@ -39,12 +39,13 @@
 
 (def event-sel [:.event])
 (h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
-  [:.name]   (h/set-attr :value name)
-  [:.date]   (h/set-attr :value date)
-  [:.author] (h/set-attr :value author)
-  [:.price]  (h/set-attr :value (str price))
-  [:.debt]   (h/set-attr :value (core/debt (sess/get :username) name date))
-  [:#parts-row]  (partial fill-parts parts)
-  [:.action.participate] (partial participate-action name date status)
-  [:.action.pay] (partial pay-action name date)
-  [:.action.start] (partial start-action name date author))
+  [:.name]              (h/set-attr :value name)
+  [:.date]              (h/set-attr :value date)
+  [:.author]            (h/set-attr :value author)
+  [:.price]             (h/set-attr :value (str price))
+  [:.debt]              (h/set-attr :value (core/debt (sess/get :username) name date))
+  [:#parts-row]         (partial fill-parts parts)
+  [:.action.participate](partial participate-action name date status)
+  [:.action.pay]        (partial pay-action name date)
+  [:.action.start]      (partial start-action name date author)
+  )
