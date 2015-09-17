@@ -73,7 +73,7 @@
   ([ename price author date parts] 
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts parts})))
   ([ename price author date]
-   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) }))))
+   (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts 0}))))
 
 (defn set-status [ename date s]
   (sql/update events (sql/set-fields {:status (statuses s)}) 
