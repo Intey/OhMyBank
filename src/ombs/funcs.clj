@@ -8,12 +8,12 @@
 
 (defn as-vec
   "get a vector or value and represents it as vector. [1 2 3] -> [1 2 3]; 1 -> [1]"
-  [x] (if-not (vector? x) 
+  [x] (if-not (vector? x)
         (conj [] x)
         x))
 
 (defn parse-int [s]
-  (if (nil? s) 
+  (if (nil? s)
     0
     (when-let [r (re-find  #"\d+" s )] (Integer. r))))
 

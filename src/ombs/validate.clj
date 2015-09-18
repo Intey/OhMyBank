@@ -13,23 +13,23 @@
            :empty-date      "Event should have date"
            :duplicate-event "Event with same name today was created. Use another name"
            :no-participants "Participants should be checked"
-           :unexist         "Event does not exist"      
+           :unexist         "Event does not exist"
            :finished        "Event is history"
            :parts-count     "Event have less parts that given"
            }
    :register {
-              :short-pass      "Password should be longer than 7 chars"  
-              :notmatch-pass   "Password doesn't match"                        
+              :short-pass      "Password should be longer than 7 chars"
+              :notmatch-pass   "Password doesn't match"
               }
    :user {
           :empty-name "Username can't be empty"
-          :not-found "User not found" 
-          :unexists "Username already used"  
+          :not-found "User not found"
+          :unexists "Username already used"
           }
    :login {
            :invalid "Incorrect Login or password"
            }
-   } 
+   }
   )
 
 (defn- message [ & tgs ] (get-in errors (vec tgs)))
@@ -56,7 +56,7 @@
 (defn add-error [tag text] (vld/set-error! tag text))
 
 (defn new-event? [eventname price date]
-  (create-validator :event 
+  (create-validator :event
                     [
                      [ (vld/has-value? eventname)              (message :event :empty-name)      ]
                      [ (vld/greater-than? price 0)             (message :event :zero-price)      ]
@@ -65,16 +65,16 @@
                      ]))
 
 (defn new-user? [username pass1 pass2]
-  (create-validator :register 
+  (create-validator :register
                     [
                      [(vld/has-value? username) (message :user :empty-name)]
-                     [(>= (count pass1) 8) (message :register :short-pass)]  
-                     [(= pass1 pass2) (message :register :notmatch-pass)]                        
-                     [(empty? (db/get-user username)) (message :user :exists) ] 
+                     [(>= (count pass1) 8) (message :register :short-pass)]
+                     [(= pass1 pass2) (message :register :notmatch-pass)]
+                     [(empty? (db/get-user username)) (message :user :exists) ]
                      ]))
 
 (defn login? [username password]
-  (create-validator :login 
+  (create-validator :login
                     [[ (vld/has-value? username) (message :user :empty-name)]
                      [ (vld/has-value? (db/get-user username)) (message :user :not-found)]
                      [ (= password (:password (db/get-user username))) (message :login :invalid)]
@@ -82,20 +82,20 @@
   )
 
 (defn participation? [ename date uname]
-  (create-validator :participation 
+  (create-validator :participation
                     [
-                     [(not= (db/get-status ename date) (db/statuses :finished)) (message :event :finished)]   
-                     [(vld/has-value? ename) (message :event :empty-name)]                                        
-                     [(vld/has-value? date) (message :event :empty-date)]                                        
-                     [(vld/has-value? uname) (message :user :empty-name)]                                         
+                     [(not= (db/get-status ename date) (db/statuses :finished)) (message :event :finished)]
+                     [(vld/has-value? ename) (message :event :empty-name)]
+                     [(vld/has-value? date) (message :event :empty-date)]
+                     [(vld/has-value? uname) (message :user :empty-name)]
                      ]))
 
 (defn ids? [eid uid]
   "Check, if id's is correct. Used with (db/get-*id)"
-  (create-validator :pay 
+  (create-validator :pay
                     [
                      [(not= nil uid) (message :user :empty-name)]
-                     [(not= nil eid) (message :event :unexist)]     
+                     [(not= nil eid) (message :event :unexist)]
                      ])
   )
 

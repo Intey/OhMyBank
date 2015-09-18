@@ -1,37 +1,37 @@
 (ns ombs.view.event
-  (:require 
+  (:require
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess]
-    [noir.validation :as vld]  
+    [noir.validation :as vld]
     [ombs.core :as core]
     [ombs.validate :refer [errors-string]]
     ))
 
 (def parts-row-sel [:#parts-row])
-(h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts] 
+(h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts]
   [:.parts] (h/set-attr :value (str parts)))
 
-(defn pay-action [name date match] 
-  (if (and 
+(defn pay-action [name date match]
+  (if (and
         (core/participated? (sess/get :username) name date)
         (core/is-active? name date) ) ; have debt
     ((h/remove-attr :disabled "")  match)
     ((h/set-attr :disabled "")     match)) )
 
 (defn start-action [name date author match]
-  (if (and (= author (sess/get :username)) 
+  (if (and (= author (sess/get :username))
            (core/is-initial? name date)
            (> (core/participants-count name date) 0))
     ((h/remove-attr :disabled "")  match)
     ((h/set-attr :disabled "")     match)) )
 
 (defn fill-parts [parts match]
-  (if (= 0 parts) 
+  (if (= 0 parts)
     nil
-    ((h/content (parts-snip parts)) match)))  
+    ((h/content (parts-snip parts)) match)))
 
 (defn participate-action [name date status match]
-  (if (and 
+  (if (and
         (not (core/participated? (sess/get :username) name date))
         (not= status "finished"))
     ((h/remove-attr :disabled "")  match)

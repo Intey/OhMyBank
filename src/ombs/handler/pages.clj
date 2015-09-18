@@ -13,8 +13,8 @@
     (pages/user username)
     (redirect "/")))
 
-(defn addevent [] 
+(defn addevent []
   (if-let [username (sess/get :username)]
-    (pages/addevent (db/get-usernames)) 
-    (redirect "/"))) 
-   
+    (pages/addevent (db/get-usernames))
+    (redirect "/")))
+

@@ -1,5 +1,5 @@
 (ns ombs.core
-  "Contains main logic. No validations. All function hope that you give to it valid data. Use in 
+  "Contains main logic. No validations. All function hope that you give to it valid data. Use in
   handlers, views, etc. "
   (:require [ombs.dbold :as db]
             [ombs.db.payment :as dbpay]
@@ -10,11 +10,11 @@
 
 (defn rate [student?] (if (= student? "on") 0.5 1.0 ) )
 
-(defn events [] (db/get-events))  
+(defn events [] (db/get-events))
 
 (defn participated? [uname ename edate] (dbpay/participated? uname ename edate))
 
-(defn debt 
+(defn debt
   "return debt count for user on event. If it's partial event, so ve use on the fly calculations."
   ([username] (dbpay/get-debt username)) ; full user debt on all events
   ([username event date] (dbpay/get-debt username event date)))
@@ -22,7 +22,7 @@
 (defn part-price [event-price parts] (/ event-price parts))
 
 (defn parts-price [ename date parts]
-  (* parts (part-price (db/get-price ename date) (db/get-parts ename date))))   
+  (* parts (part-price (db/get-price ename date) (db/get-parts ename date))))
 
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."
@@ -61,7 +61,7 @@
   (select-keys m '(:name :price :date :author)))
 
 (defn- ^:deprecated grouper [events]
-  "Reorganize participation result to map, where key - is event, and value - vector of users, that 
+  "Reorganize participation result to map, where key - is event, and value - vector of users, that
   participate this event. Expect input, after using group-by on BD-table 'participants':
   (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
   (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector

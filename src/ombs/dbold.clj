@@ -24,7 +24,7 @@
 (sql/defentity pays
   (sql/belongs-to events {:fk :events_id})
   (sql/belongs-to users {:fk :users_id})
-  ) 
+  )
 
 (sql/defentity goods
   (sql/has-many events {:fk :events_id}))
@@ -35,7 +35,7 @@
 (sql/defentity participation)
 (sql/defentity participants)
 
-; statuses - describe status of event. 
+; statuses - describe status of event.
 ;   Initial - created, but not started. Collecting participants.
 ;   In-progress - Collecting money! Not full sum payed.
 ;   Finished - closed.
@@ -47,7 +47,7 @@
 ;============================================== USER =================================================
 
 (defn add-user [uname password birthdate rate]
-  (sql/insert users (sql/values {:name uname :password password :bdate birthdate :rate rate } ))) 
+  (sql/insert users (sql/values {:name uname :password password :bdate birthdate :rate rate } )))
 
 (defn get-user [uname]
   "Return map of user info"
@@ -59,8 +59,8 @@
   (:id (first (sql/select users (sql/fields :id)
                           (sql/where (= :name uname))))))
 
-(defn get-rate [uname] 
-  (:rate (first (sql/select users (sql/fields :rate) 
+(defn get-rate [uname]
+  (:rate (first (sql/select users (sql/fields :rate)
                             (sql/where (= :name uname))))))
 
 (defn get-usernames [] (sql/select users (sql/fields :name)))
@@ -69,52 +69,52 @@
 
 
 ;============================================== EVENT =================================================
-(defn add-event 
-  ([ename price author date parts] 
+(defn add-event
+  ([ename price author date parts]
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts parts})))
   ([ename price author date]
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts 0}))))
 
 (defn set-status [ename date s]
-  (sql/update events (sql/set-fields {:status (statuses s)}) 
+  (sql/update events (sql/set-fields {:status (statuses s)})
               (sql/where {:name ename :date date})) )
 
-(defn get-events [] 
-  (map 
+(defn get-events []
+  (map
     #(update % :parts f/nil-fix)
-    (sql/select events 
-                (sql/fields :name :date :price :author :status )   
+    (sql/select events
+                (sql/fields :name :date :price :author :status )
                 (sql/with goods (sql/fields [:rest :parts]))
                 )))
 
-(defn get-active-events [] 
-  (sql/select events 
+(defn get-active-events []
+  (sql/select events
               (sql/where (not= :status (statuses :finished)))))
 
-(defn get-event [ename date] 
-  (first (sql/select events 
+(defn get-event [ename date]
+  (first (sql/select events
                      (sql/where (and (= :date date) (= :name ename))))))
 
 (defn get-eid [ename date]
   (:id (first (sql/select events (sql/fields :id)
                           (sql/where (and (= :name ename) (= :date date)))))))
 
-(defn get-price [ename date] 
+(defn get-price [ename date]
   (:price (first (sql/select events (sql/fields :price)
-                             (sql/where (and (= :date date) (= :name ename))))))) 
+                             (sql/where (and (= :date date) (= :name ename)))))))
 
-(defn get-parts [ename date] 
+(defn get-parts [ename date]
   (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id (get-eid ename date)}))))) 
+                             (sql/where {:events_id (get-eid ename date)})))))
 
 
-(defn get-status [ename date] 
-  (:status (first (sql/select events (sql/fields :status)     
-                              (sql/where {:name ename :date date} ))))) 
+(defn get-status [ename date]
+  (:status (first (sql/select events (sql/fields :status)
+                              (sql/where {:name ename :date date} )))))
 
-(defn is-initial? [ename date] 
-   (= (statuses :initial) 
-      (:status (first (sql/select events (sql/fields :status) 
+(defn is-initial? [ename date]
+   (= (statuses :initial)
+      (:status (first (sql/select events (sql/fields :status)
                                   (sql/where {:name ename :date date} ) )))))
 
 (defn can-finish? [ename date]
@@ -134,7 +134,7 @@
 (defn shrink-goods [ename date parts]
   "Sub count parst from database"
   (println (str "shrink goods on" parts))
-  (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)}) 
-              (sql/where {:events_id (get-eid ename date)})    
+  (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)})
+              (sql/where {:events_id (get-eid ename date)})
               )
   )

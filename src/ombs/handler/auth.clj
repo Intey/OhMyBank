@@ -1,5 +1,5 @@
 (ns ombs.handler.auth
-  (:require  
+  (:require
     [ombs.view.pages :as page]
     [ombs.dbold :as db]
     [ombs.core :as core]
@@ -8,9 +8,9 @@
     [ombs.validate :as isvalid] )
   )
 
-(defn reg-page [] 
-  "Hacky func, for open register-page. In routes i use only handler function, so here it is. In view.pages, 
-  function register-page takes map with params - if you mistake input, it's redirect and already inserted 
+(defn reg-page []
+  "Hacky func, for open register-page. In routes i use only handler function, so here it is. In view.pages,
+  function register-page takes map with params - if you mistake input, it's redirect and already inserted
   data was cached."
   (page/register {}))
 

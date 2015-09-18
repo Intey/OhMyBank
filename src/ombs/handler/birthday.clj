@@ -1,5 +1,5 @@
 (ns ombs.handler.birthday
-  (:require 
+  (:require
     [ombs.dbold :as db]
     [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
@@ -18,14 +18,14 @@
 (defn add-birthday [ {event :name price :price date :date users :participants parts :parts :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
   ;valudation
-  (if (isvalid/new-event? event price date users) 
+  (if (isvalid/new-event? event price date users)
     (let [user-rates (db/get-rates (funcs/as-vec users))
           party-pay (/ (read-string price) (reduce + user-rates)) ]
       (db/add-event event (read-string price) (sess/get :username) date parts)
       ;use 'dorun' for execute lazy function 'db/credit-payment'
-      (dorun 
-        (map 
-          #(dbpay/credit-payment event date % (* party-pay (db/get-rate %))) 
+      (dorun
+        (map
+          #(dbpay/credit-payment event date % (* party-pay (db/get-rate %)))
           (funcs/as-vec users)))
       (println (str "rates " user-rates " pp " party-pay " users " users))
       (redirect "/user"))

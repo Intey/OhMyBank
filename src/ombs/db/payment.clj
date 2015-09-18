@@ -4,29 +4,29 @@
             [ombs.dbold :refer :all]
             ))
 
-(defn participated? 
-  "Check participation in event. If user have some payment action on event - he is participated." 
-  ([uid eid] 
-   (not (empty? (sql/select participation (sql/where (and (= :users_id uid) (= :events_id eid))))))) 
+(defn participated?
+  "Check participation in event. If user have some payment action on event - he is participated."
+  ([uid eid]
+   (not (empty? (sql/select participation (sql/where (and (= :users_id uid) (= :events_id eid)))))))
 
-  ([uname ename edate] 
+  ([uname ename edate]
    (participated? (get-uid uname) (get-eid ename edate))))
 
-(defn get-debt 
+(defn get-debt
   "sum of all credits and debits in pays for current user and event. "
   ; full debt
   ([username]
   (if-let [summary (:debt (first (sql/select debts (sql/where (= username :user)) (sql/aggregate (sum :debt) :debt))))]
-    summary 
+    summary
     0.0))
   ; debt on some event
   ([username event date]
   (if-let [summary (:debt (first (sql/select debts (sql/where (and (= username :user) (= event :event) (= date :date))))))]
-    summary 
+    summary
     0.0))
-  ) 
+  )
 
-(defn credit-payment [eventname date username money] 
+(defn credit-payment [eventname date username money]
   (println (str "credit " eventname " date " date " user " username " money " money ))
   (sql/insert pays (sql/values { :users_id (get-uid username) :events_id (get-eid eventname date) :credit money })))
 
@@ -39,7 +39,7 @@
   )
 
 (defn get-participants [ename edate]
-  (mapv #(first (vals %)) (sql/select participants (sql/fields :user) 
+  (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
                                       (sql/where {:event ename :date edate}))))
 
 

@@ -1,5 +1,5 @@
 (ns ombs.route
-  (:require 
+  (:require
     ;common routing. wraper for ...
     [compojure.core :refer [ANY POST GET defroutes wrap-routes]]
     ; 404, and resources for using css, js, html files.
@@ -17,7 +17,7 @@
     [noir.validation :refer [wrap-noir-validation]]
     [noir.response :refer [redirect]]
 
-    ; request handlers. Prepare data, and call views. 
+    ; request handlers. Prepare data, and call views.
     [ombs.handler.pages :as pages]
     [ombs.handler.eventacts :refer [pay pay-part participate start]]
     [ombs.handler.addevent :refer [init-event]]
@@ -40,9 +40,9 @@
 
   (GET  "/user" [_] (pages/user))
 
-  (POST "/act" {params :params} 
-        (case (:action params) 
-          "pay" (if-let [parts (parse-int (:parts params))] 
+  (POST "/act" {params :params}
+        (case (:action params)
+          "pay" (if-let [parts (parse-int (:parts params))]
                   (pay-part params)
                   (pay params))
           "participate" (participate params)

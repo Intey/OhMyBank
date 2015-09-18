@@ -49,9 +49,9 @@
 ; Helpers, for creation list of user for participation
 (def usercheckbox-sel [:.users] )
 
-(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}] 
-  [:.userbox] (h/do-> 
-                (h/content username)  
+(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}]
+  [:.userbox] (h/do->
+                (h/content username)
                 (h/set-attr :value username)))
 
 (h/deftemplate addevent "../resources/public/addevent.html"
