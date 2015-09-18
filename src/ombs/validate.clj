@@ -24,7 +24,7 @@
    :user {
           :empty-name "Username can't be empty"
           :not-found "User not found" 
-          :exists "Username already used"  
+          :unexists "Username already used"  
           }
    :login {
            :invalid "Incorrect Login or password"
@@ -36,8 +36,7 @@
 
 (defn errors-string
   ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
-  ([tags] (reduce str (map #(str "|" % "|") (vld/get-errors tags)))
-   ))
+  ([tags] (reduce str (map #(str "|" % "|") (vld/get-errors tags)))))
 
 (defmacro create-rule [tag data]
   `(vld/rule ~@(list (first data)) [~tag ~(last data)] )
@@ -49,9 +48,8 @@
   in vld errors vector, when rule fails."
   [tag ve-pairs]
   `(do
-     (vld/clear-errors!)
+     ;(vld/clear-errors!)
      ~@(map #(list 'create-rule tag %) ve-pairs)
-     (println "validator errors " (errors-string ~tag) " on tags:" ~tag)
      (not (vld/errors? ~tag)))
   )
 
@@ -104,6 +102,6 @@
 (defn parts? [ename date parts]
   (create-validator :pay
                     [
-                     [(vld/less-than? parts (db/get-rest-parts ename date)) (message :event :parts-count)]
+                     [(<= parts (db/get-rest-parts ename date)) (message :event :parts-count)]
                      ])
   )

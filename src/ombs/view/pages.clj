@@ -39,7 +39,7 @@
 
 (h/deftemplate user "../resources/public/user.html" [username]
   [:#user] (h/content username)
-  [:#error] (h/content (errors-string [:participation :pay]))
+  [:#error] (h/content (errors-string))
   [:.debt] (h/content (str (core/debt username)))
   [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
   )
@@ -58,5 +58,5 @@
   [users]
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
-  [:#error] (h/content (errors-string :event))
+  [:#error] (h/content (errors-string))
   )
