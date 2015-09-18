@@ -47,11 +47,7 @@
       true) ; all is ok
     false)) ; validation fail
 
-(defn- add-good [ {event :name price :price date :date users :participants parts :parts :as params} ]
-  (if (db/add-goods event date parts)
-    (redirect "/user")
-    (addevent-page (db/get-usernames)) ))
-
+(declare add-good)
 (defn- add-partial-event [{event :name price :price date :date parts :parts
                            users :participants
                            :as params}]
@@ -62,4 +58,9 @@
         (add-good params)
         true)
       false))
+
+(defn- add-good [ {event :name price :price date :date users :participants parts :parts :as params} ]
+  (if (db/add-goods event date parts)
+    (redirect "/user")
+    (addevent-page (db/get-usernames)) ))
 
