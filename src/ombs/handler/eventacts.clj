@@ -7,7 +7,6 @@
     [ombs.funcs :refer [parse-int]]
     [ombs.handler.pages :as pages]
     [noir.session :as sess]
-    [noir.response :refer [redirect] ]
     ))
 
 (defn- finish [ename date] (db/set-status ename date :finished))
