@@ -14,8 +14,9 @@
 (declare process-it)
 
 (defn pay [{ename :event-name date :date :as params}]
-  "Add participation of current user and selected event(given as param from
-  post). Parts in params is count of parts, that user want to pay"
+  "Add payment record in db. For current user. 
+  Also, if this action, make summary event debt = 0, finish it"
+  (println "pay solid")
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         eid (db/get-eid ename date)]
@@ -28,21 +29,22 @@
 (defn pay-part [{ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from
   post). Parts in params is count of parts, that user want to pay"
+  (println "pay partial")
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         eid (db/get-eid ename date)
         parts (parse-int parts)]
     (when (isvalid/ids? eid uid)
-      (if (>= parts 1)
-        (process-it ename date parts uname)
-        (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date)))
+      (process-it ename date parts uname)
+      (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date))
       (when (= 0 (db/get-rest-parts ename date))
-        (finish ename date) )))
-  (pages/user)) ; go to user page in any case
+        (finish ename date)))
+  (pages/user))) ; go to user page in any case
 
 (defn process-it [ename date parts uname]
   (if (isvalid/parts? ename date parts) ; its check if parts >= than free parts
     (do
+      (dbpay/credit-payment ename date uname (core/parts-price ename date parts)) ; fix database logic
       (dbpay/debit-payment (db/get-uid uname) (db/get-eid ename date) (core/parts-price ename date parts))
       (db/shrink-goods ename date parts))
     (pages/user)))

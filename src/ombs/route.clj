@@ -42,9 +42,9 @@
 
   (POST "/act" {params :params}
         (case (:action params)
-          "pay" (if-let [parts (parse-int (:parts params))]
-                  (pay-part params)
-                  (pay params))
+          "pay" (if (zero? (parse-int (:parts params)))
+                  (pay params)
+                  (pay-part params))
           "participate" (participate params)
           "start" (start params)))
 
