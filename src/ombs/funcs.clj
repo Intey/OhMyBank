@@ -15,7 +15,9 @@
 (defn parse-int [s]
   (if (nil? s)
     0
-    (when-let [r (re-find  #"\d+" s )] (Integer. r))))
+    (if-let [r (re-find  #"\d+" s)] 
+      (Integer. r) 
+      0)))
 
 (defn nil-fix
  "Replace nil value to 0"
