@@ -10,27 +10,30 @@
     [ombs.view.pages :refer [addevent] :rename {addevent addevent-page}]
     )
   )
-
+; Forward declarations
 (declare add-solid-event)
+
 (declare add-partial-event)
+(declare add-good)
+
+(declare add-participants)
+; ====== End forward declarations
+
 (defn init-event [ {event :name price :price date :date parts :parts
                     users :participants
                     :as params} ]
   "Main function for creating new event."
+  (println "init event: " params)
   (if (isvalid/new-event? event price date)
     (do
-      (if (nil? (funcs/parse-int parts))
+      (if (zero? (funcs/parse-int parts))
         (add-solid-event params)
         (add-partial-event (update params :parts funcs/parse-int)))
+      (when (not-empty users) (add-participants params))
       (redirect "/user"))
     ;if validation fails
     (addevent-page (db/get-usernames)) ))
 
-;FIXME:
-; issue, when we check one user as participant, so there, users - is value(string). When >1, users - vector.
-; Solutions:
-; * Form should return always vector
-; * convert value to vector
 (defn- add-solid-event [ {event :name price :price date :date
                           users :participants
                           :as params} ]
@@ -40,14 +43,13 @@
     (do
       (db/add-event event (read-string price) (sess/get :username) date)
       (if (> (count users) 0)
-        (let [party-pay (core/party-pay price users)]
+        (let [party-pay (core/party-pay (funcs/parse-int price) users)]
           ;use 'dorun' for execute lazy function 'db/credit-payment'
           (dorun (map #(dbpay/credit-payment event date % party-pay)
                       (funcs/as-vec users))))) ; may have only one user, so create vec
       true) ; all is ok
     false)) ; validation fail
 
-(declare add-good)
 (defn- add-partial-event [{event :name price :price date :date parts :parts
                            users :participants
                            :as params}]
@@ -64,3 +66,6 @@
     (redirect "/user")
     (addevent-page (db/get-usernames)) ))
 
+(defn- add-participants [{event :name date :date users :participants}]
+  (println "add-participants " users)
+  (dorun (map (partial dbpay/add-participant event date) users)))
