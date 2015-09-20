@@ -1,6 +1,7 @@
 DROP TABLE events;
 DROP TABLE users;
 DROP TABLE pays;
+DROP TABLE fees;
 DROP TABLE participation;
 DROP TABLE goods;
 DROP VIEW participants;

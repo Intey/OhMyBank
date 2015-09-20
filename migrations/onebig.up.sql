@@ -25,6 +25,14 @@ CREATE TABLE pays(
     [credit] DOUBLE NOT NULL DEFAULT 0
 );
 
+-- table for unconfirmed payments. They shown for admin, and he can affirm or refute
+CREATE TABLE fees(
+    [id] INTEGER PRIMARY KEY AUTOINCREMENT,
+    [users_id] INTEGER REFERENCES users(id),
+    [events_id] INTEGER REFERENCES events(id),
+    [money] DOUBLE NOT NULL DEFAULT 0
+);
+
 CREATE TABLE participation(
     [users_id] INTEGER REFERENCES users(id),
     [events_id] INTEGER REFERENCES events(id),

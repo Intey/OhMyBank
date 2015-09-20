@@ -15,10 +15,14 @@
 (defn parse-int [s]
   (if (nil? s)
     0
-    (if-let [r (re-find  #"\d+" s)] 
-      (Integer. r) 
+    (if-let [r (re-find  #"\d+" s)]
+      (Integer. r)
       0)))
 
 (defn nil-fix
  "Replace nil value to 0"
  [v] (if (nil? v) 0 v))
+
+(defn valuer [sq ks]
+  "Extract keys ks from hashes in sequence sq."
+  (map #(replace % ks) sq))

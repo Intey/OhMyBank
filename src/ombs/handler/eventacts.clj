@@ -14,7 +14,7 @@
 (declare process-it)
 
 (defn pay [{ename :event-name date :date :as params}]
-  "Add payment record in db. For current user. 
+  "Add payment record in db. For current user.
   Also, if this action, make summary event debt = 0, finish it"
   (println "pay solid")
   (let [uname (sess/get :username)
