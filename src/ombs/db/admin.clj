@@ -16,8 +16,9 @@
 (declare read-fee)
 
 (defn affirm [fee-id]
-  (apply p/debit-payment (read-fee fee-id)
-  (rm-fee fee-id)))
+  (kdb/transaction
+    (apply p/debit-payment (read-fee fee-id))
+    (rm-fee fee-id)))
 
 (defn refute [fee-id]
   "Alias for rm-fee, to avoid call refute in affirm, or rm-fee in interface."
@@ -25,7 +26,7 @@
 
 (defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
 
-(defn read-fee [id]
+(defn- read-fee [id]
       (replace
         (first (sql/select fees (sql/where {:id id})))
         [:users_id :events_id :money]))
