@@ -7,6 +7,22 @@
     [ombs.validate :refer [errors-string]]
     ))
 
+(declare start-action)
+(declare fill-parts)
+(declare participate-action)
+(def event-sel [:.event])
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
+  [:.name]              (h/set-attr :value name)
+  [:.date]              (h/set-attr :value date)
+  [:.author]            (h/set-attr :value author)
+  [:.price]             (h/set-attr :value (str price))
+  [:.debt]              (h/set-attr :value (core/debt (sess/get :username) name date))
+  [:#parts-row]         (partial fill-parts parts)
+  [:.action.participate](partial participate-action name date status)
+  [:.action.pay]        (partial pay-action name date)
+  [:.action.start]      (partial start-action name date author)
+  )
+
 (def parts-row-sel [:#parts-row])
 (h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts]
   [:.parts] (h/set-attr :value (str parts)))
@@ -37,15 +53,3 @@
     ((h/remove-attr :disabled "")  match)
     ((h/set-attr :disabled "")     match)))
 
-(def event-sel [:.event])
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
-  [:.name]              (h/set-attr :value name)
-  [:.date]              (h/set-attr :value date)
-  [:.author]            (h/set-attr :value author)
-  [:.price]             (h/set-attr :value (str price))
-  [:.debt]              (h/set-attr :value (core/debt (sess/get :username) name date))
-  [:#parts-row]         (partial fill-parts parts)
-  [:.action.participate](partial participate-action name date status)
-  [:.action.pay]        (partial pay-action name date)
-  [:.action.start]      (partial start-action name date author)
-  )
