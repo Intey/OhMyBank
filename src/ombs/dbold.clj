@@ -12,9 +12,12 @@
 
 (declare events)
 (declare goods)
+(declare fees)
 
 (sql/defentity users
-  (sql/many-to-many events :pays {:lfk :users_id :rfk :events_id}))
+  (sql/many-to-many events :pays {:lfk :users_id :rfk :events_id})
+  (sql/has-many fees)
+  )
 
 (sql/defentity events
   (sql/many-to-many users :pays {:lfk :events_id :rfk :users_id})
@@ -23,8 +26,12 @@
 
 (sql/defentity pays
   (sql/belongs-to events {:fk :events_id})
-  (sql/belongs-to users {:fk :users_id})
-  )
+  (sql/belongs-to users {:fk :users_id}))
+
+(sql/defentity fees
+  (sql/belongs-to events)
+  (sql/belongs-to users))
+
 
 (sql/defentity goods
   (sql/has-many events {:fk :events_id}))

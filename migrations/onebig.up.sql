@@ -16,7 +16,9 @@ CREATE TABLE users(
     [password] varchar(40) NOT NULL,
     [bdate] DATE NOT NULL,
     [rate] DOUBLE NOT NULL DEFAULT 1,
-    [balance] DOUBLE NOT NULL DEFAULT 0);
+    [balance] DOUBLE NOT NULL DEFAULT 0,
+    -- 1 is default user, 0 is admin 
+    [role] INTEGER NOT NULL DEFAULT 1);
 
 CREATE TABLE pays(
     [users_id] INTEGER REFERENCES users(id),
@@ -30,6 +32,7 @@ CREATE TABLE fees(
     [id] INTEGER PRIMARY KEY AUTOINCREMENT,
     [users_id] INTEGER REFERENCES users(id),
     [events_id] INTEGER REFERENCES events(id),
+    [date] DATE NOT NULL DEFAULT (date('now')),
     [money] DOUBLE NOT NULL DEFAULT 0
 );
 

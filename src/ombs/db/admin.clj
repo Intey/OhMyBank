@@ -8,9 +8,6 @@
             ))
 
 ; like pays, but for unconfirmed pays
-(sql/defentity fees
-  (sql/belongs-to events)
-  (sql/belongs-to users))
 
 (declare rm-fee)
 (declare read-fee)
@@ -24,9 +21,19 @@
   "Alias for rm-fee, to avoid call refute in affirm, or rm-fee in interface."
   (rm-fee fee-id) )
 
-(defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
+(defn get-fees [] 
+  (sql/select fees 
+              (sql/fields :money :date)  
+              (sql/with users  (sql/fields [:name :user])) 
+              (sql/with events (sql/fields [:name :event] [:date :edate])) 
+              ))
 
+; pivate part
+(defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
 (defn- read-fee [id]
       (replace
         (first (sql/select fees (sql/where {:id id})))
         [:users_id :events_id :money]))
+
+(defn get-role [uid]
+  (:role (first (sql/select users (sql/where {:id uid}) (sql/fields :role)))))

@@ -3,6 +3,7 @@
   handlers, views, etc. "
   (:require [ombs.dbold :as db]
             [ombs.db.payment :as dbpay]
+            [ombs.db.admin :as db-adm]
             [ombs.funcs :as fns]
             [ombs.validate :refer [add-error]]
             [noir.response :refer [redirect]]
@@ -55,6 +56,9 @@
 
 (defn participants-count [ename date]
   (count (dbpay/get-participants ename date)))
+
+(defn get-role [username]
+  (db-adm/get-role (db/get-uid username)))
 
 (defn- ^:deprecated extract-event [m]
   "Extract event keys from raw result of query participated-list."
