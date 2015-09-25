@@ -43,3 +43,5 @@
                                       (sql/where {:event ename :date edate}))))
 
 
+(defn create-fee [uname ename date money]
+  (sql/insert fees (sql/values {:uname uname :ename ename :edate date :money money :date})))
