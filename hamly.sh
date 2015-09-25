@@ -7,4 +7,6 @@ hamle(){
     fi
 }
 
-hamle "admin"
+for file in $(ls resources/src); do
+    hamle "${file%.*}"
+done
