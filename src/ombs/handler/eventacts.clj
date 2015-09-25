@@ -21,9 +21,10 @@
         uid (db/get-uid uname)
         eid (db/get-eid ename date)]
     (when (isvalid/ids? eid uid)
-      (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date))
-      (if (db/can-finish? ename date)
-        (finish ename date))))
+      (dbpay/create-fee uid eid)
+      ;(dbpay/debit-payment uid eid (dbpay/get-debt uname ename date))
+      ;(if (db/can-finish? ename date)
+      ;  (finish ename date))))
   (pages/user)) ; go to user page in any case
 
 (defn pay-part [{ename :event-name date :date parts :parts :as params}]

@@ -13,8 +13,11 @@
 (declare read-fee)
 
 (defn affirm [fee-id]
+  "Realize fee, and if it's last part of payment - close it."
   (kdb/transaction
     (apply p/debit-payment (read-fee fee-id))
+    (if (can-finish? ename date)
+      (finish ename date))
     (rm-fee fee-id)))
 
 (defn refute [fee-id]
