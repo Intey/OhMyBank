@@ -10,4 +10,5 @@ pom.xml.asc
 .hgignore
 .hg/
 database.db
-habr.html
+.vimrc
+.vim/
