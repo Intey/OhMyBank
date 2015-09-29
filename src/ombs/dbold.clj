@@ -86,13 +86,30 @@
   (sql/update events (sql/set-fields {:status (statuses s)})
               (sql/where {:name ename :date date})) )
 
+(declare subtract-feesed-parts)
 (defn get-events []
+  "Return list of events, and it actual count of event"
+  ;First of all, we select events from it table and join for each rest(actual)
+  ;parts Then we update each event elent: substract from each count of parts,
+  ;that hang in fees some events haven't parts, and after join it's have nil
+  ;parts. So we need fix before substract
   (map
-    #(update % :parts f/nil-fix)
+    #(update % :parts 
+             (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
     (sql/select events
-                (sql/fields :name :date :price :author :status )
-                (sql/with goods (sql/fields [:rest :parts]))
-                )))
+                (sql/fields :id :name :date :price :author :status)
+                (sql/with goods (sql/fields [:rest :parts])))))
+
+(defn subtract-feesed-parts [eid parts] 
+  "Substract from given parts, founded parts in active(all) fees."
+  (assert (not= nil parts) "Can't subtract-feesed-parts from nil")
+  (- parts 
+     (-> (sql/select fees (sql/fields :sum) 
+                     (sql/where {:events_id eid}) 
+                     (sql/aggregate (sum :parts) :sum)) 
+         (first) 
+         (:sum) 
+         (f/nil-fix))))
 
 (defn get-active-events []
   (sql/select events
