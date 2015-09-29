@@ -11,8 +11,6 @@
 
 (defn- finish [ename date] (db/set-status ename date :finished))
 
-(declare process-it)
-
 (defn pay [{ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from
   post). Parts in params is count of parts, that user want to pay"
@@ -22,14 +20,6 @@
         parts (parse-int parts)]
     (dbpay/create-fee uname ename date parts) 
   (pages/user))) ; go to user page in any case
-
-(defn process-it [ename date parts uname]
-  (if (isvalid/parts? ename date parts) ; its check if parts >= than free parts
-    (do
-      (dbpay/credit-payment ename date uname (db/parts-price ename date parts)) ; fix database logic
-      (dbpay/debit-payment (db/get-uid uname) (db/get-eid ename date) (db/parts-price ename date parts))
-      (db/shrink-goods ename date parts))
-    (pages/user)))
 
 (defn participate [{ename :event-name date :date}]
   "Add participation of current user and selected event(given as param from
