@@ -58,6 +58,7 @@
       (if (can-finish? ename date)
         (finish ename date)))))
 
+(declare process-it)
 (defn pay-part [{ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from
   post). Parts in params is count of parts, that user want to pay"
