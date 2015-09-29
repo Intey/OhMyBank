@@ -33,7 +33,8 @@ CREATE TABLE fees(
     [users_id] INTEGER REFERENCES users(id),
     [events_id] INTEGER REFERENCES events(id),
     [date] DATE NOT NULL DEFAULT (date('now')),
-    [money] DOUBLE NOT NULL DEFAULT 0
+    [money] DOUBLE NOT NULL DEFAULT 0,
+    [parts] INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE participation(
