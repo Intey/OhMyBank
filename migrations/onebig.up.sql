@@ -6,7 +6,7 @@ CREATE TABLE events(
     [author] VARCHAR(50) NOT NULL,
     [date] DATE NOT NULL DEFAULT (date('now')),
     [status] VARCHAR(10) NOT NULL,
-    [parts] int NOT NULL DEFAULT 1,
+    [parts] int NOT NULL DEFAULT 0,
     UNIQUE([name], [date])
     );
 
