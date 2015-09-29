@@ -20,15 +20,9 @@
   ([username] (dbpay/get-debt username)) ; full user debt on all events
   ([username event date] (dbpay/get-debt username event date)))
 
-(defn part-price [event-price parts] (/ event-price parts))
-
-(defn parts-price [ename date parts]
-  (* parts (part-price (db/get-price ename date) (db/get-parts ename date))))
-
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."
-  (part-price event-price (count users)))
-
+  (fns/part-price event-price (count users)))
 
 (defn is-initial? [ename date] (db/is-initial? ename date))
 (defn is-active? [ename date] (= (db/get-status ename date) (:in-progress db/statuses)))

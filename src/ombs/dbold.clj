@@ -123,9 +123,21 @@
    (= (statuses :initial)
       (:status (first (sql/select events (sql/fields :status)
                                   (sql/where {:name ename :date date} ) )))))
-
+(declare get-rest-parts)
+(declare price-diff)
 (defn can-finish? [ename date]
-  (zero? (reduce - (replace (first (sql/select summary (sql/where {:event ename :date date}))) [:debits :credits]))))
+  (zero? 
+    (if (zero? (get-parts ename date))
+      (get-rest-parts ename date) 
+      (price-diff ename date))))
+
+(defn- price-diff [ename date] 
+  (reduce - 
+          (replace 
+            (first (sql/select summary (sql/where {:event ename :date date}))) 
+            [:debits :credits])))  
+
+(defn finish [ename date] (set-status ename date :finished))
 ;============================================== GOODS  =================================================
 
 ;2 transacts
@@ -145,3 +157,6 @@
               (sql/where {:events_id (get-eid ename date)})
               )
   )
+
+(defn parts-price [ename date parts]
+  (* parts (f/part-price (get-price ename date) (get-parts ename date))))

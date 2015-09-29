@@ -58,5 +58,4 @@
   [users]
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
-  [:#error] (h/content (errors-string))
-  )
+  [:#error] (h/content (errors-string)))

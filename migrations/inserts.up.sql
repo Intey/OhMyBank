@@ -1,8 +1,8 @@
 INSERT INTO users
                 (id,    name,          password,       bdate,           role) 
 VALUES 
-                (1,     'Intey',       '123',          '06-10-1990',    0),
-                (2,     'andreyk',     '123',          '10-10-1989',    1)
+                (1,     'Intey',       '123',          '06-10-1990',    1),
+                (2,     'andreyk',     '123',          '10-10-1989',    0)
                 ;
 
 INSERT INTO events

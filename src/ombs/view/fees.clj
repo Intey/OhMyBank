@@ -8,4 +8,5 @@
   [:.event] (h/content event)
   [:.edate] (h/content edate)
   [:.date] (h/content date)
-  [:.money] (h/content money))
+  [:.money] (h/content (str money))
+  )

@@ -14,5 +14,5 @@
   [:#error] (h/content (errors-string))
   [:.debt] (h/content (str (core/debt username)))
   [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
-  [:section.fees :> :article] (h/content (map #(fee-elem %)) (get-fees))
+  [:section.fees :> :article] (h/content (map #(fee-elem %) (get-fees)))
   )
