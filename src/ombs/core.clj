@@ -46,7 +46,7 @@
   (let [users (dbpay/get-participants ename edate)
         party-pay (party-pay (:price (db/get-event ename edate)) users)]
     (if (= (db/get-parts ename edate) 0); create debts only when event not partial
-      (doall (map #(dbpay/credit-payment ename edate % party-pay) users)))))
+      (doall (map #(dbpay/credit-payment (db/get-eid ename edate) (db/get-uid %) party-pay) users)))))
 
 (defn participants-count [ename date]
   (count (dbpay/get-participants ename date)))

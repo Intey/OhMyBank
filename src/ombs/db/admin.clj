@@ -51,9 +51,9 @@
     (when (isvalid/ids? eid uid)
       (if (> 0 parts) 
         (process-it eid parts uid) 
-        (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date)))
-      (if (can-finish? ename date)
-        (finish ename date)))  )
+        (dbpay/debit-payment uid eid (dbpay/get-debt uid eid)))
+      (if (can-finish? eid)
+        (finish eid)))  )
 
 (defn process-it [eid parts uid]
   ;But, it have many check on adding 

@@ -25,7 +25,7 @@
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (dorun
         (map
-          #(dbpay/credit-payment event date % (* party-pay (db/get-rate %)))
+          #(dbpay/credit-payment (db/get-eid event date) (db/get-uid %) (* party-pay (db/get-rate %)))
           (funcs/as-vec users)))
       (println (str "rates " user-rates " pp " party-pay " users " users))
       (redirect "/user"))

@@ -45,7 +45,7 @@
       (if (> (count users) 0)
         (let [party-pay (core/party-pay (funcs/parse-int price) users)]
           ;use 'dorun' for execute lazy function 'db/credit-payment'
-          (dorun (map #(dbpay/credit-payment event date % party-pay)
+          (dorun (map #(dbpay/credit-payment (db/get-eid event date) (db/get-uid %) party-pay)
                       (funcs/as-vec users))))) ; may have only one user, so create vec
       true) ; all is ok
     false)) ; validation fail

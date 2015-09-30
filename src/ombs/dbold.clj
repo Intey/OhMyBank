@@ -82,9 +82,13 @@
   ([ename price author date]
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts 0}))))
 
-(defn set-status [ename date s]
+(defn set-status 
+  ([ename date s]
   (sql/update events (sql/set-fields {:status (statuses s)})
-              (sql/where {:name ename :date date})) )
+              (sql/where {:name ename :date date})))
+  ([eid s]
+  (sql/update events (sql/set-fields {:status (statuses s)})
+              (sql/where {:id eid}))))
 
 (declare subtract-feesed-parts)
 (defn get-events []
@@ -123,13 +127,22 @@
   (:id (first (sql/select events (sql/fields :id)
                           (sql/where (and (= :name ename) (= :date date)))))))
 
-(defn get-price [ename date]
-  (:price (first (sql/select events (sql/fields :price)
-                             (sql/where (and (= :date date) (= :name ename)))))))
+(defn get-price 
+  ([ename date]
+   (:price (first (sql/select events (sql/fields :price)
+                              (sql/where (and (= :date date) (= :name ename)))))))
+  ([eid]
+   (:price (first (sql/select events (sql/fields :price) (sql/where {:id eid}))))))
 
-(defn get-parts [ename date]
-  (:rest (first (sql/select goods (sql/fields :rest)
+(defn get-parts 
+  ([ename date]
+   (:rest (first (sql/select goods (sql/fields :rest)
                              (sql/where {:events_id (get-eid ename date)})))))
+  ([eid]
+   (:rest (first (sql/select goods (sql/fields :rest)
+                             (sql/where {:events_id eid}))))))
+
+ 
 
 
 (defn get-status [ename date]
@@ -142,19 +155,37 @@
                                   (sql/where {:name ename :date date} ) )))))
 (declare get-rest-parts)
 (declare price-diff)
-(defn can-finish? [ename date]
-  (zero? 
-    (if (zero? (get-parts ename date))
-      (get-rest-parts ename date) 
-      (price-diff ename date))))
+(defn can-finish? 
+  ([ename date]
+   (zero? 
+     (if (zero? (get-parts ename date))
+       (get-rest-parts ename date) 
+       (price-diff ename date))))
+  ([eid]
+   (zero? 
+     (if (zero? (get-parts eid))
+       (get-rest-parts eid) 
+       (price-diff eid)))) 
+  )
 
-(defn- price-diff [ename date] 
+(defn- price-diff 
+  ([ename date] 
   (reduce - 
           (replace 
             (first (sql/select summary (sql/where {:event ename :date date}))) 
-            [:debits :credits])))  
+            [:debits :credits])))
+  ([eid]
+  (reduce - 
+          (replace 
+            (first (sql/select summary (sql/with events (sql/fields :id)) (sql/where {:id eid}) )) 
+            [:debits :credits]))) 
 
-(defn finish [ename date] (set-status ename date :finished))
+  )  
+
+(defn finish 
+  ([ename date] (set-status ename date :finished))
+  ([eid] (set-status eid :finished))
+  )
 ;============================================== GOODS  =================================================
 
 ;2 transacts
@@ -162,18 +193,28 @@
   (sql/insert goods (sql/values {:events_id (get-eid ename date) :rest parts})))
 
 ;2 transacts
-(defn get-rest-parts [ename date]
-  (:rest (first (sql/select goods (sql/fields :rest)
-                            (sql/where {:events_id (get-eid ename date)})))))
+(defn get-rest-parts 
+  ([ename date]
+   (:rest (first (sql/select goods (sql/fields :rest)
+                             (sql/where {:events_id (get-eid ename date)})))))
+
+  ([eid]
+   (:rest (first (sql/select goods (sql/fields :rest)
+                             (sql/where {:events_id eid}))))))
 
 ;3 transacts
-(defn shrink-goods [ename date parts]
-  "Sub count parst from database"
-  (println (str "shrink goods on" parts))
-  (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)})
-              (sql/where {:events_id (get-eid ename date)})
-              )
+(defn shrink-goods 
+  ([ename date parts]
+   "Sub count parst from database"
+   (println (str "shrink goods on" parts))
+   (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)})
+               (sql/where {:events_id (get-eid ename date)})))
+  ([eid parts]
+   (println (str "shrink goods on" parts))
+   (sql/update goods (sql/set-fields {:rest (- (get-parts eid) parts)})
+               (sql/where {:events_id eid})))
+
   )
 
-(defn parts-price [ename date parts]
-  (* parts (f/part-price (get-price ename date) (get-parts ename date))))
+(defn parts-price [eid parts]
+  (* parts (f/part-price (get-price eid) (get-parts eid))))
