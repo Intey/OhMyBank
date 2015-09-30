@@ -39,6 +39,7 @@
       (replace
         (first (sql/select fees (sql/where {:id id})))
         [:users_id :events_id :money]))
+
 (defn- event-from-fee [id]
   (take 2 (read-fee id)))
 
@@ -46,37 +47,18 @@
   (:role (first (sql/select users (sql/where {:id uid}) (sql/fields :role)))))
 
 (declare process-it)
-(defn pay [{ename :event-name date :date :as params}]
-  "Add payment record in db. For current user.
-  Also, if this action, make summary event debt = 0, finish it"
-  (println "pay solid")
-  (let [uname (sess/get :username)
-        uid (get-uid uname)
-        eid (get-eid ename date)]
+(defn write-pay [{eid :events_id uid :users_id date :date parts :parts}]
     (when (isvalid/ids? eid uid)
-      (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date))
+      (if (> 0 parts) 
+        (process-it eid parts uid) 
+        (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date)))
       (if (can-finish? ename date)
-        (finish ename date)))))
+        (finish ename date)))  )
 
-(declare process-it)
-(defn pay-part [{ename :event-name date :date parts :parts :as params}]
-  "Add participation of current user and selected event(given as param from
-  post). Parts in params is count of parts, that user want to pay"
-  (println "pay partial")
-  (let [uname (sess/get :username)
-        uid (get-uid uname)
-        eid (get-eid ename date)
-        parts (fns/parse-int parts)]
-    (when (isvalid/ids? eid uid)
-      (process-it ename date parts uname)
-      (dbpay/debit-payment uid eid (dbpay/get-debt uname ename date))
-      (when (= 0 (get-rest-parts ename date))
-        (finish ename date)))
-  ))
-
-(defn process-it [ename date parts uname]
-  (if (isvalid/parts? ename date parts) ; its check if parts >= than free parts
-    (do
-      (dbpay/credit-payment ename date uname (parts-price ename date parts)) ; fix database logic
-      (dbpay/debit-payment (get-uid uname) (get-eid ename date) (parts-price ename date parts))
-      (shrink-goods ename date parts))))
+(defn process-it [eid parts uid]
+  ;But, it have many check on adding 
+  ;(if (isvalid/parts? ename date parts) ; its check if parts >= than free parts. 
+  (kdb/transaction
+    (dbpay/credit-payment eid uid (parts-price eid parts)) ; on each debit, we should have credit.
+    (dbpay/debit-payment eid uid (parts-price eid parts))
+    (shrink-goods eid parts)))
