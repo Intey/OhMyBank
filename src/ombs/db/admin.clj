@@ -28,7 +28,7 @@
 
 (defn get-fees [] 
   (sql/select fees 
-              (sql/fields :money :date :parts)  
+              (sql/fields :id :money :date :parts)  
               (sql/with users  (sql/fields [:name :user])) 
               (sql/with events (sql/fields [:name :event] [:date :edate])) 
               ))

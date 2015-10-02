@@ -3,7 +3,8 @@
     [net.cgrand.enlive-html :as h]
     ))
 
-(h/defsnippet fee-elem "../resources/public/fee.html" [:.fee] [{:keys [user event edate date money parts]}]
+(h/defsnippet fee-elem "../resources/public/fee.html" [:.fee] [{:keys [id user event edate date money parts]}]
+  [:.fee] (h/set-attr :id id)
   [:.user] (h/content user)
   [:.event] (h/content event)
   [:.edate] (h/content edate)
