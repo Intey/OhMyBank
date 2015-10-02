@@ -37,8 +37,17 @@
             --> 
         </section>
     </main>
-    <!-- Progressive enhancement!
+    <script src="/js/jquery-2.1.4.min.js"></script>
     <script>
+    function affirm(b) {
+        var id = $(b).parent().attr('id'); 
+        $.get( '/affirm', {fid: id} )
+            .done( function(data) { 
+                alert(data); 
+            }); 
+    }
+    </script>
+    <!-- Progressive enhancement!
     function participate(caller){
         var ename = $(caller).children("#ename").text();
         $.post("/participate", { "event-name": ename }, function(data) {
@@ -46,8 +55,6 @@
             // disable button
         });
     }
-    </script>
-    <script src="/js/jquery-2.1.4.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     -->
 </body>
