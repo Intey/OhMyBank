@@ -50,6 +50,6 @@
 (defn create-fee [uname ename date & [parts]] 
   (sql/insert fees (sql/values {:users_id (get-uid uname) :events_id (get-eid ename date) 
                                 :parts parts
-                                :money (if parts 
+                                :money (if (> parts 0) 
                                          (parts-price (get-eid ename date) parts)
                                          (get-debt uname ename date)) } )))

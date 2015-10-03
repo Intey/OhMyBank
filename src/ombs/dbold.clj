@@ -223,4 +223,5 @@
   )
 
 (defn parts-price [eid parts]
+  (println "parts-price for eid:" eid " parts: " parts)
   (* parts (f/part-price (get-price eid) (get-parts eid))))
