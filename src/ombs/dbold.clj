@@ -37,7 +37,10 @@
   (sql/has-many events {:fk :events_id}))
 
 (sql/defentity summary)
-(sql/defentity debts)
+(sql/defentity debts
+  (sql/belongs-to events)
+  (sql/belongs-to users)
+  )
 
 (sql/defentity participation)
 (sql/defentity participants)
@@ -177,7 +180,7 @@
   ([eid]
   (reduce - 
           (replace 
-            (first (sql/select summary (sql/with events (sql/fields :id)) (sql/where {:id eid}) )) 
+            (first (sql/select summary (sql/where {:eid eid}) )) 
             [:debits :credits]))) 
 
   )  

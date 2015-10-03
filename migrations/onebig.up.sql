@@ -60,7 +60,7 @@ CREATE VIEW participants
 
 CREATE VIEW summary
     AS 
-    SELECT e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
+    SELECT e.id eid, u.id uid, e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
     FROM events e
     JOIN pays p 
     ON e.id = p.events_id
@@ -70,5 +70,5 @@ CREATE VIEW summary
 
 CREATE VIEW debts
     AS 
-    SELECT user, event, [date], credits - debits debt
+    SELECT eid, uid, event, user, [date], credits - debits debt
     FROM summary;

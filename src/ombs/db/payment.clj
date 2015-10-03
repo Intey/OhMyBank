@@ -25,9 +25,7 @@
      summary
      0.0))
   ([uid eid]
-   (if-let [summary (:debt (first (sql/select debts (sql/where {:eid eid :uid uid})
-                                              (sql/with events (sql/fields [:id :eid])) 
-                                              (sql/with users (sql/fields [:id :uid])))))]
+   (if-let [summary (:debt (first (sql/select debts (sql/where {:eid eid :uid uid}))))]
      summary
      0.0)) 
   )

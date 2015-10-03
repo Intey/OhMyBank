@@ -20,6 +20,7 @@
     ; request handlers. Prepare data, and call views.
     [ombs.handler.pages :as pages]
     [ombs.handler.eventacts :refer [pay participate start]]
+    [ombs.handler.adminacts :refer [affirm]]
     [ombs.handler.addevent :refer [init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     [ombs.funcs :refer [parse-int]]
@@ -45,6 +46,7 @@
           "pay" (pay params)
           "participate" (participate params)
           "start" (start params)))
+  (GET "/affirm" {params :params} (affirm (:fid params)))
 
   ;payment controlling
   ;(POST "/confirm {params :params} (confirm-payment)
