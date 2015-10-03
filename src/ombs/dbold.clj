@@ -136,14 +136,11 @@
 
 (defn get-parts 
   ([ename date]
-   (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id (get-eid ename date)})))))
+   (f/nil-fix (:rest (first (sql/select goods (sql/fields :rest)
+                                        (sql/where {:events_id (get-eid ename date)})))))) 
   ([eid]
-   (println "get-parts return " 
-   (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id eid})))))
-   (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id eid}))))
+   (f/nil-fix (:rest (first (sql/select goods (sql/fields :rest)
+                                        (sql/where {:events_id eid})))))
    ))
 
  

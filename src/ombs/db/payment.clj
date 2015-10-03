@@ -40,8 +40,7 @@
   )
 
 (defn add-participant [event date user]
-  (sql/insert participation (sql/values {:events_id (get-eid event date) :users_id (get-uid user)}))
-  )
+  (sql/insert participation (sql/values {:events_id (get-eid event date) :users_id (get-uid user)})))
 
 (defn get-participants [ename edate]
   (mapv #(first (vals %)) (sql/select participants (sql/fields :user)

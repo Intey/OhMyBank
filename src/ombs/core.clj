@@ -45,6 +45,7 @@
   (db/set-status ename edate :in-progress)
   (let [users (dbpay/get-participants ename edate)
         party-pay (party-pay (:price (db/get-event ename edate)) users)]
+    (println "Starting event " ename " date:" edate ", for " users " with party-pay:" party-pay)
     (if (= (db/get-parts ename edate) 0); create debts only when event not partial
       (doall (map #(dbpay/credit-payment (db/get-eid ename edate) (db/get-uid %) party-pay) users)))))
 
