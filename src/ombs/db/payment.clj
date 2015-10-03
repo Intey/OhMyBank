@@ -30,11 +30,12 @@
      0.0)) 
   )
 
-(defn credit-payment [uid eid money]
+(defn credit-payment [eid uid money]
   (println (str "credit " uid " user " uid " money " money ))
   (sql/insert pays (sql/values { :users_id uid :events_id eid :credit money })))
 
-(defn debit-payment [uid eid money]
+(defn debit-payment [eid uid money]
+  (println (str "dedit " uid " user " uid " money " money ))
   (sql/insert pays (sql/values { :users_id uid :events_id eid :debit money }))
   )
 

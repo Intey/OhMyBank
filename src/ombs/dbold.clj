@@ -139,8 +139,12 @@
    (:rest (first (sql/select goods (sql/fields :rest)
                              (sql/where {:events_id (get-eid ename date)})))))
   ([eid]
+   (println "get-parts return " 
    (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id eid}))))))
+                             (sql/where {:events_id eid})))))
+   (:rest (first (sql/select goods (sql/fields :rest)
+                             (sql/where {:events_id eid}))))
+   ))
 
  
 
@@ -159,13 +163,15 @@
   ([ename date]
    (zero? 
      (if (zero? (get-parts ename date))
-       (get-rest-parts ename date) 
-       (price-diff ename date))))
+       (price-diff ename date)
+       (get-rest-parts ename date)
+       )))
   ([eid]
    (zero? 
      (if (zero? (get-parts eid))
+       (price-diff eid)
        (get-rest-parts eid) 
-       (price-diff eid)))) 
+       )))
   )
 
 (defn- price-diff 
@@ -210,7 +216,7 @@
    (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)})
                (sql/where {:events_id (get-eid ename date)})))
   ([eid parts]
-   (println (str "shrink goods on" parts))
+   (println (str "shrink goods on " parts))
    (sql/update goods (sql/set-fields {:rest (- (get-parts eid) parts)})
                (sql/where {:events_id eid})))
 

@@ -24,8 +24,7 @@
 
 (defn get-fees [] 
   "Return fees, for views"
-  (sql/select fees 
-              (sql/fields :id :money :date :parts)  
+  (sql/select fees (sql/fields :id :money :date :parts)  
               (sql/with users  (sql/fields [:name :user])) 
               (sql/with events (sql/fields [:name :event] [:date :edate])) 
               ))
@@ -35,24 +34,18 @@
 
 ; ============================ PRIVATE =======================================
 
-(declare process-it)
-(defn- write-pay [{eid :events_id uid :users_id parts :parts}]
+(defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
+    (println "write-pay eid:" eid " uid:" uid " parts:" parts " money:" money)
     (when (isvalid/ids? eid uid)
-      (if (> 0 parts) 
-        (process-it eid parts uid) 
-        (dbpay/debit-payment uid eid (dbpay/get-debt uid eid)))
+      (when (> parts 0) 
+        (do 
+          (println " Pay partial event")
+          (shrink-goods eid parts) 
+          (dbpay/credit-payment eid uid money)))
+      (dbpay/debit-payment eid uid money)
       (if (can-finish? eid)
-        (finish eid)))  )
+        (finish eid))))
 
-(defn- process-it [eid parts uid]
-  ;But, it have many check on adding 
-  ;(if (isvalid/parts? ename date parts) ; its check if parts >= than free parts. 
-  (kdb/transaction
-    (dbpay/credit-payment eid uid (parts-price eid parts)) ; on each debit, we should have credit.
-    (dbpay/debit-payment eid uid (parts-price eid parts))
-    (shrink-goods eid parts)))
-
-(defn- get-fee [id]
-  (first (sql/select fees (sql/fields :users_id :events_id :parts)))) 
+(defn- get-fee [id] (first (sql/select fees)))
 
 (defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
