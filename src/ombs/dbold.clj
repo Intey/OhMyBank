@@ -37,10 +37,7 @@
   (sql/has-many events {:fk :events_id}))
 
 (sql/defentity summary)
-(sql/defentity debts
-  (sql/belongs-to events)
-  (sql/belongs-to users)
-  )
+(sql/defentity debts)
 
 (sql/defentity participation)
 (sql/defentity participants)
