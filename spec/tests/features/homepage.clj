@@ -1,4 +1,4 @@
-;(ns ombs.features.homepage
+;(ns tests.features.homepage
 ;  (:require
 ;    [speclj.core :as spec]
 ;    [ring.adapter.jetty :as jetty]
