@@ -16,8 +16,8 @@
 ;
 ;(spec/describe "Homepage"
 ;               (spec/before-all
-;                 (stop-browser)               
-;                 (.stop server)   
+;                 (stop-browser)
+;                 (.stop server)
 ;                 (.start server)
 ;                 (start-browser)
 ;
@@ -40,7 +40,7 @@
 ;                        (spec/-fail "but no error") )
 ;
 ;               (spec/it "should move user to his page(with his name), after sucess log in"
-;                        
+;
 ;                          (taxi/input-text "#username" uname)
 ;                          (taxi/input-text "#pass" password)
 ;                          (taxi/click "#ok")
@@ -50,7 +50,7 @@
 ;
 ;                        )
 ;               (spec/after-all
-;                 
+;
 ;                )
 ;               )
 ;
