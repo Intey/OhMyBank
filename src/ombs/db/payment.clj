@@ -53,7 +53,7 @@
                                 :events_id eid
                                 :debit money })))
 
-(defn add-participant 
+(defn add-participant
   ([event date user]
   (sql/insert participation (sql/values {:events_id (get-eid event date)
                                          :users_id (get-uid user)})))
@@ -70,8 +70,13 @@
     (parts-price eid parts)
     (get-debt uid eid)) )
 
-(defn create-fee [uid eid & [parts]]
-  (sql/insert fees (sql/values {:users_id uid
-                                :events_id eid
-                                :parts parts
-                                :money (calc-fee-money uid eid parts) })))
+(defn create-fee
+  ([uid eid] (create-fee uid eid 0))
+  ([uid eid parts]
+   (sql/insert fees (sql/values {:users_id uid
+                                 :events_id eid
+                                 :parts parts
+                                 :money (calc-fee-money uid eid parts) }))))
+
+(defn can-pay? [uid eid]
+  false)
