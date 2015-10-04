@@ -46,9 +46,15 @@
   (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
                                       (sql/where {:event ename :date edate}))))
 
+(defn calc-fee-money [uid eid parts]
+  (if (> parts 0) 
+    (parts-price eid parts)
+    (get-debt uname ename date)) )
+
 (defn create-fee [uname ename date & [parts]] 
-  (sql/insert fees (sql/values {:users_id (get-uid uname) :events_id (get-eid ename date) 
-                                :parts parts
-                                :money (if (> parts 0) 
-                                         (parts-price (get-eid ename date) parts)
-                                         (get-debt uname ename date)) } )))
+  (let [uid (get-uid uname)
+        eid (get-eid ename date) ]
+    (sql/insert fees (sql/values {:users_id uid
+                                  :events_id eid
+                                  :parts parts
+                                  :money (calc-fee-money uid eid parts) }))))
