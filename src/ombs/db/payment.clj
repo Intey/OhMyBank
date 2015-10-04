@@ -64,12 +64,10 @@
 (defn calc-fee-money [uid eid parts]
   (if (> parts 0)
     (parts-price eid parts)
-    (get-debt uname ename date)) )
+    (get-debt uid eid)) )
 
-(defn create-fee [uname ename date & [parts]]
-  (let [uid (get-uid uname)
-        eid (get-eid ename date) ]
-    (sql/insert fees (sql/values {:users_id uid
-                                  :events_id eid
-                                  :parts parts
-                                  :money (calc-fee-money uid eid parts) }))))
+(defn create-fee [uid eid & [parts]]
+  (sql/insert fees (sql/values {:users_id uid
+                                :events_id eid
+                                :parts parts
+                                :money (calc-fee-money uid eid parts) })))

@@ -18,7 +18,7 @@
         uid (db/get-uid uname)
         eid (db/get-eid ename date)
         parts (parse-int parts)]
-    (dbpay/create-fee uname ename date parts) 
+    (dbpay/create-fee uid eid parts) 
   (pages/user))) ; go to user page in any case
 
 (defn participate [{ename :event-name date :date}]
