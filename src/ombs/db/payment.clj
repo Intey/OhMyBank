@@ -61,9 +61,10 @@
    (sql/insert participation (sql/values {:events_id eid :users_id uid })))
   )
 
-(defn get-participants [ename edate]
-  (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
-                                      (sql/where {:event ename :date edate}))))
+(defn get-participants
+  ([ename edate] (get-participants (get-eid ename edate)))
+  ([eid] (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
+                                      (sql/where {:eid eid})))))
 
 (defn calc-fee-money [uid eid parts]
   (if (> parts 0)

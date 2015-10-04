@@ -22,6 +22,7 @@
 
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."
+  (println "get pp with " event-price " and users " users)
   (fns/part-price event-price (count users)))
 
 (defn is-initial? [ename date] (db/is-initial? ename date))
@@ -41,13 +42,13 @@
     (dbpay/add-participant (db/get-eid ename date) (db/get-uid uname))
     (add-in-progress ename date uname)))
 
-(defn start-event [ename edate]
-  (db/set-status ename edate :in-progress)
-  (let [users (dbpay/get-participants ename edate)
-        party-pay (party-pay (:price (db/get-event ename edate)) users)]
-    (println "Starting event " ename " date:" edate ", for " users " with party-pay:" party-pay)
-    (if (= (db/get-parts ename edate) 0); create debts only when event not partial
-      (doall (map #(dbpay/credit-payment (db/get-eid ename edate) (db/get-uid %) party-pay) users)))))
+(defn start-event [eid]
+  (db/set-status eid :in-progress)
+  (let [users (dbpay/get-participants eid)
+        party-pay (party-pay (:price (db/get-event eid)) users)]
+    (println "Starting event " eid ", for " users " with party-pay:" party-pay)
+    (if (= (db/get-parts eid) 0); create debts only when event not partial
+      (doall (map #(dbpay/credit-payment eid (db/get-uid %) party-pay) users)))))
 
 (defn participants-count [ename date]
   (count (dbpay/get-participants ename date)))
