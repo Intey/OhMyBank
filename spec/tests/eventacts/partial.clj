@@ -1,6 +1,6 @@
 (ns tests.eventacts.partial
   (:require [tests.test :refer :all]
-            [clojure.test :as t] 
+            [clojure.test :as t]
             [ombs.dbold :as db]
             [ombs.db.admin :as dba]
             [ombs.db.payment :as dbp]
@@ -18,7 +18,9 @@
   )
 
 (t/deftest can-pay
-  (dbp/add-participant uid eid)
-  (t/is (= true (dbp/can-pay? uid eid-partial))) 
+  (t/is (= false (dbp/can-pay? uid eid-partial)))
+  (dbp/add-participant uid eid-partial)
+  (t/is (= true  (dbp/can-pay? uid eid-partial)))
   (dbp/create-fee uid eid-solid)
-  (t/is (= false (dbp/can-pay? uid eid-partial))))
+  (t/is (= false (dbp/can-pay? uid eid-partial)))
+  )
