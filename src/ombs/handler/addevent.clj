@@ -68,4 +68,4 @@
 
 (defn- add-participants [{event :name date :date users :participants}]
   (println "add-participants " users)
-  (dorun (map (partial dbpay/add-participant event date) users)))
+  (dorun (map (comp (partial dbpay/add-participant (db/get-eid event date)) db/get-uid) users)))

@@ -38,7 +38,7 @@
   "Hope, that data is ok, and given user can participate in given event."
   (println (str "core.add-participant:" uname " event:" ename " date:" date))
   (if (is-initial? ename date)
-    (dbpay/add-participant ename date uname)
+    (dbpay/add-participant (db/get-eid ename date) (db/get-uid uname))
     (add-in-progress ename date uname)))
 
 (defn start-event [ename edate]

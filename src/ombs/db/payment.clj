@@ -53,9 +53,13 @@
                                 :events_id eid
                                 :debit money })))
 
-(defn add-participant [event date user]
+(defn add-participant 
+  ([event date user]
   (sql/insert participation (sql/values {:events_id (get-eid event date)
                                          :users_id (get-uid user)})))
+  ([uid eid]
+   (sql/insert participation (sql/values {:events_id eid :users_id uid })))
+  )
 
 (defn get-participants [ename edate]
   (mapv #(first (vals %)) (sql/select participants (sql/fields :user)

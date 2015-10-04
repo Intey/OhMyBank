@@ -26,7 +26,7 @@
   post)"
   (let [uname (sess/get :username)]
     (when (isvalid/participation? ename date uname)
-      (core/add-participant ename date uname)))
+      (core/add-participant (db/get-eid ename date) (db/get-uid uname))))
   (pages/user)); go to user page in any case
 
 (defn start [{ename :event-name date :date}]
