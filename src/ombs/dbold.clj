@@ -5,7 +5,7 @@
             ))
 
 (kdb/defdb korma-db (kdb/sqlite3
-                      { :db "database.db"
+                      { :db "test.db"
                        :user "user"
                        :password "placeholder"}))
 ; about many-to-many https://groups.google.com/d/msg/sqlkorma/r3kR6DyQZHo/RrQS_J8kkQ8J
