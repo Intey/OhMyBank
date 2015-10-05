@@ -6,7 +6,6 @@
             [ombs.db.payment :as dbp]
             ))
 
-
 (t/use-fixtures :each cleandb-fixture)
 
 (t/deftest rest-parts
