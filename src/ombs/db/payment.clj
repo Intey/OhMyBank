@@ -9,7 +9,7 @@
   he is participated."
   ([uid eid]
    (not (empty? (sql/select participation
-                            (sql/where {:serds_id uid
+                            (sql/where {:users_id uid
                                         :events_id eid})))))
 
   ([uname ename edate]
@@ -80,4 +80,8 @@
                                  :money (calc-fee-money uid eid parts) }))))
 
 (defn can-pay? [uid eid]
-  false)
+  (and
+    (participated? uid eid)
+    (= (get-status eid) (:in-progress statuses)))
+
+  )
