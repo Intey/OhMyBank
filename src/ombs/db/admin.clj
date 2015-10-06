@@ -28,16 +28,11 @@
               (sql/with users  (sql/fields [:name :user]))
               (sql/with events (sql/fields [:name :event] [:date :edate]))))
 
-(defn fees-money [uid eid]
-  "Get sum of fees of some user on some event."
-  (:summ (first (sql/select fees
-              (sql/where {:users_id uid :events_id eid})
-              (sql/fields :summ)
-              (sql/aggregate (sum :money) :summ)))))
-
 (defn get-role [uid]
   (:role (first (sql/select users (sql/where {:id uid}) (sql/fields :role)))))
 
+(defn get-fid
+  ([uid eid] (:id (first (sql/select fees (sql/fields :id) (sql/where {:users_id uid :events_id eid}))))))
 ; ============================ PRIVATE =======================================
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
@@ -52,6 +47,8 @@
       (if (can-finish? eid)
         (finish eid))))
 
-(defn- get-fee [id] (first (sql/select fees)))
+
+(defn- get-fee
+  ([id] (first (sql/select fees (sql/where {:id id})))))
 
 (defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
