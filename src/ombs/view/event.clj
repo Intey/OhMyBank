@@ -42,15 +42,16 @@
     ((h/remove-attr :disabled "")  match)
     ((h/set-attr :disabled "")     match)) )
 
-(defn fill-parts [parts match]
-  (if (= 0 parts)
-    nil
-    ((h/content (parts-snip parts)) match)))
-
 (defn participate-action [name date status match]
   (if (and
         (not (core/participated? (sess/get :username) name date))
         (not= status "finished"))
     ((h/remove-attr :disabled "")  match)
     ((h/set-attr :disabled "")     match)))
+
+(defn fill-parts [parts match]
+  (if (= 0 parts)
+    nil
+    ((h/content (parts-snip parts)) match)))
+
 
