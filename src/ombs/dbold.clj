@@ -152,10 +152,14 @@
   ([ename date] get-status (get-eid ename date))
   ([eid] (:status (first (sql/select events (sql/fields :status) (sql/where {:id eid}))))))
 
-(defn is-initial? [ename date]
+(defn is-initial?
+  ([ename date] (is-initial? (get-eid ename date)))
+  ([eid]
    (= (statuses :initial)
       (:status (first (sql/select events (sql/fields :status)
-                                  (sql/where {:name ename :date date} ) )))))
+                                  (sql/where {:id eid} ) )))))
+
+  )
 (declare get-rest-parts)
 (declare price-diff)
 (defn can-finish?
