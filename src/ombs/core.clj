@@ -32,7 +32,7 @@
 (defn is-active? [ename date] (= (db/get-status ename date) (:in-progress db/statuses)))
 
 (defn- add-in-progress
-  [eid uid]
+  [uid eid]
   (println "Add in progress!")
   (add-error :participation "No implementation for participate user in-progress event")
   (redirect "/user")
@@ -41,9 +41,9 @@
 (defn add-participant
   ([ename date uname] (add-participant (db/get-eid ename) (db/get-uid uname)))
   ([eid uid]
-   (if (is-initial? eid uid)
-     (dbpay/add-participant eid uid)
-     (add-in-progress eid uid))))
+   (if (db/is-initial? eid)
+     (dbpay/add-participant uid eid)
+     (add-in-progress uid eid))))
 
 (defn start-event [eid]
   (db/set-status eid :in-progress)
