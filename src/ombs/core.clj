@@ -25,22 +25,25 @@
   (println "get pp with " event-price " and users " users)
   (fns/part-price event-price (count users)))
 
-(defn is-initial? [ename date] (db/is-initial? ename date))
+(defn is-initial?
+  ([ename date] (db/is-initial? (db/get-eid ename date)))
+  ([eid] (db/is-initial? eid)))
+
 (defn is-active? [ename date] (= (db/get-status ename date) (:in-progress db/statuses)))
 
-(defn- add-in-progress [ename date uname]
+(defn- add-in-progress
+  [eid uid]
   (println "Add in progress!")
-  (let [message (str "No implementation for participate user " uname " in-progress event " (db/get-event ename date) )]
-    (add-error :participation message))
-    (redirect "/user")
+  (add-error :participation "No implementation for participate user in-progress event")
+  (redirect "/user")
   )
 
-(defn add-participant [ename date uname]
-  "Hope, that data is ok, and given user can participate in given event."
-  (println (str "core.add-participant:" uname " event:" ename " date:" date))
-  (if (is-initial? ename date)
-    (dbpay/add-participant (db/get-eid ename date) (db/get-uid uname))
-    (add-in-progress ename date uname)))
+(defn add-participant
+  ([ename date uname] (add-participant (db/get-eid ename) (db/get-uid uname)))
+  ([eid uid]
+   (if (is-initial? eid uid)
+     (dbpay/add-participant eid uid)
+     (add-in-progress eid uid))))
 
 (defn start-event [eid]
   (db/set-status eid :in-progress)

@@ -2,6 +2,7 @@
   (:require [korma.db :as kdb]
             [korma.core :as sql]
             [ombs.dbold :refer :all]
+            [ombs.funcs :as f]
             ))
 
 (defn participated?
@@ -79,9 +80,17 @@
                                  :parts parts
                                  :money (calc-fee-money uid eid parts) }))))
 
+(declare fees-money)
 (defn can-pay? [uid eid]
   (and
     (participated? uid eid)
-    (= (get-status eid) (:in-progress statuses)))
-
+    (= (get-status eid) (:in-progress statuses))
+    (< (fees-money uid eid) (/ (get-price eid) (count (get-participants eid)))))
   )
+
+(defn fees-money [uid eid]
+  "Get sum of fees of some user on some event."
+  (f/nil-fix (:summ (first (sql/select fees
+                                       (sql/where {:users_id uid :events_id eid})
+                                       (sql/fields :summ)
+                                       (sql/aggregate (sum :money) :summ))))))
