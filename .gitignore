@@ -10,5 +10,6 @@ pom.xml.asc
 .hgignore
 .hg/
 database.db
+test.db
 .vimrc
 .vim/

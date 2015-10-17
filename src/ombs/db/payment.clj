@@ -2,6 +2,7 @@
   (:require [korma.db :as kdb]
             [korma.core :as sql]
             [ombs.dbold :refer :all]
+            [ombs.funcs :as f]
             ))
 
 (defn participated?
@@ -9,7 +10,7 @@
   he is participated."
   ([uid eid]
    (not (empty? (sql/select participation
-                            (sql/where {:serds_id uid
+                            (sql/where {:users_id uid
                                         :events_id eid})))))
 
   ([uname ename edate]
@@ -61,9 +62,10 @@
    (sql/insert participation (sql/values {:events_id eid :users_id uid })))
   )
 
-(defn get-participants [ename edate]
-  (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
-                                      (sql/where {:event ename :date edate}))))
+(defn get-participants
+  ([ename edate] (get-participants (get-eid ename edate)))
+  ([eid] (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
+                                      (sql/where {:eid eid})))))
 
 (defn calc-fee-money [uid eid parts]
   (if (> parts 0)
@@ -78,5 +80,17 @@
                                  :parts parts
                                  :money (calc-fee-money uid eid parts) }))))
 
+(declare fees-money)
 (defn can-pay? [uid eid]
-  false)
+  (and
+    (participated? uid eid)
+    (= (get-status eid) (:in-progress statuses))
+    (< (fees-money uid eid) (/ (get-price eid) (count (get-participants eid)))))
+  )
+
+(defn fees-money [uid eid]
+  "Get sum of fees of some user on some event."
+  (f/nil-fix (:summ (first (sql/select fees
+                                       (sql/where {:users_id uid :events_id eid})
+                                       (sql/fields :summ)
+                                       (sql/aggregate (sum :money) :summ))))))

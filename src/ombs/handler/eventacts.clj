@@ -31,5 +31,5 @@
 
 (defn start [{ename :event-name date :date}]
   ;isvalid: not started, exists.
-  (core/start-event ename date)
+  (if-let [eid (db/get-eid ename date)] (core/start-event eid)) 
   (pages/user)); go to user page in any case

@@ -50,7 +50,7 @@ CREATE TABLE goods(
 
 CREATE VIEW participants
     AS
-    SELECT u.name user, e.name event, e.date [date]
+    SELECT u.id uid, u.name user, e.name event, e.date [date], e.id eid 
     FROM participation p
     LEFT JOIN events e
     ON e.id = p.events_id

@@ -76,13 +76,17 @@
 
 
 ;============================================== EVENT =================================================
+(defn get-eid [ename date]
+  (:id (first (sql/select events (sql/fields :id)
+                          (sql/where (and (= :name ename) (= :date date)))))))
+
 (defn add-event
   ([ename price author date parts]
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts parts})))
   ([ename price author date]
    (sql/insert events (sql/values {:name ename :price price :author author :date date :status (statuses :initial) :parts 0}))))
 
-(defn set-status 
+(defn set-status
   ([ename date s]
   (sql/update events (sql/set-fields {:status (statuses s)})
               (sql/where {:name ename :date date})))
@@ -98,94 +102,96 @@
   ;that hang in fees some events haven't parts, and after join it's have nil
   ;parts. So we need fix before substract
   (map
-    #(update % :parts 
+    #(update % :parts
              (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
     (sql/select events
                 (sql/fields :id :name :date :price :author :status)
                 (sql/with goods (sql/fields [:rest :parts])))))
 
-(defn subtract-feesed-parts [eid parts] 
+(defn subtract-feesed-parts [eid parts]
   "Substract from given parts, founded parts in active(all) fees."
   (assert (not= nil parts) "Can't subtract-feesed-parts from nil")
-  (- parts 
-     (-> (sql/select fees (sql/fields :sum) 
-                     (sql/where {:events_id eid}) 
-                     (sql/aggregate (sum :parts) :sum)) 
-         (first) 
-         (:sum) 
+  (- parts
+     (-> (sql/select fees (sql/fields :sum)
+                     (sql/where {:events_id eid})
+                     (sql/aggregate (sum :parts) :sum))
+         (first)
+         (:sum)
          (f/nil-fix))))
 
 (defn get-active-events []
   (sql/select events
               (sql/where (not= :status (statuses :finished)))))
 
-(defn get-event [ename date]
-  (first (sql/select events
-                     (sql/where (and (= :date date) (= :name ename))))))
+(defn get-event
+  ([ename date] get-event (get-eid ename date))
+  ([eid] (first (sql/select events (sql/where {:id eid}))))
+  )
 
-(defn get-eid [ename date]
-  (:id (first (sql/select events (sql/fields :id)
-                          (sql/where (and (= :name ename) (= :date date)))))))
 
-(defn get-price 
+(defn get-price
   ([ename date]
    (:price (first (sql/select events (sql/fields :price)
                               (sql/where (and (= :date date) (= :name ename)))))))
   ([eid]
    (:price (first (sql/select events (sql/fields :price) (sql/where {:id eid}))))))
 
-(defn get-parts 
+(defn get-parts
   ([ename date]
    (f/nil-fix (:rest (first (sql/select goods (sql/fields :rest)
-                                        (sql/where {:events_id (get-eid ename date)})))))) 
+                                        (sql/where {:events_id (get-eid ename date)}))))))
   ([eid]
    (f/nil-fix (:rest (first (sql/select goods (sql/fields :rest)
                                         (sql/where {:events_id eid})))))
    ))
 
- 
 
 
-(defn get-status [ename date]
-  (:status (first (sql/select events (sql/fields :status)
-                              (sql/where {:name ename :date date} )))))
 
-(defn is-initial? [ename date]
+(defn get-status
+  ([ename date] (get-status (get-eid ename date)))
+  ([eid] (:status (first (sql/select events (sql/fields :status) (sql/where {:id eid}))))))
+
+(defn is-initial?
+  ([ename date] (is-initial? (get-eid ename date)))
+  ([eid]
    (= (statuses :initial)
       (:status (first (sql/select events (sql/fields :status)
-                                  (sql/where {:name ename :date date} ) )))))
+                                  (sql/where {:id eid} ) )))))
+
+  )
 (declare get-rest-parts)
 (declare price-diff)
-(defn can-finish? 
+(defn can-finish?
   ([ename date]
-   (zero? 
+   (zero?
      (if (zero? (get-parts ename date))
        (price-diff ename date)
        (get-rest-parts ename date)
        )))
   ([eid]
-   (zero? 
+   (zero?
      (if (zero? (get-parts eid))
        (price-diff eid)
-       (get-rest-parts eid) 
+       (get-rest-parts eid)
        )))
   )
 
-(defn- price-diff 
-  ([ename date] 
-  (reduce - 
-          (replace 
-            (first (sql/select summary (sql/where {:event ename :date date}))) 
+(defn- price-diff
+  ([ename date]
+  (reduce -
+          (replace
+            (first (sql/select summary (sql/where {:event ename :date date})))
             [:debits :credits])))
   ([eid]
-  (reduce - 
-          (replace 
-            (first (sql/select summary (sql/where {:eid eid}) )) 
-            [:debits :credits]))) 
+  (reduce -
+          (replace
+            (first (sql/select summary (sql/where {:eid eid}) ))
+            [:debits :credits])))
 
-  )  
+  )
 
-(defn finish 
+(defn finish
   ([ename date] (set-status ename date :finished))
   ([eid] (set-status eid :finished))
   )
@@ -196,7 +202,7 @@
   (sql/insert goods (sql/values {:events_id (get-eid ename date) :rest parts})))
 
 ;2 transacts
-(defn get-rest-parts 
+(defn get-rest-parts
   ([ename date]
    (:rest (first (sql/select goods (sql/fields :rest)
                              (sql/where {:events_id (get-eid ename date)})))))
@@ -206,7 +212,7 @@
                              (sql/where {:events_id eid}))))))
 
 ;3 transacts
-(defn shrink-goods 
+(defn shrink-goods
   ([ename date parts]
    "Sub count parst from database"
    (println (str "shrink goods on" parts))
