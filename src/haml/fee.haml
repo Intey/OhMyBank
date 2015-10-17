@@ -1,9 +1,10 @@
-.fee
-  .user
-  .event
-  .edate
-  .date
-  .money
-  .parts
-  %button.action.affirm{:onclick => 'affirm(this)'}
-    Affirm
+%tr.fee
+  %td
+    %button.action.affirm.btn{ :onclick => 'affirm(this)' }
+      Affirm
+  %td.user
+  %td.money
+  %td.date
+  %td.event
+  %td.edate
+  %td.parts

@@ -10,16 +10,51 @@
     <header>
       <span id='error'></span>
       <span>
+        Welcome,
+        <span id='user'></span>
+      </span>
       <p>
         <span class='debt'></span>
       </p>
       <form action='/addevent' id='eventform' methor='get'>
-        <input type='submit' value='Add event'>
+        <input class='btn btn-primary' type='submit' value='ADD EVENT'>
+      </form>
+      <form action='/logout' id='logform' methor='post'>
+        <input class='btn btn-primary' type='submit' value='LOGOUT'>
       </form>
     </header>
     <main>
-      <section class='fees'>
-        <article></article>
+      <section>
+        <table class='fees table'>
+          <thead class='thead-default'>
+            <tr>
+              <td>
+                Action
+              </td>
+              <td>
+                User
+              </td>
+              <td>
+                Money
+              </td>
+              <td>
+                Date
+              </td>
+              <td>
+                Event
+              </td>
+              <td>
+                Edate
+              </td>
+              <td>
+                Parts
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr></tr>
+          </tbody>
+        </table>
       </section>
       <section class='events'>
         <article></article>

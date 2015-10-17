@@ -8,14 +8,35 @@
   %body
     %header
       %span#error
-      %span Welcome, 
+      %span 
+        Welcome, 
         %span#user
       %p 
         %span.debt
       %form#eventform{ :methor => "get", :action => "/addevent"}
-        %input{ :type => "submit", :value => "Add event"}
+        %input.btn.btn-primary{ :type => "submit", :value => "ADD EVENT"}
+      %form#logform{ :methor => "post", :action => "/logout"}
+        %input.btn.btn-primary{ :type => "submit", :value => "LOGOUT"}
     %main
-      %section.fees
-        %article
+      %section
+        %table.fees.table
+          %thead.thead-default
+            %tr
+              %td
+                Action
+              %td
+                User
+              %td
+                Money
+              %td
+                Date
+              %td
+                Event
+              %td
+                Edate
+              %td
+                Parts
+          %tbody
+            %tr
       %section.events
         %article
