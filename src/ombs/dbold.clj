@@ -149,7 +149,7 @@
 
 
 (defn get-status
-  ([ename date] get-status (get-eid ename date))
+  ([ename date] (get-status (get-eid ename date)))
   ([eid] (:status (first (sql/select events (sql/fields :status) (sql/where {:id eid}))))))
 
 (defn is-initial?
