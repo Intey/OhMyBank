@@ -1,36 +1,70 @@
 <html>
-<body>
-    <form class="event" method="post" action="/act">
-        <table>
-            <tr>
-                <td> <label for="name">Event:</label> </td>
-                <td> <input class="name" id="name" type="text" readonly value="" name="event-name"></input> </td>
-            </tr>
-            <tr>
-                <td><label for="date">Date:</label></td>
-                <td><input class="date" id="date" type="text" readonly value="" name="date"></input></td>
-            </tr>
-            <tr>
-                <td><label for="author">Author:</label></td>
-                <td><input class="author" id="author" type="text" readonly value="" name="author"></input></td>
-            </tr>
-            <tr>
-                <td><label for="price">Price:</label></td>
-                <td><input class="price" id="price" type="text" name="price" readonly value=""></input></td>
-            </tr>
-            <tr id="parts-row">
-            </tr>
-            <tr>
-                <td><label for="debt">Your debt:</label></td>
-                <td><input class="debt" id="debt" type="text" name="debt" readonly value=""></input></td>
-            </tr>
-            <tr>
-                <td><input type="submit" class="action pay" name="action" value="pay"></td>
-                <td><input type="submit" class="action participate" name="action" value="participate"></td>
-                <td><input type="submit" class="action start" name="action" value="start"></td>
-            </tr>
-            
-        </table>
+  <body>
+    <form action='/act' class='event' method='post'>
+      <table>
+        <tr>
+          <td>
+            <label for='name'>
+              Event:
+            </label>
+          </td>
+          <td>
+            <input class='name' id='name' name='event-name' readonly='' type='text' value=''>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for='date'>
+              Date:
+            </label>
+          </td>
+          <td>
+            <input class='date' id='date' name='date' readonly='' type='text' value=''>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for='author'>
+              Author:
+            </label>
+          </td>
+          <td>
+            <input class='author' id='author' name='author' readonly='' type='text' value=''>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for='price'>
+              Price:
+            </label>
+          </td>
+          <td>
+            <input class='price' id='price' name='price' readonly='' type='text' value=''>
+          </td>
+        </tr>
+        <tr id='parts-row'></tr>
+        <tr>
+          <td>
+            <label for='debt'>
+              Your debt:
+            </label>
+          </td>
+          <td>
+            <input class='debt' id='debt' name='debt' readonly='' type='text' value=''>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input class='action pay' name='action' type='submit' value='pay'>
+          </td>
+          <td>
+            <input class='action participate' name='action' type='submit' value='participate'>
+          </td>
+          <td>
+            <input class='action start' name='action' type='submit' value='start'>
+          </td>
+        </tr>
+      </table>
     </form>
-</body>
+  </body>
 </html>
