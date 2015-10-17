@@ -32,22 +32,22 @@
   (if (and
         (core/participated? (sess/get :username) name date)
         (core/is-active? name date) ) ; have debt
-    ((h/remove-attr :disabled "")  match)
-    ((h/set-attr :disabled "")     match)) )
+    ((h/remove-class "disabled") match)
+    ((h/add-class "disabled")    match)))
 
 (defn start-action [name date author match]
   (if (and (= author (sess/get :username))
            (core/is-initial? name date)
            (> (core/participants-count name date) 0))
-    ((h/remove-attr :disabled "")  match)
-    ((h/set-attr :disabled "")     match)) )
+    ((h/remove-class "disabled") match)
+    ((h/add-class "disabled")    match)))
 
 (defn participate-action [name date status match]
   (if (and
         (not (core/participated? (sess/get :username) name date))
         (not= status "finished"))
-    ((h/remove-attr :disabled "")  match)
-    ((h/set-attr :disabled "")     match)))
+    ((h/remove-attr "disabled") match)
+    ((h/add-class "disabled")   match)))
 
 (defn fill-parts [parts match]
   (if (= 0 parts)
