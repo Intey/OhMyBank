@@ -1,0 +1,34 @@
+html
+    head
+        title Hey, admin!
+        meta(charset="utf-8")
+        meta('http-equiv' = "X-UA-Compatible", content = "IE=edge")
+        meta(name = "viewport", content = "width=device-width, initial-scale=1")
+        link(rel = "stylesheet", href = "css/bootstrap.min.css")
+    body
+        header
+            p: span#error
+            span Welcome admin, 
+                span#user
+            p: span.debt
+        form#eventform(methor = "get", action = "/addevent")
+            input.btn.btn-primary(type = "submit", value = "ADD EVENT")
+        form#logform(methor = "post", action = "/logout")
+            input.btn.btn-primary(type = "submit", value = "LOGOUT")
+        main
+            section
+                table.fees.table
+                    thead.thead-default: tr
+                        th Action
+                        th User
+                        th Money
+                        th Date
+                        th Event
+                        th Parts
+                    tbody: tr
+
+            section.events.container-fluid
+                article.row
+
+        script(src = "/js/jquery-2.1.4.min.js")
+        script(src = "/js/main.js")

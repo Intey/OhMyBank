@@ -1,0 +1,24 @@
+html
+  body
+    form.event.col-lg-2.col-sm-6(method="post" action="/act")
+        field-set.form-group
+            label(for="name") Event
+            input.form-control(class="name" id="name" type="text" readonly="" value="" name="event-name")
+        field-set.form-group
+            label(for="date") Date
+            input.form-control(class="date" id="date" type="text" readonly="" value="" name="date")
+        field-set.form-group
+            label(for="author") Author
+            input.form-control(class="author" id="author" type="text" readonly="" value="" name="author")
+
+        field-set.form-group
+            label(for="price") Price
+            input.form-control(class="price" id="price" type="text" name="price" readonly="" value="")
+        #parts-row
+        field-set.form-group
+            label(for="debt") Your debt
+            input.form-control(class="debt" id="debt" type="text" name="debt" readonly="" value="")
+        field-set.form-group
+            input.form-control(type="submit" class="btn action pay" name="action" value="pay")
+            input.form-control(type="submit" class="btn action participate" name="action" value="participate")
+            input.form-control(type="submit" class="btn action start" name="action" value="start")
