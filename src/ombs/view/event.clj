@@ -1,6 +1,7 @@
 (ns ombs.view.event
   (:require
     [net.cgrand.enlive-html :as h]
+    [net.cgrand.reload :as reload]
     [noir.session :as sess]
     [noir.validation :as vld]
     [ombs.core :as core]
@@ -55,3 +56,4 @@
     ((h/content (parts-snip parts)) match)))
 
 
+(reload/auto-reload *ns*)
