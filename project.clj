@@ -7,7 +7,7 @@
                            [org.clojure/clojure-contrib "1.2.0"] ;additions
                            [ring/ring-jetty-adapter "1.3.2"]
                            [compojure "1.3.3"] ; routing
-                           [enlive "1.1.5"] ; templating(plain HTML)
+                           [enlive "1.1.6"] ; templating(plain HTML)
                            [lib-noir "0.9.9"] ; session management
                            [liberator "0.12.2"] ; for RESTful project
                            [cheshire "5.4.0"] ; JSON parsing
@@ -16,9 +16,6 @@
                            [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver
                            [korma "0.4.0"] ; sql in code
                            [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
-
-
-
                            ]
             :profiles {
                        :dev { 

@@ -1,6 +1,7 @@
 (ns ombs.view.admin
   (:require
     [net.cgrand.enlive-html :as h]
+    [net.cgrand.reload :as reload]
     [noir.session :as sess]
     [ombs.validate :refer [errors-string]]
     [ombs.core :as core]
@@ -16,3 +17,5 @@
   [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
   [:section :> :table :> :tbody] (h/content (map #(fee-elem %) (get-fees)))
   )
+
+(reload/auto-reload *ns*)

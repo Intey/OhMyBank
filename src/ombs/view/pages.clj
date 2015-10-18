@@ -1,6 +1,7 @@
 (ns ombs.view.pages
   (:require
     [net.cgrand.enlive-html :as h]
+    [net.cgrand.reload :as reload]
     [noir.session :as sess]
     [ombs.validate :refer [errors-string]]
     [ombs.core :as core]
@@ -59,3 +60,5 @@
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
   [:#error] (h/content (errors-string)))
+
+(reload/auto-reload *ns*)
