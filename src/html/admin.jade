@@ -5,6 +5,7 @@ html
         meta('http-equiv' = "X-UA-Compatible", content = "IE=edge")
         meta(name = "viewport", content = "width=device-width, initial-scale=1")
         link(rel = "stylesheet", href = "css/bootstrap.min.css")
+        link(href='css/styles.css' rel='stylesheet')
     body
         header
             p: span#error
@@ -16,8 +17,8 @@ html
         form#logform(methor = "post", action = "/logout")
             input.btn.btn-primary(type = "submit", value = "LOGOUT")
         main
-            section
-                table.fees.table
+            section.card.fees
+                table.table
                     thead.thead-default: tr
                         th Action
                         th User
@@ -27,8 +28,8 @@ html
                         th Parts
                     tbody: tr
 
-            section.events.container-fluid
+            section.events.container-fluid.card
                 article.row
-
         script(src = "/js/jquery-2.1.4.min.js")
+        script(src = "/js/bootstrap.min.js")
         script(src = "/js/main.js")
