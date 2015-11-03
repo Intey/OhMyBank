@@ -16,17 +16,18 @@ form.event.col-lg-2.col-sm-6(method="post" action="/act")
     field-set.form-group
         label(for="debt") Your debt
         input.form-control(class="debt" id="debt" type="text" name="debt" readonly="" value="")
-    field-set.form-group
-        input.form-control.btn.action.pay(type="submit" name="action" value="pay")
-        input.form-control.btn.action.participate(type="submit" name="action" value="participate")
-        input.form-control.btn.action.start(type="submit" name="action" value="start")
-div.event2.col-lg-2.col-sm-6
+    field-set.btn-group
+        input.btn.action.pay(type="submit" name="action" value="")
+        input.btn.action.participate(type="submit" name="action" value="")
+        input.btn.action.start(type="submit" name="action" value="")
+div.event2.col-lg-2.col-sm-6.card
     .name
     .date
     .price
     .debt
     .parts
     //action message, style and function should setted in template
-    button.action.start.btn(data-toggle="tooltip" data-placement="right" title="Start Event")
-    button.action.pay.btn(data-toggle="tooltip" data-placement="right" title="Pay")
-    button.action.participate.btn(data-toggle="tooltip" data-placement="right" title="Participate")
+    .btn-group
+        button.action.start.btn.btn-primary(data-toggle="tooltip" data-placement="right" title="Start Event")
+        button.action.pay.btn.btn-primary(data-toggle="tooltip" data-placement="right" title="Pay")
+        button.action.participate.btn.btn-primary(data-toggle="tooltip" data-placement="right" title="Participate")
