@@ -7,15 +7,18 @@ html
         link(rel = "stylesheet", href = "css/bootstrap.min.css")
         link(href='css/styles.css' rel='stylesheet')
     body
-        header
+        header.flexbox
             p: span#error
-            span Welcome
+            span Welcome, 
                 span#user
-            p: span.debt
-        form#eventform(methor = "get", action = "/addevent")
-            input.btn.btn-primary(type = "submit", value = "ADD EVENT")
-        form#logform(methor = "post", action = "/logout")
-            input.btn.btn-primary(type = "submit", value = "LOGOUT")
+            p: Your summary debt:
+                span(class="debt")
+            .buttons.flexbox
+                form#eventform(methor = "get", action = "/addevent")
+                    input.btn.btn-primary(type = "submit", value = "ADD EVENT")
+                form#logform(methor = "post", action = "/logout")
+                    input.btn.btn-primary(type = "submit", value = "LOGOUT")
+
         main
             block main
         script(src = "/js/jquery-2.1.4.min.js")

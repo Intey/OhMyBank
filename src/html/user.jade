@@ -1,34 +1,10 @@
-doctype
-html
-head
-    title: User page
-    meta(charset="utf-8")
-    meta(http-equiv="X-UA-Compatible" content="IE=edge")
-    meta(name="viewport" content="width=device-width, initial-scale=1")
-    link(href='cssbootstrap.min.css' rel='stylesheet')
-    link(href='css/styles.css' rel='stylesheet')
-head
-body
-    header
-        span(id="error")
-
-        span : Welcome, 
-            span(id="user")
-
-        p: Your summary debt:
-            span(class="debt")
-
-        form(method="get" id="addeventform" action="addevent")
-            input(type="submit" value="Add event")
-        form(method="post" id="logform" action="logout")
-            input(type="submit" value="logout")
-    main
-        section(class="events")
-            h2: All Existing Events
-            article 
-        section(class="fees")
-            h2: Fees 
-            article
-    script(src="jsjquery-2.1.4.min.js")
-    script(src="jsbootstrap.min.js")
-    script(src="main.js")
+extends ./base.jade
+block title
+    User page
+block main
+    section(class="events")
+        h2: All Existing Events
+        article 
+    section(class="fees")
+        h2: Fees 
+        article

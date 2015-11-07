@@ -1,13 +1,8 @@
 extends ./base.jade
 block title
     title Hey, admin!
-
-form#eventform(methor = "get", action = "/addevent")
-    input.btn.btn-primary(type = "submit", value = "ADD EVENT")
-form#logform(methor = "post", action = "/logout")
-    input.btn.btn-primary(type = "submit", value = "LOGOUT")
 block main
-    section.card.fees
+    section.fees
         table.table
             thead.thead-default: tr
                 th Action
@@ -17,5 +12,5 @@ block main
                 th Event
                 th Parts
             tbody: tr
-    section.events.container-fluid.card
-        article.row
+    // .container-fluid.card
+    section.events.flexbox
