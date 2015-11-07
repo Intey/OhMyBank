@@ -1,9 +1,14 @@
 (ns tests.test
   (:require
     [clojure.java.shell :refer [sh]]
+    [korma.db :as kdb]
     [korma.core :as sql]
-    [ombs.dbold :as db]
     ))
+
+(kdb/defdb korma-db (kdb/sqlite3
+                      { :db "test.db"
+                       :user "user"
+                       :password "placeholder"}))
 
 (defn cleandb-fixture [f]
   (sh "bash" "-c" "./resetdb.sh test")

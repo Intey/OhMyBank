@@ -34,7 +34,7 @@
                       :database "jdbc:sqlite:database.db" }
 
             :ring {:handler ombs.route/engine
-                   ;:init ombs.handler/init       ; use this, Luke.
+                   :init ombs.db.init/database       ; use this, Luke.
                    ;:destroy ombs.handler/destroy
                    } 
 
