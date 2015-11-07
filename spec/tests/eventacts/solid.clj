@@ -1,6 +1,5 @@
 (ns tests.eventacts.solid
   (:require [tests.test :refer :all]
-            [clojure.test :as t]
             [clojure.java.shell :refer [sh]]
             [speclj.core :as spec]
             [ombs.dbold :as db]
@@ -9,15 +8,16 @@
             [ombs.core :as core]
             [noir.validation :as vld]
             ))
+
 (def affirmation (vld/wrap-noir-validation dba/affirm))
 
 (spec/describe "======= Pay button on"
 
                (spec/before-all
                  (println "############################## RESET DB #######################################")
-                 (sh "bash" "-c" "./resetdb.sh test"))
+                 (println (sh "bash" "-c" "./scripts/resetdb.sh test")))
 
-               (spec/context "=======solid event(without parts)"
+               (spec/context "solid event(without parts)"
                              (spec/it "is HIDDEN, when user NOT participate event"
                                       (spec/should-not (dbp/can-pay? uid eid-solid)))
 
@@ -35,7 +35,7 @@
                                       (spec/should-not (dbp/can-pay? uid eid-solid))
                                       ))
 
-               (spec/context "=======partial event(without parts)"
+               (spec/context "partial event(without parts)"
                              (spec/it "is HIDDEN, when user NOT participate event"
                                       (spec/should-not (dbp/can-pay? uid eid-partial))
                                       (spec/should (= 8 (db/get-rest-parts eid-partial))) 

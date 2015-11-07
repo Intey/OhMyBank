@@ -14,3 +14,6 @@ database.db
 test.db
 .vimrc
 .vim/
+.nrepl-history
+.ropeproject/
+__pycache__/
