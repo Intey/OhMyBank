@@ -14,13 +14,8 @@
 (h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts] :as event}]
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
-  [:.author] (h/content (str "Author: " author))
   [:.money]  (h/content (str (get-money event)))
   [:.action] (get-action event)
-  ;[:.price] (h/content (str price))
-  ;[:#parts-row]
-  ;[:.action.participate]
-  ;[:.action.start]
   )
 
 (def parts-row-sel [:#parts-row]) ;tag in parts.html
