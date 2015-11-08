@@ -9,17 +9,18 @@
     ))
 
 (declare get-action)
+(declare get-money)
 (def event-sel [:.event2])
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts] }]
-  [:.name]              (h/content (str author "'s " name))
-  [:.date]              (h/content (str date))
-  [:.author]            (h/content (str "Author: " author))
-  ;[:.price]             (h/content (str price))
-  [:.debt]              (h/content (str "Debt: " (core/debt (sess/get :username) name date)))
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts] :as event}]
+  [:.name]   (h/content (str author "'s " name))
+  [:.date]   (h/content (str date))
+  [:.author] (h/content (str "Author: " author))
+  [:.money]  (h/content (str (get-money event)))
+  [:.action] (get-action event)
+  ;[:.price] (h/content (str price))
   ;[:#parts-row]
-;  [:.action.participate]
-  [:.action]        (h/content "Action")
-;  [:.action.start]
+  ;[:.action.participate]
+  ;[:.action.start]
   )
 
 (def parts-row-sel [:#parts-row]) ;tag in parts.html
@@ -30,13 +31,17 @@
 (declare fill-parts)
 (declare participate-action)
 (declare pay-action)
-(defn get-action [name date author status parts]
+(defn get-action [{:keys [name price date author status parts]}]
   (case 1
     1 (partial pay-action name date)
     2 (partial fill-parts parts)
     3 (partial start-action name date author)
     4 (partial participate-action name date status)
     )
+  )
+
+(defn get-money [{:keys [name price date author status parts]}]
+  0
   )
 
 (defn set-attr-class

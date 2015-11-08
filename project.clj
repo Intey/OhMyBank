@@ -46,7 +46,6 @@
                       [cider/cider-nrepl "0.9.1"]
                       ]
 
-            :eval-in :nrepl
-            :test-paths ["spec"]
+            ;:test-paths ["spec"]
 
             )
