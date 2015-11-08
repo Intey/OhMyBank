@@ -3,6 +3,7 @@
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess]
     [ombs.core :as core]
+    [ombs.view.dom :as dom]
     )
   )
 
@@ -18,8 +19,8 @@
         (core/participated? (sess/get :username) name date)
         (core/is-active? name date) ) ; in-progress
     ; add parts field
-    ((h/content "Pay") ((rm-attr-class "disabled")   match))
-    ((h/content "Pay") ((set-attr-class "disabled")  match))
+    ((h/content "Pay") ((dom/rm-attr-class "disabled")   match))
+    ((h/content "Pay") ((dom/set-attr-class "disabled")  match))
     ))
 
 (defn start [name date author match]
