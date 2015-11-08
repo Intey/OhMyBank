@@ -1,6 +1,8 @@
 (ns ombs.view.dom
   (:require [net.cgrand.enlive-html :as h])) 
 
+(defn content-wrap [value match] ((h/content (str value)) match))
+
 (defn set-attr-class
   ([attr]
     (set-attr-class attr ""))
