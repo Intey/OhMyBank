@@ -6,6 +6,7 @@
     [noir.validation :as vld]
     [ombs.core :as core]
     [ombs.validate :refer [errors-string]]
+    [ombs.view.dom :refer [set-attr-class rm-attr-class]]
     ))
 
 (declare get-action)
@@ -19,9 +20,7 @@
   [:.date]   (h/content (str date))
   [:.action] (h/content (action event)))
 
-
-(def parts-row-sel [:#parts-row]) ;tag in parts.html
-(h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts]
+(h/defsnippet parts-snip "../resources/public/parts.html" [:#parts-row] [parts]
   [:.parts] (h/set-attr :value (str parts)))
 
 (defn content-wrap [value match] ((h/content (str value)) match))
@@ -37,16 +36,6 @@
       (partial content-wrap price)
       )))
 
-(defn set-attr-class
-  ([attr]
-    (set-attr-class attr ""))
-  ([attr value]
-    {:pre (= (type attr) java.lang.String)}
-    (comp (h/set-attr attr value) (h/add-class attr))) )
-
-(defn rm-attr-class [attr]
-  {:pre (= (type attr) java.lang.String)}
-  (comp (h/remove-attr attr ) (h/remove-class attr)) )
 
 (defn pay-action [name date match]
   (if (and
