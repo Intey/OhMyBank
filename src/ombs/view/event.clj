@@ -10,34 +10,32 @@
 
 (declare get-action)
 (declare get-money)
-(def event-sel [:.event2])
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts] :as event}]
+(h/defsnippet action "../resources/public/action.html" [:.action] [event]
+  [:.money] (get-money event)
+  [:button] (get-action event))
+
+(h/defsnippet event-elem "../resources/public/event.html" [:.event2] [{:keys [name price date author status parts] :as event}]
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
-  [:.money]  (h/content (str (get-money event)))
-  [:.action] (get-action event)
-  )
+  [:.action] (h/content (action event)))
+
 
 (def parts-row-sel [:#parts-row]) ;tag in parts.html
 (h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts]
   [:.parts] (h/set-attr :value (str parts)))
 
-(declare start-action)
-(declare fill-parts)
-(declare participate-action)
-(declare pay-action)
-(defn get-action [{:keys [name price date author status parts]}]
-  (case 1
-    1 (partial pay-action name date)
-    2 (partial fill-parts parts)
-    3 (partial start-action name date author)
-    4 (partial participate-action name date status)
-    )
-  )
-
+(defn content-wrap [value match] ((h/content (str value)) match))
 (defn get-money [{:keys [name price date author status parts]}]
-  0
-  )
+  "Return price or user debt, depends on user participation. 
+  If user not participate - show price; else - show debt. 
+  Also, if user have fee on this event, or event is finished - return nil"
+  (when-let [uname (sess/get :username)]
+    (if (and
+          (core/participated? uname name date)
+          (core/is-active? name date) ) ; have debt
+      (partial content-wrap (core/debt uname name date))
+      (partial content-wrap price)
+      )))
 
 (defn set-attr-class
   ([attr]
@@ -77,6 +75,15 @@
   (if (= 0 parts)
     nil
     ((h/content (parts-snip parts)) match)))
+
+(defn get-action [{:keys [name price date author status parts]}]
+  (case 1
+    1 (partial pay-action name date)
+    2 (partial fill-parts parts)
+    3 (partial start-action name date author)
+    4 (partial participate-action name date status)
+    )
+  )
 
 
 (reload/auto-reload *ns*)
