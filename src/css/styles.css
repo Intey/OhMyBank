@@ -53,16 +53,13 @@ header > .buttons {
     flex-wrap: wrap;
     align-items: stretch;
     text-align: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 .flexbox > * {
     margin: 0.5rem;
 }
 
 .event2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     margin: .4rem;
     padding: 0.1rem;
     width: 9rem;
