@@ -8,61 +8,70 @@
     [ombs.validate :refer [errors-string]]
     ))
 
-(declare start-action)
-(declare fill-parts)
-(declare participate-action)
-(declare pay-action)
+(declare get-action)
 (def event-sel [:.event2])
-(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts]}]
-  [:.name]              (h/content name)
-  [:.date]              (h/content date)
-  [:.author]            (h/content author)
-  [:.price]             (h/content (str price))
-  [:.debt]              (h/content (str (core/debt (sess/get :username) name date)))
-  [:#parts-row]         (partial fill-parts parts)
-  [:.action.participate](partial participate-action name date status)
-  [:.action.pay]        (partial pay-action name date)
-  [:.action.start]      (partial start-action name date author)
+(h/defsnippet event-elem "../resources/public/event.html" event-sel [{:keys [name price date author status parts] }]
+  [:.name]              (h/content (str author "'s " name))
+  [:.date]              (h/content (str date))
+  [:.author]            (h/content (str "Author: " author))
+  ;[:.price]             (h/content (str price))
+  [:.debt]              (h/content (str "Debt: " (core/debt (sess/get :username) name date)))
+  ;[:#parts-row]
+;  [:.action.participate]
+  [:.action]        (h/content "Action")
+;  [:.action.start]
   )
 
 (def parts-row-sel [:#parts-row]) ;tag in parts.html
 (h/defsnippet parts-snip "../resources/public/parts.html" parts-row-sel [parts]
   [:.parts] (h/set-attr :value (str parts)))
 
-(defn set-attr-class 
-  ([attr] 
+(declare start-action)
+(declare fill-parts)
+(declare participate-action)
+(declare pay-action)
+(defn get-action [name date author status parts]
+  (case 1
+    1 (partial pay-action name date)
+    2 (partial fill-parts parts)
+    3 (partial start-action name date author)
+    4 (partial participate-action name date status)
+    )
+  )
+
+(defn set-attr-class
+  ([attr]
     (set-attr-class attr ""))
   ([attr value]
     {:pre (= (type attr) java.lang.String)}
     (comp (h/set-attr attr value) (h/add-class attr))) )
 
-(defn rm-attr-class [attr] 
+(defn rm-attr-class [attr]
   {:pre (= (type attr) java.lang.String)}
-  (comp (h/remove-attr attr ) (h/remove-class attr)) ) 
+  (comp (h/remove-attr attr ) (h/remove-class attr)) )
 
 (defn pay-action [name date match]
   (if (and
         (core/participated? (sess/get :username) name date)
         (core/is-active? name date) ) ; have debt
-    ((rm-attr-class "disabled")   match)
-    ((set-attr-class "disabled")  match)
+
+    ((h/content "Pay") ((rm-attr-class "disabled")   match))
+    ((h/content "Pay") ((set-attr-class "disabled")  match))
     ))
 
 (defn start-action [name date author match]
   (if (and (= author (sess/get :username))
            (core/is-initial? name date)
            (> (core/participants-count name date) 0))
-    ((rm-attr-class "disabled")   match)
-    ((set-attr-class "disabled")  match)
-    ))
+    ((h/remove-class "disabled") match)
+    ((h/add-class "disabled")    match)))
 
 (defn participate-action [name date status match]
   (if (and
         (not (core/participated? (sess/get :username) name date))
         (not= status "finished"))
-    ((rm-attr-class "disabled")   match)
-    ((set-attr-class "disabled")  match)
-    ))
+    ((h/remove-attr "disabled") match)
+    ((h/add-class "disabled")   match)))
 
 (defn fill-parts [parts match]
   (if (= 0 parts)

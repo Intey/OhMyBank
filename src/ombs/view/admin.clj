@@ -14,8 +14,12 @@
   [:#user] (h/content username)
   [:#error] (h/content (errors-string))
   [:.debt] (h/content (str (core/debt username)))
-  [:section.events :> :article] (h/content (map #(event-elem %) (core/events)))
-  [:section :> :table :> :tbody] (h/content (map #(fee-elem %) (get-fees)))
+  [:section.events] (h/content (map #(event-elem %) (core/events)))
+  [:section.fees] (let [fees (get-fees)]
+                    (if (not= fees {})
+                      (h/content (map #(fee-elem %) fees))
+                      nil
+                      ))
   )
 
 (reload/auto-reload *ns*)
