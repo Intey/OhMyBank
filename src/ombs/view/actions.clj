@@ -14,26 +14,7 @@
     nil
     ((h/content (parts-snip parts)) match)))
 
-(defn pay [name date match]
-  (if (and
-        (core/participated? (sess/get :username) name date)
-        (core/is-active? name date) ) ; in-progress
-    ; add parts field
-    ((h/content "Pay") ((dom/rm-attr-class "disabled")   match))
-    ((h/content "Pay") ((dom/set-attr-class "disabled")  match))
-    ))
-
-(defn start [name date author match]
-  (if (and (= author (sess/get :username))
-           (core/is-initial? name date)
-           (> (core/participants-count name date) 0))
-    ((h/remove-class "disabled") match)
-    ((h/add-class "disabled")    match)))
-
-(defn participate [name date status match]
-  (if (and
-        (not (core/participated? (sess/get :username) name date))
-        (not= status "finished"))
-    ((h/remove-attr "disabled") match)
-    ((h/add-class "disabled")   match)))
+(defn pay [match] ((h/content "Pay") match))
+(defn start [match] ((h/content "Start") match))
+(defn participate [match] ((h/content "Participate") match))
 
