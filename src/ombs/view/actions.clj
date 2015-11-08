@@ -5,6 +5,9 @@
     [ombs.core :as core]
     )
   )
+
+(h/defsnippet parts-snip "../resources/public/parts.html" [:#parts-row] [parts]
+  [:.parts] (h/set-attr :value (str parts)))
 (defn fill-parts [parts match]
   (if (= 0 parts)
     nil
