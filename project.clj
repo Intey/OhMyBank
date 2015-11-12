@@ -5,6 +5,7 @@
                       :url "http://www.eclipse.org/legal/epl-v10.html"}
             :dependencies [[org.clojure/clojure "1.7.0" ]
                            [org.clojure/clojure-contrib "1.2.0"] ;additions
+                           [org.clojure/clojurescript "0.0-3308"]
                            [ring/ring-jetty-adapter "1.3.2"]
                            [compojure "1.3.3"] ; routing
                            [enlive "1.1.6"] ; templating(plain HTML)
@@ -16,9 +17,12 @@
                            [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver
                            [korma "0.4.0"] ; sql in code
                            [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
+
+                           [org.omcljs/om "0.9.0"] ; react
+                           [prismatic/om-tools "0.3.10"]
                            ]
             :profiles {
-                       :dev { 
+                       :dev {
                              :dependencies [
                                             [speclj "3.3.0"]
                                             [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
@@ -36,9 +40,10 @@
             :ring {:handler ombs.route/engine
                    :init ombs.db.init/database       ; use this, Luke.
                    ;:destroy ombs.handler/destroy
-                   } 
+                   }
 
             :plugins [ [lein-ring "0.8.8"]
+                      [lein-cljsbuild "1.0.6"]
                       [speclj "3.3.0"]
                       [lein-ancient "0.6.6"]
                       [ragtime/ragtime.lein "0.3.8"]
@@ -49,4 +54,26 @@
             :eval-in :nrepl
             :test-paths ["spec"]
 
-            )
+          :cljsbuild
+          {:builds
+		   [{:id "devel"
+			 :source-paths ["src/cljs"]
+			 :compiler {:output-to "resources/public/js/app.js"
+						:output-dir "resources/public/js/out-devel"
+						:source-map true
+						:optimizations :none
+						:cache-analysis false
+						:asset-path "/static/js/out-devel"
+						:main cljsworkshop.core
+						:pretty-print true}}
+			{:id "prod"
+			 :source-paths ["src/cljs"]
+			 :compiler {:output-to "resources/public/js/app.js"
+						:output-dir "resources/public/js/out-prod"
+						:source-map "resources/public/js/app.js.map"
+						:optimizations :advanced
+						:cache-analysis false
+						:asset-path "/static/js/out-prod"
+						:main cljsworkshop.core
+						:pretty-print false}}]}
+)
