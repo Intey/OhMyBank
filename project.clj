@@ -38,7 +38,7 @@
                       :database "jdbc:sqlite:database.db" }
 
             :ring {:handler ombs.route/engine
-                   :init ombs.db.init/database       ; use this, Luke.
+                   :init ombs.db.init/database
                    ;:destroy ombs.handler/destroy
                    }
 
@@ -64,7 +64,7 @@
 						:optimizations :none
 						:cache-analysis false
 						:asset-path "/static/js/out-devel"
-						:main cljsworkshop.core
+						:main ombs.frontcore
 						:pretty-print true}}
 			{:id "prod"
 			 :source-paths ["src/cljs"]
@@ -74,6 +74,6 @@
 						:optimizations :advanced
 						:cache-analysis false
 						:asset-path "/static/js/out-prod"
-						:main cljsworkshop.core
+						:main ombs.frontcore
 						:pretty-print false}}]}
 )

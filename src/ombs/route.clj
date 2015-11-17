@@ -54,7 +54,9 @@
   ;(POST "/pay" {params :params} (println (str "paying! Params:" params)))
   ;(POST "/participate" {params :params} (println (str "participating! Params:" params))) ;request common/participate) ; TODO: not fixed, after realize participation on addition
 
-  (resources "/static") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
+  ;Should be after pages. Search all css, js, etc. in dir 'resources' in root
+  ;of project. In html, links to "/static/css/..."
+  (resources "/static")
 
   (not-found "Page not found") ) ; should be last, it overlap all below routes.
 
