@@ -1,37 +1,33 @@
 (ns ombs.frontcore
   (:require
-	[om.core :as om]
-	[om-tools.dom :as dom]
-	))
+    [kioo.om :refer [content set-attr do-> substitute listen]]
+    [kioo.core :refer [handle-wrapper]]
+	[om.core :as om :include-macros true]
+	[om-tools.dom :as dom :include-macros true]
+	)
+  (:require-macros [kioo.om :refer [defsnippet deftemplate]]))
 
+(defsnippet nav-component "public/test.html" [:.nav-item]
+  [[caption func]]
+  {[:a] (do-> (content caption)
+              (listen :onClick #(func caption)))})
 
-(defn mycomponent
-  [app owner]
-  (reify
-    ;; Set the initial component state.
-    om/IInitState
-    (init-state [_]
-      {:message "Hello world from local state"})
+(defsnippet header "public/test.html" [:header]
+  [{:keys [heading navigation]}]
+  { [:h1] (content heading)
+    [:ul] (content map nav-component navigation)
+   })
 
-    ;; Render the component with current local state.
-    om/IRenderState
-    (render-state [_ {:keys [message]}]
-      (dom/section
-        (dom/div message)
-        (dom/div (:message app))))))
+(deftemplate my-page "public/test.html"
+  [data]
+  { [:header] (substitute (header data))
+   [:.content] (content (:content data)) })
 
-(defonce state {:message "Hello world from global state."})
+(defn init [data] (om/component (my-page data)))
 
-;; "app" is the id of a dom element in index.html
-(let [el (js/document.getElementById "app")]
-  (om/root mycomponent state {:target el}))
+(def app-state {:header "main"
+                :content "Hello world"
+                :navigation [["home" #(js/alert %)]
+                             ["next" #(js/alert %)]] })
 
-
-; (defn set-html! [el content]
-;   (set! (.-innerHTML el) content))
-;
-; (defn main []
-;   (let [content "HEllo, CLJS!"
-;         element (aget (js/document.getElementsByTagName "main") 0)]
-;     (set-html! element content)))
-; (main)
+(om/root init app-state {:target (.-body js/document)})
