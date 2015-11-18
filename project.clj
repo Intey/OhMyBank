@@ -16,10 +16,12 @@
                            [org.clojure/java.jdbc "0.3.6"] ; deps fo db-driver
                            [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver
                            [korma "0.4.0"] ; sql in code
-                           [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
+                           ;[ragtime/ragtime.sql.files "0.3.8"] ; db migrations
 
+                           ; frontend
                            [org.omcljs/om "0.9.0"] ; react
                            [prismatic/om-tools "0.3.10"]
+                           [kioo "0.4.1"]
                            ]
             :profiles {
                        :dev {
@@ -34,8 +36,8 @@
 
                        }
 
-            :ragtime {:migrations ragtime.sql.files/migrations
-                      :database "jdbc:sqlite:database.db" }
+            ;:ragtime {:migrations ragtime.sql.files/migrations
+            ;          :database "jdbc:sqlite:database.db" }
 
             :ring {:handler ombs.route/engine
                    :init ombs.db.init/database
@@ -53,27 +55,28 @@
 
             :eval-in :nrepl
             :test-paths ["spec"]
+            :source-paths ["src"]
 
-          :cljsbuild
-          {:builds
-		   [{:id "devel"
-			 :source-paths ["src/cljs"]
-			 :compiler {:output-to "resources/public/js/app.js"
-						:output-dir "resources/public/js/out-devel"
-						:source-map true
-						:optimizations :none
-						:cache-analysis false
-						:asset-path "/static/js/out-devel"
-						:main ombs.frontcore
-						:pretty-print true}}
-			{:id "prod"
-			 :source-paths ["src/cljs"]
-			 :compiler {:output-to "resources/public/js/app.js"
-						:output-dir "resources/public/js/out-prod"
-						:source-map "resources/public/js/app.js.map"
-						:optimizations :advanced
-						:cache-analysis false
-						:asset-path "/static/js/out-prod"
-						:main ombs.frontcore
-						:pretty-print false}}]}
-)
+            :cljsbuild
+            {:builds
+             [{:id "devel"
+               :source-paths ["src/cljs"]
+               :compiler {:output-to "resources/public/js/app.js"
+                          :output-dir "resources/public/js/out-devel"
+                          :source-map true
+                          :optimizations :none
+                          :cache-analysis false
+                          :asset-path "/static/js/out-devel"
+                          ;:main "ombs.frontcore"
+                          :pretty-print true}}
+              {:id "prod"
+               :source-paths ["src/cljs"]
+               :compiler {:output-to "resources/public/js/app.js"
+                          :output-dir "resources/public/js/out-prod"
+                          :source-map "resources/public/js/app.js.map"
+                          :optimizations :advanced
+                          :cache-analysis false
+                          :asset-path "/static/js/out-prod"
+                          ;:main "ombs.frontcore"
+                          :pretty-print false}}]}
+            )
