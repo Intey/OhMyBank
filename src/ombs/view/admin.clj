@@ -10,7 +10,7 @@
     [ombs.view.fees :refer [fee-elem]]
     ))
 
-(h/deftemplate page "../resources/public/admin.html" [username]
+(h/deftemplate page "public/admin.html" [username]
   [:#user] (h/content username)
   [:#error] (h/content (errors-string))
   [:.debt] (h/content (str (core/debt username)))

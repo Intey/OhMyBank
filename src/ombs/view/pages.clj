@@ -15,7 +15,7 @@
 
 ; ============================= index page ================================
 
-(h/deftemplate index "../resources/public/index.html" []
+(h/deftemplate index "public/index.html" []
   [:#error] (h/content (errors-string))
   ; hide log and reg forms, show logout form if have username in session
   ;[:#logform] (hide)
@@ -26,7 +26,7 @@
 ; ============================= register page ================================
 
 ;Generate register page. If in given params founded keys for this page - fill fields with founded values
-(h/deftemplate register "../resources/public/register.html" [params]
+(h/deftemplate register "public/register.html" [params]
   [:#uname]        (h/content (sess/get :username))
   [:#error]        (h/content (errors-string :register))
   [:#username]     (h/set-attr :value (params :username))
@@ -38,7 +38,7 @@
 
 ; ============================= user page ================================
 
-(h/deftemplate user "../resources/public/user.html" [username]
+(h/deftemplate user "public/user.html" [username]
   [:#user] (h/content username)
   [:#error] (h/content (errors-string))
   [:.debt] (h/content (str (core/debt username)))
@@ -50,12 +50,12 @@
 ; Helpers, for creation list of user for participation
 (def usercheckbox-sel [:.users] )
 
-(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}]
+(h/defsnippet usercheckbox-elem "public/addevent.html" usercheckbox-sel [{username :name}]
   [:.userbox] (h/do->
                 (h/content username)
                 (h/set-attr :value username)))
 
-(h/deftemplate addevent "../resources/public/addevent.html"
+(h/deftemplate addevent "public/addevent.html"
   [users]
   [:.users] (h/content ( map #(usercheckbox-elem %) users) )
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
