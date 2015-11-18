@@ -13,21 +13,21 @@
               (listen :onClick #(func caption)))})
 
 (defsnippet header "public/test.html" [:header]
-  [{:keys [heading navigation]}]
-  { [:h1] (content heading)
-    [:ul] (content map nav-component navigation)
+  [{:keys [header navigation]}]
+  { [:h1] (content header)
+    [:ul] (content (map nav-component navigation))
    })
 
 (deftemplate my-page "public/test.html"
   [data]
-  { [:header] (substitute (header data))
+  {[:header] (substitute (header data))
    [:.content] (content (:content data)) })
 
 (defn init [data] (om/component (my-page data)))
 
-(def app-state {:header "main"
-                :content "Hello world"
-                :navigation [["home" #(js/alert %)]
-                             ["next" #(js/alert %)]] })
+(def app-state (atom {:header "main"
+                      :content "Hello world"
+                      :navigation [["home" #(js/alert %)]
+                                   ["next" #(js/alert %)]] }))
 
 (om/root init app-state {:target (.-body js/document)})
