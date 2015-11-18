@@ -45,7 +45,7 @@
                    }
 
             :plugins [ [lein-ring "0.8.8"]
-                      [lein-cljsbuild "1.0.6"]
+                      [lein-cljsbuild "1.1.1"]
                       [speclj "3.3.0"]
                       [lein-ancient "0.6.6"]
                       [ragtime/ragtime.lein "0.3.8"]
@@ -67,7 +67,7 @@
                           :optimizations :none
                           :cache-analysis false
                           :asset-path "/static/js/out-devel"
-                          ;:main "ombs.frontcore"
+                          :main "ombs.frontcore"
                           :pretty-print true}}
               {:id "prod"
                :source-paths ["src/cljs"]
@@ -77,6 +77,6 @@
                           :optimizations :advanced
                           :cache-analysis false
                           :asset-path "/static/js/out-prod"
-                          ;:main "ombs.frontcore"
+                          :main "ombs.frontcore"
                           :pretty-print false}}]}
             )
