@@ -16,14 +16,14 @@
   [:button] button)
 
 (declare get-action)
-(h/defsnippet event-elem "../resources/public/event.html" [:.event] [{:keys [name price date author status parts] :as event}]
-  [:.event2] (h/set-attr :id 1)
+(h/defsnippet event-elem "../resources/public/event.html" [:.event] [{:keys [id name price date author status parts] :as event}]
+  [:.event] (h/set-attr :id id)
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
   [:.action] (partial action (get-action event)))
 
 (defn get-button [button-type {:keys [name price date author status parts]}]
-  (println button-type)
+  ;(println button-type)
   (case button-type
     :pay          (partial actions/pay)
     :start        (partial actions/start)
@@ -34,9 +34,9 @@
 
 (defn get-action [{:keys [name price date author status parts] :as event}]
   "return hashmap with function for money and button"
-  (println event)
-  (println (core/participated? "Intey" name date))
-  (println (core/participants-count name date))
+  ;(println event)
+  ;(println (core/participated? "Intey" name date))
+  ;(println (core/participants-count name date))
   (if-let [uname (sess/get :username)]
     (case status
       "initial" (cond
