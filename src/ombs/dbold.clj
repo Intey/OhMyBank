@@ -93,13 +93,15 @@
 (declare subtract-feesed-parts)
 (defn get-events []
   "Return list of events, and it actual count of event"
-  ;First of all, we select events from it table and join for each rest(actual)
-  ;parts Then we update each event elent: substract from each count of parts,
-  ;that hang in fees some events haven't parts, and after join it's have nil
-  ;parts. So we need fix before substract
+  ; Then we update each event elent: substract from each event count of parts,
+  ; that hang in fees.
+  ; Some events haven't parts, and after join it's have nil parts. So we need
+  ; fix before substract.
   (map
     #(update % :parts
              (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
+    ; First of all, we select events from it table and join for each
+    ; rest(actual) parts.
     (sql/select events
                 (sql/fields :id :name :date :price :author :status)
                 (sql/with goods (sql/fields [:rest :parts])))))
