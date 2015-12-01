@@ -11,17 +11,17 @@
 
 (defn- finish [ename date] (db/set-status ename date :finished))
 
-(defn pay [{ename :event-name date :date parts :parts :as params}]
+(defn pay [{eid :eid ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from
   post). Parts in params is count of parts, that user want to pay"
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         eid (db/get-eid ename date)
         parts (parse-int parts)]
-    (dbpay/create-fee uid eid parts) 
+    (dbpay/create-fee uid eid parts)
   (pages/user))) ; go to user page in any case
 
-(defn participate [{ename :event-name date :date}]
+(defn participate [{eid :eid ename :event-name date :date}]
   "Add participation of current user and selected event(given as param from
   post)"
   (let [uname (sess/get :username)]
@@ -29,7 +29,7 @@
       (core/add-participant (db/get-eid ename date) (db/get-uid uname))))
   (pages/user)); go to user page in any case
 
-(defn start [{ename :event-name date :date}]
+(defn start [{eid :eid ename :event-name date :date}]
   ;isvalid: not started, exists.
-  (if-let [eid (db/get-eid ename date)] (core/start-event eid)) 
+  (if-let [eid (db/get-eid ename date)] (core/start-event eid))
   (pages/user)); go to user page in any case

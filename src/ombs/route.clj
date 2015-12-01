@@ -46,13 +46,11 @@
           "pay" (pay params)
           "participate" (participate params)
           "start" (start params)))
+
+  (GET "/start" {params :params} (start (:fid params)))
+  (GET "/participate" {params :params} (participate (:fid params)))
+  (GET "/pay" {params :params} (pay (:fid params)))
   (GET "/affirm" {params :params} (affirm (:fid params)))
-
-  ;payment controlling
-  ;(POST "/confirm {params :params} (confirm-payment)
-
-  ;(POST "/pay" {params :params} (println (str "paying! Params:" params)))
-  ;(POST "/participate" {params :params} (println (str "participating! Params:" params))) ;request common/participate) ; TODO: not fixed, after realize participation on addition
 
   (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
 

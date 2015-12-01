@@ -16,7 +16,8 @@
   [:button] button)
 
 (declare get-action)
-(h/defsnippet event-elem "../resources/public/event.html" [:.event2] [{:keys [name price date author status parts] :as event}]
+(h/defsnippet event-elem "../resources/public/event.html" [:.event] [{:keys [name price date author status parts] :as event}]
+  [:.event2] (h/set-attr :id 1)
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
   [:.action] (partial action (get-action event)))
