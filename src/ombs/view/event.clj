@@ -55,7 +55,7 @@
 
       "in-progress" (if (core/participated? uname name date)
                      {:button  (get-button :pay event)
-                      :money (partial content-wrap (core/debt uname name date))}
+                      :money (core/debt uname name date)}
 
                      {:button  (get-button :participate event)
                       :money (fns/part-price
