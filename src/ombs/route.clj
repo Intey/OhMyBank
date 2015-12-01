@@ -41,16 +41,10 @@
 
   (GET  "/user" [_] (pages/user))
 
-  (POST "/act" {params :params}
-        (case (:action params)
-          "pay" (pay params)
-          "participate" (participate params)
-          "start" (start params)))
-
-  (GET "/start" {params :params} (start (:fid params)))
-  (GET "/participate" {params :params} (participate (:fid params)))
-  (GET "/pay" {params :params} (pay (:fid params)))
-  (GET "/affirm" {params :params} (affirm (:fid params)))
+  (GET "/start" {params :params} (start params))
+  (GET "/participate" {params :params} (participate params))
+  (GET "/pay" {params :params} (pay params))
+  (GET "/affirm" {{fid :fid} :params} (affirm fid))
 
   (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
 
