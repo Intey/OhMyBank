@@ -18,6 +18,8 @@ section.fees {
     min-height: 2em;
     position: relative;
 }
+
+/*
 .action::after {
     content: "";
     top: 0;
@@ -40,7 +42,7 @@ section.fees {
     background: url('../img/pay.png') no-repeat transparent;
     background-position: center;
     background-size: 1rem;
-}
+} */
 
 header > .buttons {
     align-self: flex-end;
@@ -59,7 +61,7 @@ header > .buttons {
     margin: 0.5rem;
 }
 
-.event2 {
+.event {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -69,7 +71,7 @@ header > .buttons {
 }
 
 @media (max-width: 320px) {
-.event2 {
+.event {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
