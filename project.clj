@@ -18,7 +18,7 @@
                            [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
                            ]
             :profiles {
-                       :dev { 
+                       :dev {
                              :dependencies [
                                             [speclj "3.3.0"]
                                             [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
@@ -36,7 +36,10 @@
             :ring {:handler ombs.route/engine
                    :init ombs.db.init/database       ; use this, Luke.
                    ;:destroy ombs.handler/destroy
-                   } 
+                   :nrepl {:start? true
+                           :port 3001 }
+                   }
+
 
             :plugins [ [lein-ring "0.8.8"]
                       [speclj "3.3.0"]

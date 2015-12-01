@@ -7,14 +7,14 @@ function affirm(elem) {
 }
 function start(elem) {
     var eid = $(elem).parent().parent().attr('id');
-    $.get( '/start', {uid: uid, eid: eid} )
+    $.get( '/start', {eid: eid} )
         .done( function(data) {
             $(elem).remove();
         });
 }
 function pay(elem) {
     var eid = $(elem).parent().parent().attr('id');
-    $.get( '/pay', {uid: uid, eid: eid} )
+    $.get( '/pay', {eid: eid} )
         .done( function(data) {
             $(elem).remove();
         });
@@ -22,7 +22,7 @@ function pay(elem) {
 
 function participate(elem) {
     var eid = $(elem).parent().parent().attr('id');
-    $.get( '/participate', {uid: uid, eid: eid} )
+    $.get( '/participate', {eid: eid} )
         .done( function(data) {
             $(elem).remove();
         });
