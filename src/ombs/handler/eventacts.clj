@@ -19,14 +19,13 @@
     (if (isvalid/ids? eid uid)
       (dbpay/create-fee uid eid parts))))
 
-(defn participate [{eid :eid ename :event-name date :date}]
+(defn participate [{eid :eid ename :event-name date :date :as params}]
   "Add participation of current user and selected event(given as param from
   post)"
-  (let [uname (sess/get :username)]
-    (when (isvalid/participation? ename date uname)
-      (core/add-participant (db/get-eid ename date) (db/get-uid uname)))))
+  (if-let [uname (sess/get :username)]
+    (when (isvalid/participation? eid)
+      (core/add-participant eid (db/get-uid uname)))))
 
-(defn start [{eid :eid ename :event-name date :date}]
-  ;isvalid: not started, exists.
+(defn start [{eid :eid ename :event-name date :date :as params}]
   (if (db/is-initial? eid)
     (core/start-event eid)))
