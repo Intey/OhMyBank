@@ -20,7 +20,6 @@
   (redirect "/user"))
 
 (defn register [{:keys [username password1 password2 birthdate student-flag] :as params} ]
-  (println (str username " " password1" " password2" " birthdate" " student-flag " flog type" (type student-flag)))
   (if (isvalid/new-user? username password1 password2)
     (do
       (db/add-user username password1 birthdate (core/rate student-flag))

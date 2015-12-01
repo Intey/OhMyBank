@@ -22,7 +22,6 @@
 
 (defn party-pay [event-price users]
   "Simple for common events. For birthday, need more complex realization depends on each user rate."
-  (println "get pp with " event-price " and users " users)
   (fns/part-price event-price (count users)))
 
 (defn is-initial?
@@ -33,7 +32,6 @@
 
 (defn- add-in-progress
   [uid eid]
-  (println "Add in progress!")
   (add-error :participation "No implementation for participate user in-progress event")
   (redirect "/user")
   )
@@ -49,7 +47,6 @@
   (db/set-status eid :in-progress)
   (let [users (dbpay/get-participants eid)
         party-pay (party-pay (:price (db/get-event eid)) users)]
-    (println "Starting event " eid ", for " users " with party-pay:" party-pay)
     (if (= (db/get-parts eid) 0); create debts only when event not partial
       (doall (map #(dbpay/credit-payment eid (db/get-uid %) party-pay) users)))))
 

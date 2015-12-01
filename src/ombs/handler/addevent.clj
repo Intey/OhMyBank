@@ -23,7 +23,6 @@
                     users :participants
                     :as params} ]
   "Main function for creating new event."
-  (println "init event: " params)
   (if (isvalid/new-event? event price date)
     (do
       (if (zero? (funcs/parse-int parts))
@@ -38,7 +37,6 @@
                           users :participants
                           :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
-  (println "add solid event")
   (if (isvalid/new-event? event price date)
     (do
       (db/add-event event (read-string price) (sess/get :username) date)
@@ -53,7 +51,6 @@
 (defn- add-partial-event [{event :name price :price date :date parts :parts
                            users :participants
                            :as params}]
-  (println "add partial event")
   (if (isvalid/new-event? event price date)
     (do
       (db/add-event event (funcs/parse-int price) (sess/get :username) date parts)
@@ -67,5 +64,4 @@
     (addevent-page (db/get-usernames)) ))
 
 (defn- add-participants [{event :name date :date users :participants}]
-  (println "add-participants " users)
   (dorun (map (comp (partial dbpay/add-participant (db/get-eid event date)) db/get-uid) users)))

@@ -27,7 +27,6 @@
         (map
           #(dbpay/credit-payment (db/get-eid event date) (db/get-uid %) (* party-pay (db/get-rate %)))
           (funcs/as-vec users)))
-      (println (str "rates " user-rates " pp " party-pay " users " users))
       (redirect "/user"))
     (addevent)
 

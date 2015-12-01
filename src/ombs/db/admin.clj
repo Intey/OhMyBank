@@ -36,11 +36,9 @@
 ; ============================ PRIVATE =======================================
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
-    (println "write-pay eid:" eid " uid:" uid " parts:" parts " money:" money)
     (when (isvalid/ids? eid uid)
       (when (> parts 0)
         (do
-          (println " Pay partial event")
           (shrink-goods eid parts)
           (dbpay/credit-payment eid uid money)))
       (dbpay/debit-payment eid uid money)

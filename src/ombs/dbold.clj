@@ -213,16 +213,13 @@
 (defn shrink-goods
   ([ename date parts]
    "Sub count parst from database"
-   (println (str "shrink goods on" parts))
    (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)})
                (sql/where {:events_id (get-eid ename date)})))
   ([eid parts]
-   (println (str "shrink goods on " parts))
    (sql/update goods (sql/set-fields {:rest (- (get-parts eid) parts)})
                (sql/where {:events_id eid})))
 
   )
 
 (defn parts-price [eid parts]
-  (println "parts-price for eid:" eid " parts: " parts)
   (* parts (f/part-price (get-price eid) (get-parts eid))))

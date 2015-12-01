@@ -1,5 +1,7 @@
 (namespace ombs.handler.admin
-           (:require 
+           (:require
              [ombs.db.admin :as db-a]  ))
 
-(defn affirm [{fid :fid}] (println "affirming fee" (db-a/read-fee fid)))
+(defn affirm [{fid :fid}]
+  (println "Not realized affirming fee" (db-a/read-fee fid))
+  )

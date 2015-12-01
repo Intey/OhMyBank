@@ -1,11 +1,7 @@
 (ns ombs.handler.adminacts
-  (require 
+  (require
     [ombs.db.admin :as db]
     )
   )
 
-(defn affirm [id]
-  (println "affirm fee-id:" id)
-  (db/affirm id)
-  "Affirmed!"
-  )
+(defn affirm [id] (db/affirm id))
