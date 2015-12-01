@@ -81,13 +81,11 @@
                      ])
   )
 
-(defn participation? [ename date uname]
+(defn participation? [eid]
   (create-validator :participation
                     [
-                     [(not= (db/get-status ename date) (db/statuses :finished)) (message :event :finished)]
-                     [(vld/has-value? ename) (message :event :empty-name)]
-                     [(vld/has-value? date) (message :event :empty-date)]
-                     [(vld/has-value? uname) (message :user :empty-name)]
+                     [(not= (db/get-status eid) (db/statuses :finished)) (message :event :finished)]
+                     [(not= "" (:name (db/get-event eid))) (message :event :unexist)]
                      ]))
 
 (defn ids? [eid uid]
