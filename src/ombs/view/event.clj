@@ -46,10 +46,11 @@
                   :money price }
 
                  (core/participated? uname name date)
-                 {:button (get-button :participate event)
+                 {:button nil
                   :money price}
 
-                 :else {:button (get-button :participate event)
+                 :else
+                 {:button (get-button :participate event)
                         :money price}
                  )
 
