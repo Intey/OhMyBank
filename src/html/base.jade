@@ -8,8 +8,11 @@ html
         link(href='css/styles.css' rel='stylesheet')
     body
         header.flexbox
-            p: span#error
-            span Welcome, 
+            #errorbox.centered.alert.alert-danger
+                .message
+                strong: .description
+                button.btn.btn-sm.btn-danger(onclick = "hideParent(this)") x
+            span Welcome,
                 span#user
             p: Your summary debt:
                 span(class="debt")

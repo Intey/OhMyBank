@@ -1,13 +1,18 @@
 // core
 "use strict";
 
+function hideParent(self) {
+	$(self).parent().hide();
+}
+
 function replace(data) {
-	var error_holder = $('#error');
+	var error_holder = $('#errorbox > .message');
 	if (data) {
 		var result = JSON.parse(data);
 		var err_msg = result.error;
 		if (err_msg) {
 			$(error_holder).text(err_msg);
+			$('#errorbox').show("slow");
 			return;
 		}
 		var action = $(this).parent();
@@ -15,7 +20,8 @@ function replace(data) {
 		$(action).append(data);
 	}
 	else {
-		$(error_holder).text("Internal: Response is empty. Look handlers, Luke.");
+		$(error_holder).text("Internal: Response is empty. Look handlers, Luke.").show('slow');
+        $('#errorbox').show("slow");
 	}
 }
 
