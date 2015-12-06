@@ -5,6 +5,7 @@
     [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
     [ombs.funcs :refer [parse-int]]
+    [cheshire.core :as json]
     [noir.session :as sess]
     ))
 
@@ -17,7 +18,11 @@
         uid (db/get-uid uname)
         parts (parse-int parts)]
     (if (isvalid/ids? eid uid)
-      (dbpay/create-fee uid eid parts))))
+      (do
+        (dbpay/create-fee uid eid parts)
+        (json/generate-string {:ok "Waiting confirmation..."}))
+      (json/generate-string {:error (isvalid/errors-string)})
+      )))
 
 (defn participate [{eid :eid ename :event-name date :date :as params}]
   "Add participation of current user and selected event(given as param from
