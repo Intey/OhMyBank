@@ -1,21 +1,12 @@
-
-doctype
-
-html(lang="en")
-    head
-        title : Oh My Bank
-        meta(charset="utf-8")
-        meta(http-equiv="X-UA-Compatible" content="IE=edge")
-        meta(name="viewport" content="width=device-width, initial-scale=1")
-        link(rel = "stylesheet", href = "css/bootstrap.min.css")
-        link(href='css/styles.css' rel='stylesheet')
-body
-    main
-        section
-            form(method="get" action="/register" id="regform")
-                input(type="submit" value="log up")
-            form(method="post" id="logform" action="/login")
-                input(type="text" name="username" placeholder="username")
-                input(type="password" name="password" placeholder="password")
-                input(type="submit" value="log in")
-            span#error
+extends base.jade
+block title
+  title OhMyBank
+block main
+  section
+      form(method="get" action="/register" id="regform")
+          input(type="submit" value="log up")
+      form(method="post" id="logform" action="/login")
+          input(type="text" name="username" placeholder="username")
+          input(type="password" name="password" placeholder="password")
+          input(type="submit" value="log in")
+      span#error
