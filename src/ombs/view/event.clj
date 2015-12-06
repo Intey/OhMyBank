@@ -11,7 +11,7 @@
     [ombs.view.actions :as actions]
     ))
 
-(h/defsnippet action "../resources/public/action.html" [:.action] [{:keys [money button]} match]
+(h/defsnippet action "../resources/public/event.html" [:.action] [{:keys [money button]} match]
   [:.money] (partial content-wrap money)
   [:button] button)
 
@@ -20,23 +20,21 @@
   [:.event] (h/set-attr :id id)
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
-  [:.action] (partial action (get-action event)))
+  [:.action] (partial action (get-action event))
+  )
 
 (defn get-button [button-type {:keys [name price date author status parts]}]
-  ;(println button-type)
+  (println button-type)
   (case button-type
-    :pay          (partial actions/pay)
-    :start        (partial actions/start)
-    :participate  (partial actions/participate)
+    :pay          actions/pay
+    :start        actions/start
+    :participate  actions/participate
     :finished     (partial content-wrap "Finished")
     )
   )
 
 (defn get-action [{:keys [name price date author status parts] :as event}]
-  "return hashmap with function for money and button"
-  ;(println event)
-  ;(println (core/participated? "Intey" name date))
-  ;(println (core/participants-count name date))
+  "Return hashmap with function for money and button"
   (if-let [uname (sess/get :username)]
     (case status
       "initial" (cond
@@ -51,7 +49,7 @@
 
                  :else
                  {:button (get-button :participate event)
-                        :money price}
+                  :money price}
                  )
 
       "in-progress" (if (core/participated? uname name date)
