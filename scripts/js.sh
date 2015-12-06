@@ -11,3 +11,5 @@ for f in ${files[@]}; do
     echo "cp $f ⇒ resources/public/js/$bname"
     cp $f "$DIR/../resources/public/js/$bname"
 done
+
+browserify -t [ babelify --presets [ react ] ] $SRC"/components.js" -o $DEST"/components.js" > /dev/stdout

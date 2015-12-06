@@ -17,3 +17,4 @@ test.db
 .nrepl-history
 .ropeproject/
 __pycache__/
+node_modules/
