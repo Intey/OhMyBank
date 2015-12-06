@@ -24,15 +24,18 @@
    :user {
           :empty-name "Username can't be empty"
           :not-found "User not found"
-          :unexists "Username already used"
+          :unexist "Username doesn't exists"
           }
    :login {
            :invalid "Incorrect Login or password"
            }
+   :fee {
+         :unexist "Unexists fee"
+         }
    }
   )
 
-(defn- message [ & tgs ] (get-in errors (vec tgs)))
+(defn- message [ & tgs ] (get-in errors (vec tgs) "Internal: Wrong message link"))
 
 (defn errors-string
   ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
@@ -70,7 +73,7 @@
                      [(vld/has-value? username) (message :user :empty-name)]
                      [(>= (count pass1) 8) (message :register :short-pass)]
                      [(= pass1 pass2) (message :register :notmatch-pass)]
-                     [(empty? (db/get-user username)) (message :user :exists) ]
+                     [(empty? (db/get-user username)) (message :user :unexist) ]
                      ]))
 
 (defn login? [username password]
@@ -102,4 +105,14 @@
                     [
                      [(<= parts (db/get-rest-parts ename date)) (message :event :parts-count)]
                      ])
+  )
+
+(defn fee? [id]
+ (create-validator :pay
+                   [
+                    [(not= nil id) (message :fee :unexist)]
+                    [false (message :event :unexist)]
+                    [false (message :user :unexist)]
+                    ]
+                   )
   )
