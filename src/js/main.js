@@ -11,9 +11,11 @@ function setErrorMessage(msg) {
                4000 );
 }
 
+/* If error in response, return true; else - false. */
 function fillErrorOrNull(result) {
 		var err_msg = result.error;
-		if (err_msg) { setErrorMessage(err_msg); return; }
+		if (err_msg) { setErrorMessage(err_msg); return true; }
+        return false;
 }
 
 // should be bind to event element
@@ -27,9 +29,9 @@ function handleActionResponse(data) {
 	if (data) {
 		var result = JSON.parse(data);
 
-        fillErrorOrNull(data);
-
-        replaceAction(this, data);
+        if (! fillErrorOrNull(data)) {
+            replaceAction(this, data);
+        }
 
 	} else {
         setErrorMessage("Internal: Response is empty. Look handlers, Luke.");
@@ -43,10 +45,9 @@ function handleActionResponse(data) {
 function handleFeeResponse(data) {
     if (data) {
         var result = JSON.parse(data);
-        fillErrorOrNull(result);
-
-        // determine where action
-        hideParent(this);
+        if (! fillErrorOrNull(result)) {
+            hideParent(this);
+        }
     } else {
         setErrorMessage("Internal: Response is empty. Look handlers, Luke.");
     }
