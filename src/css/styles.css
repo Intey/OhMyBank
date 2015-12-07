@@ -10,7 +10,7 @@
 }
 
 #errorbox * {
-    display: inline-block;
+    display: inline;
 }
 
 #errorbox button {
