@@ -2,47 +2,75 @@
 "use strict";
 
 function hideParent(self) {
-	$(self).parent().hide();
+	$(self).parent().hide("slow");
+}
+function setErrorMessage(msg) {
+    $('#errorbox > .message').text(msg);
+    $('#errorbox').show("slow");
+    setTimeout(function() { $('#errorbox').hide("slow") },
+               4000 );
 }
 
-function replace(data) {
-	var error_holder = $('#errorbox > .message');
+function fillErrorOrNull(result) {
+		var err_msg = result.error;
+		if (err_msg) { setErrorMessage(err_msg); return; }
+}
+
+// should be bind to event element
+function replaceAction(action, new_action) {
+    var action_container = $(action).parent();
+    $(action).hide('slow', function() { $(action).remove(); });
+    $(action_container).append(new_action);
+}
+
+function handleActionResponse(data) {
 	if (data) {
 		var result = JSON.parse(data);
-		var err_msg = result.error;
-		if (err_msg) {
-			$(error_holder).text(err_msg);
-			$('#errorbox').show("slow");
-			return;
-		}
-		var action = $(this).parent();
-		$(this).hide('slow', function() { $(this).remove(); });
-		$(action).append(data);
+
+        fillErrorOrNull(data);
+
+        replaceAction(this, data);
+
+	} else {
+        setErrorMessage("Internal: Response is empty. Look handlers, Luke.");
 	}
-	else {
-		$(error_holder).text("Internal: Response is empty. Look handlers, Luke.").show('slow');
-        $('#errorbox').show("slow");
-	}
+}
+
+
+// NOTE: should be bind to fee.
+// Element Response contains data about event, that need be updated with
+// actions, in response.
+function handleFeeResponse(data) {
+    if (data) {
+        var result = JSON.parse(data);
+        fillErrorOrNull(result);
+
+        // determine where action
+        hideParent(this);
+    } else {
+        setErrorMessage("Internal: Response is empty. Look handlers, Luke.");
+    }
 }
 
 // actions
 function affirm(elem) {
     var id = $(elem).parent().parent().attr('id');
-    $.get( '/affirm',       {fid: id} ).done( replace.bind(elem) );
+    $.get( '/affirm', {fid: id} ).done( handleFeeResponse.bind(elem) );
 }
 
 function start(elem) {
     var eid = $(elem).parent().parent().attr('id');
-    $.get( '/start',        {eid: eid} ).done( replace.bind(elem) );
+    $.get( '/start', {eid: eid} ).done( handleActionResponse.bind(elem) );
 }
 
 function pay(elem) {
-    var eid = $(elem).parent().parent().attr('id');
-    var parts
-    $.get( '/pay',          {eid: 100500, parts: 0} ).done( replace.bind(elem) );
+	var event_dom = $(elem).parent().parent();
+    var eid = $(event_dom).attr('id');
+	var parts = parseInt($(event_dom).children('.parts').text());
+    $.get( '/pay', {eid: eid, parts: parts} ).done( handleActionResponse.bind(elem) );
 }
 
 function participate(elem) {
     var eid = $(elem).parent().parent().attr('id');
-    $.get( '/participate',  {eid: eid} ).done( replace.bind(elem) );
+    $.get('/participate', {eid: eid}).done( handleActionResponse.bind(elem) );
 }
