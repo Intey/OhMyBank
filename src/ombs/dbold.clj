@@ -18,6 +18,7 @@
 (sql/defentity events
   (sql/many-to-many users :pays {:lfk :events_id :rfk :users_id})
   (sql/has-one goods)
+  (sql/has-one fees)
   )
 
 (sql/defentity pays
@@ -223,3 +224,9 @@
 
 (defn parts-price [eid parts]
   (* parts (f/part-price (get-price eid) (get-parts eid))))
+
+(defn event-from-fee [fid]
+  (first (sql/select events
+                     (sql/with fees
+                       (sql/fields)
+                       (sql/where {:id fid})))))
