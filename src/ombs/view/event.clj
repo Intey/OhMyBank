@@ -6,6 +6,7 @@
     [ombs.validate :as vld]
     [ombs.core :as core]
     [ombs.funcs :as fns]
+    [ombs.dbold :as db]
     [ombs.validate :refer [errors-string]]
     [ombs.view.dom :refer [set-attr-class rm-attr-class content-wrap]]
     [ombs.view.actions :as actions]
@@ -17,7 +18,7 @@
 
 (declare get-action)
 (h/defsnippet event-elem "../resources/public/event.html" [:.event] [{:keys [id name price date author status parts] :as event}]
-  [:.event] (h/set-attr :id id)
+  [:.event]  (h/set-attr :id id)
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
   [:.action] (partial action (get-action event))
@@ -33,7 +34,7 @@
     )
   )
 
-(defn get-action [{:keys [name price date author status parts] :as event}]
+(defn get-action [{:keys [id name price date author status parts] :as event}]
   "Return hashmap with function for money and button"
   (if-let [uname (sess/get :username)]
     (case status
@@ -53,8 +54,12 @@
                  )
 
       "in-progress" (if (core/participated? uname name date)
-                     {:button  (get-button :pay event)
-                      :money (core/debt uname name date)}
+                      (if (core/fee-exist? id (db/get-uid uname))
+
+                        {:button (h/content "Waiting...") }
+
+                        {:button  (get-button :pay event)
+                         :money (core/debt uname name date)})
 
                      {:button  (get-button :participate event)
                       :money (fns/part-price
