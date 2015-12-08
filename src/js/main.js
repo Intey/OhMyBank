@@ -1,5 +1,6 @@
 // core
 "use strict";
+var errorHideTime = 4000;
 
 function hideParent(self) {
 	$(self).parent().hide("slow");
@@ -8,7 +9,7 @@ function setErrorMessage(msg) {
     $('#errorbox > .message').text(msg);
     $('#errorbox').show("slow");
     setTimeout(function() { $('#errorbox').hide("slow") },
-               4000 );
+               errorHideTime );
 }
 
 /* If error in response, return true; else - false. */
