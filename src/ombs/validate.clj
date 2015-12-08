@@ -2,6 +2,7 @@
   (:require
     [noir.validation :as vld]
     [ombs.dbold :as db]
+    [noir.session :as sess]
     [noir.response :refer [redirect]]
     ))
 
@@ -117,7 +118,7 @@
                    [
                     [(not= nil id) (message [:fee :unexist])]
                     [(not (nil? (db/event-from-fee id))) (message [:event :unexist])]
-                    [false (message [:user :unexist])]
+                    [(vld/has-value? (sess/get :username)) (message [:user :unexist])]
                     ]
                    )
   )
