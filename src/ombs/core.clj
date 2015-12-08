@@ -56,6 +56,9 @@
 (defn get-role [username]
   (db-adm/get-role (db/get-uid username)))
 
+(defn fee-exist? [eid uid]
+  (not (empty? (db-adm/find-fee eid uid))))
+
 (defn- ^:deprecated extract-event [m]
   "Extract event keys from raw result of query participated-list."
   (select-keys m '(:name :price :date :author)))
@@ -66,3 +69,5 @@
   (event-name, event-price, date, remain, user). Each row, can contains same event, with different users"
   (map (fn [[k v]] {:event k :users (mapv :user v)}) ;this func map usernames in vector
        (group-by extract-event events)))
+
+

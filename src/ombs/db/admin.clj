@@ -33,6 +33,10 @@
 
 (defn get-fid
   ([uid eid] (:id (first (sql/select fees (sql/fields :id) (sql/where {:users_id uid :events_id eid}))))))
+
+(defn find-fee [eid uid]
+  (sql/select fees (sql/where {:users_id uid :events_id eid}))
+  )
 ; ============================ PRIVATE =======================================
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
@@ -50,3 +54,4 @@
   ([id] (first (sql/select fees (sql/where {:id id})))))
 
 (defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
+
