@@ -45,6 +45,10 @@
 ;   Finished - closed.
 (def statuses {:initial "initial" :finished "finished" :in-progress "in-progress"})
 
+(defn status-vector [ st ]
+  (if (vector? st)
+    (mapv #(% statuses) st)
+    (st statuses)))
 ; ===========================================================================================================
 ; ===========================================================================================================
 
@@ -92,12 +96,13 @@
               (sql/where {:id eid}))))
 
 (declare subtract-feesed-parts)
-(defn get-events []
+(defn get-events [status]
   "Return list of events, and it actual count of event"
   ; Then we update each event elent: substract from each event count of parts,
   ; that hang in fees.
   ; Some events haven't parts, and after join it's have nil parts. So we need
   ; fix before substract.
+  (println status)
   (map
     #(update % :parts
              (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
@@ -105,6 +110,7 @@
     ; rest(actual) parts.
     (sql/select events
                 (sql/fields :id :name :date :price :author :status)
+                (sql/where {:status [in (status-vector status)]})
                 (sql/with goods (sql/fields [:rest :parts])))))
 
 (defn subtract-feesed-parts [eid parts]

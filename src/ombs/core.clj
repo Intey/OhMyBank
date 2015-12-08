@@ -11,7 +11,7 @@
 
 (defn rate [student?] (if (= student? "on") 0.5 1.0 ) )
 
-(defn events [] (db/get-events))
+(defn events [] (db/get-events [:initial :in-progress]))
 
 (defn participated? [uname ename edate] (dbpay/participated? uname ename edate))
 
