@@ -109,9 +109,9 @@
     ; First of all, we select events from it table and join for each
     ; rest(actual) parts.
     (sql/select events
-                (sql/fields :id :name :date :price :author :status)
+                (sql/fields :id :name :date :price :author :status :parts)
                 (sql/where {:status [in (status-vector status)]})
-                (sql/with goods (sql/fields [:rest :parts])))))
+                (sql/with goods (sql/fields :rest)))))
 
 (defn subtract-feesed-parts [eid parts]
   "Substract from given parts, founded parts in active(all) fees."

@@ -17,10 +17,11 @@
   [:button] button)
 
 (declare get-action)
-(h/defsnippet event-elem "../resources/public/event.html" [:.event] [{:keys [id name price date author status parts] :as event}]
+(h/defsnippet event-elem "../resources/public/event.html" [:.event] [{:keys [id name price date author status parts rest] :as event}]
   [:.event]  (h/set-attr :id id)
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
+  [:.parts]  (comp (h/set-attr :max parts) (h/set-attr :value rest))
   [:.action] (partial action (get-action event))
   )
 
