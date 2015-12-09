@@ -2,6 +2,7 @@
   (:require
     [noir.validation :as vld]
     [ombs.dbold :as db]
+    [ombs.db.payment :as dbp]
     [noir.session :as sess]
     [noir.response :refer [redirect]]
     ))
@@ -32,6 +33,9 @@
            }
    :fee {
          :unexist "Unexists fee"
+         }
+   :pay {
+         :wrong-parts "Parts count %s is greater that we have."
          }
    }
   )
@@ -97,12 +101,13 @@
                      [(not= "" (:name (db/get-event eid))) (message [:event :unexist])]
                      ]))
 
-(defn ids? [eid uid]
+(defn payment? [eid uid parts]
   "Check, if id's is correct. Used with (db/get-*id)"
   (create-validator :pay
                     [
                      [(not= nil uid) (message [:user :empty-name])]
                      [(not= nil eid) (message [:event :unexist])]
+                     [(< parts (dbp/free-parts eid))] (message [:pay :wrong-parts])
                      ])
   )
 

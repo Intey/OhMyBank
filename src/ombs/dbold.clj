@@ -77,6 +77,9 @@
 
 
 ;============================================== EVENT =================================================
+; (defrecord Event [name date price author status] )
+; (defrecord PartialEvent [parts-count actual-parts])
+
 (defn get-eid [ename date]
   (:id (first (sql/select events (sql/fields :id)
                           (sql/where (and (= :name ename) (= :date date)))))))
@@ -102,7 +105,6 @@
   ; that hang in fees.
   ; Some events haven't parts, and after join it's have nil parts. So we need
   ; fix before substract.
-  (println status)
   (map
     #(update % :parts
              (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
@@ -149,9 +151,6 @@
    (f/nil-fix (:rest (first (sql/select goods (sql/fields :rest)
                                         (sql/where {:events_id eid})))))
    ))
-
-
-
 
 (defn get-status
   ([ename date] (get-status (get-eid ename date)))
@@ -200,6 +199,12 @@
   ([ename date] (set-status ename date :finished))
   ([eid] (set-status eid :finished))
   )
+
+(defn event-from-fee [fid]
+  (first (sql/select events
+                     (sql/with fees
+                       (sql/fields)
+                       (sql/where {:id fid})))))
 ;============================================== GOODS  =================================================
 
 ;2 transacts
@@ -208,6 +213,7 @@
 
 ;2 transacts
 (defn get-rest-parts
+  "Return parts, that "
   ([ename date]
    (:rest (first (sql/select goods (sql/fields :rest)
                              (sql/where {:events_id (get-eid ename date)})))))
@@ -231,8 +237,3 @@
 (defn parts-price [eid parts]
   (* parts (f/part-price (get-price eid) (get-parts eid))))
 
-(defn event-from-fee [fid]
-  (first (sql/select events
-                     (sql/with fees
-                       (sql/fields)
-                       (sql/where {:id fid})))))

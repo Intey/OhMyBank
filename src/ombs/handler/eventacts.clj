@@ -14,10 +14,11 @@
 (defn pay [{eid :eid ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from
   post). Parts in params is count of parts, that user want to pay"
+  (println "Pay params: " params)
   (let [uname (sess/get :username)
         uid (db/get-uid uname)
         parts (parse-int parts)]
-    (if (isvalid/ids? eid uid)
+    (if (isvalid/payment? eid uid parts)
       (do
         (dbpay/create-fee uid eid parts)
         (json/generate-string {:ok "Waiting confirmation..."}))

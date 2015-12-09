@@ -66,9 +66,9 @@ function start(elem) {
 }
 
 function pay(elem) {
-	var event_dom = $(elem).parent().parent();
-    var eid = $(event_dom).attr('id');
-	var parts = parseInt($(event_dom).children('.parts').text());
+	var event = $(elem).parent().parent();
+    var eid = $(event).attr('id');
+	var parts = parseInt($(event).find('.parts').val());
     $.get( '/pay', {eid: eid, parts: parts} ).done( handleActionResponse.bind(elem) );
 }
 
