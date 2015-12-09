@@ -40,7 +40,7 @@
 ; ============================ PRIVATE =======================================
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
-    (when (isvalid/ids? eid uid)
+    (when (isvalid/payment? eid uid parts)
       (when (> parts 0)
         (do
           (shrink-goods eid parts)
