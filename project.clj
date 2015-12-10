@@ -26,6 +26,7 @@
                                             [org.seleniumhq.selenium/selenium-server "2.45.0"] ; drive it manualy
                                             [ring-mock "0.1.5"] ; ??
                                             [ring/ring-jetty-adapter "1.3.2"] ; for runs app before tests
+                                            ;[org.clojure/tools.nrepl "0.2.7"]
                                             ]}
 
                        }
@@ -47,6 +48,7 @@
                       [ragtime/ragtime.lein "0.3.8"]
                       [lein-gossip "0.1.0-SNAPSHOT"]
                       [cider/cider-nrepl "0.9.1"]
+                      ;[reactor-nrepl "1.1.0"]
                       ]
 
             ;:test-paths ["spec"]

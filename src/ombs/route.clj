@@ -10,14 +10,15 @@
     [ring.middleware.stacktrace :refer [wrap-stacktrace]]
     ; sic!
     [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+    [cheshire.core :as json]
 
     ;[ring.middleware.reload :refer [wrap-reload]] ; don't work
-    [cheshire.core :as json]
 
     [noir.session :refer [wrap-noir-session]]
     [noir.validation :refer [wrap-noir-validation]]
     [noir.response :refer [redirect]]
     [ombs.dbold :refer [get-events]]
+    ; [ombs.server.restapi.response :refer [Res]]
 
     ; request handlers. Prepare data, and call views.
     [ombs.handler.pages :as pages]
@@ -46,7 +47,7 @@
   (GET "/start" {params :params} (start params))
   (GET "/participate" {params :params} (participate params))
   (GET "/pay" {params :params} (pay params))
-  (GET "/affirm" {{fid :fid} :params} (affirm fid))
+  (GET "/affirm" {{fid :fid} :params} (json/generate-string (affirm fid)))
 
   (ANY "/api/pong" {params :params} (json/generate-string params))
   (GET "/api/events" [_] (json/generate-string (get-events)))

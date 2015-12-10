@@ -21,29 +21,35 @@ function fillErrorOrNull(result) {
 
 // should be bind to event element
 function replaceAction(action, new_action) {
+    console.log("new action data: " + JSON.stringify(new_action));
     var action_container = $(action).parent();
     $(action).hide('slow', function() { $(action).remove(); });
     $(action_container).append(new_action);
+
 }
 
 function handleActionResponse(data) {
+    console.log("handling income data: " + data);
 	if (data) {
 		var result = JSON.parse(data);
 
-        if (! fillErrorOrNull(data)) {
-            replaceAction(this, data);
+        if (! fillErrorOrNull(result)) {
+            replaceAction(this, result);
         }
-
 	} else {
         setErrorMessage("Internal: Response is empty. Look handlers, Luke.");
 	}
 }
 
 
+var temp = {};
 // NOTE: should be bind to fee.
 // Element Response contains data about event, that need be updated with
 // actions, in response.
 function handleFeeResponse(data) {
+
+    temp = JSON.stringify(JSON.parse(data).data);
+    console.log("handling income data: " + temp);
     if (data) {
         var result = JSON.parse(data);
         if (! fillErrorOrNull(result)) {

@@ -12,6 +12,18 @@
     [ombs.view.dom :refer [set-attr-class rm-attr-class content-wrap]]
     ))
 
+(h/defsnippet action-snip-extern "../resources/public/event.html" [:.action]
+  [{:keys [money button]}]
+
+  [:.money] (partial content-wrap money)
+  [:button] button )
+
+;get output from get-button and generate html
+(defn actions-html [event]
+  "Generate actions HTML for event. actions-types determine which actions
+  availible. "
+  (apply str (h/emit* (action-snip-extern (get-action event)))))
+
 (defn pay [match]
   ((comp (h/set-attr :onclick "pay(this)") (h/content "Pay")) match))
 
@@ -26,6 +38,7 @@
   [:.money] (partial content-wrap money)
   [:button] button)
 
+;return enlive func
 (defn get-button [button-type {:keys [name price date author status parts]}]
   (case button-type
     :pay          pay
@@ -37,6 +50,7 @@
 
 (defn get-action [{:keys [id name price date author status parts] :as event}]
   "Return hashmap with function for money and button"
+  (println "get-action for: " event)
   (if-let [uname (sess/get :username)]
     (case status
       "initial" (cond

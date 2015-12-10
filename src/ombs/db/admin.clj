@@ -52,7 +52,7 @@
 
 (defn- get-fee
   ([id]
-   (print (first (sql/select fees (sql/where {:id id}))))
+   ;(print (first (sql/select fees (sql/where {:id id}))))
    (first (sql/select fees (sql/where {:id id}))) ))
 
 (defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
