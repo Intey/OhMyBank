@@ -89,6 +89,13 @@ header > .buttons {
     width: 9rem;
 }
 
+.fee {
+    margin: 0.4rem;
+}
+.fee > * {
+    padding: 0.2rem;
+}
+
 @media (max-width: 320px) {
 .event {
     display: flex;
@@ -97,5 +104,6 @@ header > .buttons {
     margin: .4rem;
     width: 7rem;
 }
+
 
 }
