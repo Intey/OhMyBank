@@ -107,7 +107,7 @@
                     [
                      [(not= nil uid) (message [:user :empty-name])]
                      [(not= nil eid) (message [:event :unexist])]
-                     [(< parts (dbp/free-parts eid))] (message [:pay :wrong-parts])
+                     [(<= parts (dbp/free-parts eid))] (message [:pay :wrong-parts])
                      ])
   )
 
