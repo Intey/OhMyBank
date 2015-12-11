@@ -26,7 +26,7 @@
   [:.name]   (h/content (str author "'s " name))
   [:.date]   (h/content (str date))
   [:.action] (partial acts/action-snip (acts/get-action event))
-  [:.parts] (partial fill-parts parts)
+  [:.parts] (partial fill-parts rest)
   [:.participants] (h/content (str (dbp/get-participants id))) ;TODO: remove str
   )
 
