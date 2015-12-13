@@ -97,8 +97,10 @@
 (defn participation? [eid]
   (create-validator :participation
                     [
-                     [(not= (db/get-status eid) (db/statuses :finished)) (message [:event :finished])]
-                     [(not= "" (:name (db/get-event eid))) (message [:event :unexist])]
+                     [(not= (db/get-status eid) (db/statuses :finished))
+                      (message [:event :finished])]
+                     [(not= "" (:name (db/get-event eid)))
+                      (message [:event :unexist])]
                      ]))
 
 (defn payment? [eid uid parts]
