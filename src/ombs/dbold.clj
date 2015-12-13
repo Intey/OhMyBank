@@ -106,7 +106,7 @@
   ; Some events haven't parts, and after join it's have nil parts. So we need
   ; fix before substract.
   (map
-    #(update % :parts
+    #(update % :rest
              (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
     ; First of all, we select events from it table and join for each
     ; rest(actual) parts.
