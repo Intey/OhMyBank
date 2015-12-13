@@ -93,25 +93,13 @@
                                        (sql/fields :summ)
                                        (sql/aggregate (sum :money) :summ))))))
 
-(defn- fixer
-  ([r] (-> r
-           first
-           f/nil-fix))
-  ([t r] (-> r
-             first
-             t
-             f/nil-fix)))
+(defn get-feesed-parts [eid]
+  "Select sum of parts, that contained in fees for given event id."
+  (:sum (first (sql/select fees
+                           (sql/where {:events_id eid})
+                           (sql/aggregate (sum :parts) :sum)))))
 
 (defn free-parts [eid]
   "Return num of parts, that can be payed."
-  (let [
-        actual (fixer :rest
-                      (sql/select goods
-                                  (sql/fields :rest)
-                                  (sql/where {:events_id eid}) ))
-        feesed (fixer :sum
-                      (sql/select fees
-                                  (sql/where {:events_id eid})
-                                  (sql/aggregate (sum :parts) :sum)))
-        ]
-    (- actual feesed)))
+  (- (f/nil-fix (get-rest-parts eid))
+     (f/nil-fix (get-feesed-parts eid))))
