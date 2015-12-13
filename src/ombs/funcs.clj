@@ -28,3 +28,7 @@
   (map #(replace % ks) sq))
 
 (defn part-price [event-price parts] (/ event-price parts))
+
+(defn with-log [f]
+  (print f)
+  (f))
