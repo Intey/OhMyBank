@@ -51,6 +51,8 @@
   ([] (reduce str (map #(str "|" % "|") (vld/get-errors))))
   ([tags] (reduce str (map #(str "|" % "|") (vld/get-errors tags)))))
 
+(defn errors? [] (vld/errors?))
+
 (defmacro create-rule [tag data]
   `(vld/rule ~@(list (first data)) [~tag ~(last data)] )
   )
@@ -107,16 +109,20 @@
   "Check, if id's is correct. Used with (db/get-*id)"
   (create-validator :pay
                     [
-                     [(not= nil uid) (message [:user :empty-name])]
-                     [(not= nil eid) (message [:event :unexist])]
-                     [(<= parts (dbp/free-parts eid))] (message [:pay :wrong-parts])
+                     [(not= nil uid)
+                      (message [:user :empty-name])]
+                     [(not= nil eid)
+                      (message [:event :unexist])]
+                     [(<= parts (+ (dbp/free-parts eid) parts))
+                      (message [:pay :wrong-parts])]
                      ])
   )
 
 (defn parts? [ename date parts]
   (create-validator :pay
-                    [
-                     [(<= parts (db/get-rest-parts ename date)) (message [:event :parts-count])]
+                    [ ; FIXME: free-parts include parts from currect fee
+                     [(<= parts (+ (dbp/free-parts ename date) parts))
+                      (message [:event :parts-count])]
                      ])
   )
 
