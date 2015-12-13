@@ -1,10 +1,10 @@
 (ns ombs.db.admin
   (:require [clojure.set :refer [rename-keys]]
             [korma.db :as kdb]
+            [ombs.db.payment :as dbpay]
             [korma.core :as sql]
             [noir.session :as sess]
             [ombs.dbold :refer :all] ; for entity
-            [ombs.db.payment :as dbpay]
             [ombs.validate :as isvalid]
             [ombs.funcs :as fns]
             ))
@@ -37,6 +37,7 @@
 (defn find-fee [eid uid]
   (sql/select fees (sql/where {:users_id uid :events_id eid}))
   )
+
 ; ============================ PRIVATE =======================================
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
@@ -49,11 +50,10 @@
       (if (can-finish? eid)
         (finish eid))))
 
-
 (defn- get-fee
   ([id]
-   (print (first (sql/select fees (sql/where {:id id}))))
    (first (sql/select fees (sql/where {:id id}))) ))
+
 
 (defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
 
