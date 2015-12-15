@@ -1,6 +1,7 @@
 (ns ombs.handler.addevent
   (:require
-    [ombs.dbold :as db]
+    [ombs.db.old :as db]
+    [ombs.db.partial :as partial-event]
     [ombs.db.payment :as dbpay]
     [ombs.core :as core]
     [ombs.funcs :as funcs]
@@ -59,7 +60,7 @@
     false))
 
 (defn- add-good [ {event :name price :price date :date users :participants parts :parts :as params} ]
-  (if (db/add-goods event date parts)
+  (if (partial-event/add-goods event date parts)
     (redirect "/user")
     (addevent-page (db/get-usernames)) ))
 

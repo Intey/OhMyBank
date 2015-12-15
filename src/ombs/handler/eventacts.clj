@@ -1,7 +1,7 @@
 (ns ombs.handler.eventacts
   (:require
     [ombs.core :as core]
-    [ombs.dbold :as db]
+    [ombs.db.old :as db]
     [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
     [ombs.funcs :refer [parse-int]]

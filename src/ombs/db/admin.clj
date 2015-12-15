@@ -2,9 +2,10 @@
   (:require [clojure.set :refer [rename-keys]]
             [korma.db :as kdb]
             [ombs.db.payment :as dbpay]
+            [ombs.db.partial :as partial-event]
             [korma.core :as sql]
             [noir.session :as sess]
-            [ombs.dbold :refer :all] ; for entity
+            [ombs.db.old :refer :all] ; for entity
             [ombs.validate :as isvalid]
             [ombs.funcs :as fns]
             ))
@@ -29,31 +30,36 @@
               (sql/with events (sql/fields [:name :event] [:date :edate]))))
 
 (defn get-role [uid]
-  (:role (first (sql/select users (sql/where {:id uid}) (sql/fields :role)))))
+  (:role (first
+           (sql/select users (sql/where {:id uid}) (sql/fields :role)))))
 
-(defn get-fid
-  ([uid eid] (:id (first (sql/select fees (sql/fields :id) (sql/where {:users_id uid :events_id eid}))))))
+(defn get-fid [uid eid]
+  (:id (first
+         (sql/select fees (sql/fields :id)
+                     (sql/where {:users_id uid :events_id eid})))))
 
 (defn find-fee [eid uid]
-  (sql/select fees (sql/where {:users_id uid :events_id eid}))
-  )
+  (sql/select fees (sql/where {:users_id uid :events_id eid})))
 
 ; ============================ PRIVATE =======================================
+
+(defn finish
+  ([ename date] (set-status ename date :finished))
+  ([eid] (set-status eid :finished)))
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
     (when (isvalid/payment? eid uid parts)
       (when (> parts 0)
-        (do
-          (shrink-goods eid parts)
-          (dbpay/credit-payment eid uid money)))
+        (println "paying " )
+        (partial-event/shrink-goods eid parts)
+        (dbpay/credit-payment eid uid money))
       (dbpay/debit-payment eid uid money)
-      (if (can-finish? eid)
+      (if (dbpay/can-finish? eid)
         (finish eid))))
 
-(defn- get-fee
-  ([id]
-   (first (sql/select fees (sql/where {:id id}))) ))
+(defn- get-fee [id]
+  (first (sql/select fees (sql/where {:id id}))) )
 
-
-(defn- rm-fee [id] (sql/delete fees (sql/where {:id id})))
+(defn- rm-fee [id]
+  (sql/delete fees (sql/where {:id id})))
 

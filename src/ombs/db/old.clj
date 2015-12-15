@@ -1,4 +1,4 @@
-(ns ombs.dbold
+(ns ombs.db.old
   (:require [korma.db :as kdb]
             [korma.core :as sql]
             [ombs.funcs :as f]
@@ -164,76 +164,9 @@
                                   (sql/where {:id eid} ) )))))
 
   )
-(declare get-rest-parts)
-(declare price-diff)
-(defn can-finish?
-  ([ename date]
-   (zero?
-     (if (zero? (get-parts ename date))
-       (price-diff ename date)
-       (get-rest-parts ename date)
-       )))
-  ([eid]
-   (zero?
-     (if (zero? (get-parts eid))
-       (price-diff eid)
-       (get-rest-parts eid)
-       )))
-  )
-
-(defn- price-diff
-  ([ename date]
-  (reduce -
-          (replace
-            (first (sql/select summary (sql/where {:event ename :date date})))
-            [:debits :credits])))
-  ([eid]
-  (reduce -
-          (replace
-            (first (sql/select summary (sql/where {:eid eid}) ))
-            [:debits :credits])))
-
-  )
-
-(defn finish
-  ([ename date] (set-status ename date :finished))
-  ([eid] (set-status eid :finished))
-  )
 
 (defn event-from-fee [fid]
   (first (sql/select events
                      (sql/with fees
                        (sql/fields)
                        (sql/where {:id fid})))))
-;============================================== GOODS  =================================================
-
-;2 transacts
-(defn add-goods [ename date parts]
-  (sql/insert goods (sql/values {:events_id (get-eid ename date) :rest parts})))
-
-;2 transacts
-(defn get-rest-parts
-  "Return parts, that "
-  ([ename date]
-   (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id (get-eid ename date)})))))
-
-  ([eid]
-   (:rest (first (sql/select goods (sql/fields :rest)
-                             (sql/where {:events_id eid}))))))
-
-;3 transacts
-(defn shrink-goods
-  ([ename date parts]
-   "Sub count parst from database"
-   (sql/update goods (sql/set-fields {:rest (- (get-parts ename date) parts)})
-               (sql/where {:events_id (get-eid ename date)})))
-  ([eid parts]
-   (sql/update goods (sql/set-fields {:rest (- (get-parts eid) parts)})
-               (sql/where {:events_id eid})))
-
-  )
-
-(defn parts-price [eid parts]
-  (* parts (f/part-price (get-price eid) (get-parts eid))))
-

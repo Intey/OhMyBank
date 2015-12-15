@@ -17,7 +17,7 @@
     [noir.session :refer [wrap-noir-session]]
     [noir.validation :refer [wrap-noir-validation]]
     [noir.response :refer [redirect]]
-    [ombs.dbold :refer [get-events]]
+    [ombs.db.old :refer [get-events]]
 
     ; request handlers. Prepare data, and call views.
     [ombs.handler.pages :as pages]

@@ -1,7 +1,7 @@
 (ns ombs.validate
   (:require
     [noir.validation :as vld]
-    [ombs.dbold :as db]
+    [ombs.db.old :as db]
     [ombs.db.payment :as dbp]
     [noir.session :as sess]
     [noir.response :refer [redirect]]

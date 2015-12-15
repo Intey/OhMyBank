@@ -3,7 +3,7 @@
     [net.cgrand.enlive-html :as h]
     [noir.session :as sess]
 
-    [ombs.dbold :as db]
+    [ombs.db.old :as db]
     [ombs.db.payment :as dbp]
 
     [ombs.validate :as vld]

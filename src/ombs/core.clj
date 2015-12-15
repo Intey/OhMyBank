@@ -1,7 +1,7 @@
 (ns ombs.core
   "Contains main logic. No validations. All function hope that you give to it valid data. Use in
   handlers, views, etc. "
-  (:require [ombs.dbold :as db]
+  (:require [ombs.db.old :as db]
             [ombs.db.payment :as dbpay]
             [ombs.db.admin :as db-adm]
             [ombs.funcs :as fns]

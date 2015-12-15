@@ -1,7 +1,8 @@
 (ns ombs.db.payment
   (:require [korma.db :as kdb]
             [korma.core :as sql]
-            [ombs.dbold :refer :all]
+            [ombs.db.old :refer :all]
+            [ombs.db.partial :as partial-event]
             [ombs.funcs :as f]
             ))
 
@@ -67,7 +68,7 @@
 
 (defn calc-fee-money [uid eid parts]
   (if (> parts 0)
-    (parts-price eid parts)
+    (partial-event/parts-price eid parts)
     (get-debt uid eid)) )
 
 (defn create-fee
@@ -101,5 +102,31 @@
 
 (defn free-parts [eid]
   "Return num of parts, that can be payed."
-  (- (f/nil-fix (get-rest-parts eid))
+  (- (f/nil-fix (partial-event/rest-parts eid))
      (f/nil-fix (get-feesed-parts eid))))
+
+(defn- price-diff
+  ([ename date]
+  (reduce -
+          (replace
+            (first (sql/select summary (sql/where {:event ename :date date})))
+            [:debits :credits])))
+  ([eid]
+  (reduce -
+          (replace
+            (first (sql/select summary (sql/where {:eid eid}) ))
+            [:debits :credits])))
+
+  )
+
+(defn can-finish?
+  ([ename date]
+   (zero?
+     (if (zero? (get-parts ename date))
+       (price-diff ename date)
+       (partial-event/rest-parts ename date))))
+  ([eid]
+   (zero?
+     (if (zero? (get-parts eid))
+       (price-diff eid)
+       (partial-event/rest-parts eid)))))

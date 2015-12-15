@@ -2,7 +2,7 @@
   (:require
     [ombs.view.pages :as pages]
     [ombs.view.admin :as admin]
-    [ombs.dbold :as db]
+    [ombs.db.old :as db]
     [ombs.core :as core]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]

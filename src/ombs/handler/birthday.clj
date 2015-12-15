@@ -1,6 +1,6 @@
 (ns ombs.handler.birthday
   (:require
-    [ombs.dbold :as db]
+    [ombs.db.old :as db]
     [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
     [ombs.funcs :as funcs]
