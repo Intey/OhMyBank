@@ -161,9 +161,7 @@
   ([eid]
    (= (statuses :initial)
       (:status (first (sql/select events (sql/fields :status)
-                                  (sql/where {:id eid} ) )))))
-
-  )
+                                  (sql/where {:id eid} )))))))
 
 (defn event-from-fee [fid]
   (first (sql/select events
