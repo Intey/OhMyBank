@@ -38,6 +38,16 @@ section.fees {
     position: relative;
 }
 
+.inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.field {
+    padding: 0 0.1rem 0 0.1rem;
+}
+
+
 /*
 .action::after {
     content: "";
@@ -91,9 +101,11 @@ header > .buttons {
 
 .fee {
     margin: 0.4rem;
+    display: inline-block;
 }
 .fee > * {
     padding: 0.2rem;
+    text-align: center;
 }
 
 @media (max-width: 320px) {

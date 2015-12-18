@@ -22,7 +22,7 @@
     ; request handlers. Prepare data, and call views.
     [ombs.handler.pages :as pages]
     [ombs.handler.eventacts :refer [pay participate start]]
-    [ombs.handler.adminacts :refer [affirm]]
+    [ombs.handler.adminacts :refer [affirm refute]]
     [ombs.handler.addevent :refer [init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
     [ombs.funcs :refer [parse-int]]
@@ -47,6 +47,7 @@
   (GET "/participate" {params :params} (participate params))
   (GET "/pay" {params :params} (pay params))
   (GET "/affirm" {{fid :fid} :params} (affirm fid))
+  (GET "/refute" {{fid :fid} :params} (refute fid))
 
   (ANY "/api/pong" {params :params} (json/generate-string params))
   (GET "/api/events" [_] (json/generate-string (get-events)))

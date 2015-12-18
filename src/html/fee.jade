@@ -1,8 +1,13 @@
 .fee
-  span
-    button.action.affirm.btn(onclick='affirm(this)') Affirm
-  span.user
-  span.money
-  span.event-date
-  span.event-name
-  span.parts
+    div
+        span.pay-date.field
+    div
+        span.money.field
+        span.user.field
+    div
+        span.event-name.field
+    div
+        span.parts.field
+    div
+        button.action.affirm.btn(onclick='affirm(this)') Affirm
+        button.action.refute.btn(onclick='refute(this)') refute

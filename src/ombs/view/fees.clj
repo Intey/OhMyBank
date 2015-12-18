@@ -8,9 +8,9 @@
   [:.fee] (h/set-attr :id id)
   [:.user] (h/content user)
   [:.event-name] (h/content (str event " " edate))
-  [:.event-date] (h/content date)
+  [:.pay-date] (h/content date)
   [:.money] (h/content (str money))
-  [:.parts] (h/content (str parts))
+  [:.parts] (h/content (str "Parts: " parts))
   )
 
 (reload/auto-reload *ns*)

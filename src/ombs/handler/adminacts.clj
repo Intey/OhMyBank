@@ -10,3 +10,9 @@
   (if (isvalid/fee? id)
     (db/affirm id)
     (ch/generate-string {:error (isvalid/errors-string)})))
+
+(defn refute [id]
+  (println "refute " id)
+  (if (isvalid/fee? id)
+    (db/refute id)
+    (ch/generate-string {:error (isvalid/errors-string)})))
