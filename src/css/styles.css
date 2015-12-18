@@ -32,12 +32,6 @@ section.fees {
     padding-top: 0;
 }
 
-.action {
-    min-width: 2em;
-    min-height: 2em;
-    position: relative;
-}
-
 .inline {
     display: inline-block;
     vertical-align: middle;
@@ -46,6 +40,22 @@ section.fees {
 .field {
     padding: 0 0.1rem 0 0.1rem;
 }
+
+.action {
+    min-width: 2rem;
+    min-height: 2rem;
+    position: relative;
+}
+.action > button {
+    display: inline-block;
+}
+
+.parts {
+    width: 3.5rem;
+    display: inline-block;
+}
+
+
 
 
 /*
