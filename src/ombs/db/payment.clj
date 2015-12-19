@@ -109,12 +109,16 @@
   ([ename date]
   (reduce -
           (replace
-            (first (sql/select summary (sql/where {:event ename :date date})))
+            (first (sql/select summary (sql/where {:event ename :date date})
+                               (sql/aggregate (sum :debits) :debits)
+                               (sql/aggregate (sum :credits) :credits)))
             [:debits :credits])))
   ([eid]
   (reduce -
           (replace
-            (first (sql/select summary (sql/where {:eid eid}) ))
+            (first (sql/select summary (sql/where {:eid eid})
+                               (sql/aggregate (sum :debits) :debits)
+                               (sql/aggregate (sum :credits) :credits)))
             [:debits :credits])))
 
   )
