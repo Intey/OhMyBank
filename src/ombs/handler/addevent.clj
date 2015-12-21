@@ -65,4 +65,4 @@
     (addevent-page (db/get-usernames)) ))
 
 (defn- add-participants [{event :name date :date users :participants}]
-  (dorun (map (comp (partial dbpay/add-participant (db/get-eid event date)) db/get-uid) users)))
+  (dorun (map (comp #(dbpay/add-participant % (db/get-eid event date)) db/get-uid) users)))
