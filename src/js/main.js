@@ -7,7 +7,7 @@ var errorHideTime = 4000;
 
 
 function hideParent(self) {
-	$(self).parent().hide("slow");
+    $(self).parent().hide("slow");
 }
 
 
@@ -27,8 +27,8 @@ function setErrorMessage(msg) {
 
 /* If error in response, return true; else - false. */
 function fillErrorOrNull(result) {
-		var err_msg = result.error;
-		if (err_msg) { setErrorMessage(err_msg); return true; }
+        var err_msg = result.error;
+        if (err_msg) { setErrorMessage(err_msg); return true; }
         return false;
 }
 
@@ -50,15 +50,15 @@ function replaceAction(action, new_action) {
 function handleActionResponse(data) {
     replaceAction(this, data);
 
-	if (data) {
-		var result = JSON.parse(data);
+    if (data) {
+        var result = JSON.parse(data);
         var error = fillErrorOrNull(data);
         if ( error ) {
             // some handling...
         }
-	} else {
+    } else {
         setErrorMessage("Internal: Response is empty. Look handlers, Luke.");
-	}
+    }
 }
 
 
@@ -113,9 +113,9 @@ function start(elem) {
 
 
 function pay(elem) {
-	var event = $(elem).parent().parent();
+    var event = $(elem).parent().parent();
     var eid = $(event).attr('id');
-	var parts = parseInt($(event).find('.parts').val());
+    var parts = parseInt($(event).find('.parts').val());
     $.get( '/pay', {eid: eid, parts: parts} ).done( handleActionResponse.bind(elem) );
 }
 
