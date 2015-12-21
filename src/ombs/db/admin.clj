@@ -41,16 +41,15 @@
 (defn find-fee [eid uid]
   (sql/select fees (sql/where {:users_id uid :events_id eid})))
 
-; ============================ PRIVATE =======================================
-
 (defn finish
   ([ename date] (set-status ename date :finished))
   ([eid] (set-status eid :finished)))
 
+; ============================ PRIVATE =======================================
+
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
     (when (isvalid/payment? eid uid parts)
       (when (> parts 0)
-        (println "paying " )
         (partial-event/shrink-goods eid parts)
         (dbpay/credit-payment eid uid money))
       (dbpay/debit-payment eid uid money)

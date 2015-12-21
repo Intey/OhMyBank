@@ -115,8 +115,17 @@
                       (message [:event :unexist])]
                      [(<= parts (+ (dbp/free-parts eid) parts))
                       (message [:pay :wrong-parts])]
-                     ])
-  )
+                     ]))
+(defn fee? [id]
+ (create-validator :pay
+                   [
+                    [(not= nil id)
+                     (message [:fee :unexist])]
+                    [(not (nil? (db/event-from-fee id)))
+                     (message [:event :unexist])]
+                    [(vld/has-value? (sess/get :username))
+                     (message [:user :unexist])]
+                    ]))
 
 (defn parts? [ename date parts]
   (create-validator :pay
@@ -126,12 +135,3 @@
                      ])
   )
 
-(defn fee? [id]
- (create-validator :pay
-                   [
-                    [(not= nil id) (message [:fee :unexist])]
-                    [(not (nil? (db/event-from-fee id))) (message [:event :unexist])]
-                    [(vld/has-value? (sess/get :username)) (message [:user :unexist])]
-                    ]
-                   )
-  )
