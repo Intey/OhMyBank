@@ -1,34 +1,27 @@
-html
-    head
-        // ===========================================
-        block title
-        // ===========================================
-        meta(charset="utf-8")
-        meta('http-equiv' = "X-UA-Compatible", content = "IE=edge")
-        meta(name = "viewport", content = "width=device-width, initial-scale=1")
-        link(rel = "stylesheet", href = "css/bootstrap.min.css")
-        link(href='css/styles.css' rel='stylesheet')
-    body
-        header.flexbox
-            #errorbox.centered.alert.alert-danger
-                .message
-                strong: .description
-                button.btn.btn-sm.btn-danger(onclick = "hideParent(this)") x
-            span Welcome,
-                span#user
-            p: Your summary debt:
-                span(class="debt")
-            .buttons.flexbox
-                form#eventform(methor = "get", action = "/addevent")
-                    input.btn.btn-primary(type = "submit", value = "ADD EVENT")
-                form#logform(methor = "post", action = "/logout")
-                    input.btn.btn-primary(type = "submit", value = "LOGOUT")
-                form#logform(methor = "get", action = "/outmoney")
-                    input.btn.btn-primary(type = "submit", value = "GIMME MONEY")
-        main
-            // ===========================================
-            block main
-            // ===========================================
-        script(src = "/js/jquery-2.1.4.min.js")
-        script(src = "/js/bootstrap.min.js")
-        script(src = "/js/main.js")
+extends ./base.jade
+// ===========================================
+block title
+// ===========================================
+block header
+    header.flexbox
+        #errorbox.centered.alert.alert-danger
+            .message
+            strong: .description
+            button.btn.btn-sm.btn-danger(onclick = "hideParent(this)") x
+        span Welcome,
+            span#user
+        p: Your summary debt:
+            span(class="debt")
+        .buttons.flexbox
+            form#eventform(methor = "get", action = "/addevent")
+                input.btn.btn-primary(type = "submit", value = "ADD EVENT")
+            form#logform(methor = "post", action = "/logout")
+                input.btn.btn-primary(type = "submit", value = "LOGOUT")
+            form#logform(methor = "get", action = "/outmoney")
+                input.btn.btn-primary(type = "submit", value = "GIMME MONEY")
+// ===========================================
+block main
+
+block body
+    script(src = "/js/main.js")
+// ===========================================

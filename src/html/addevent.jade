@@ -1,0 +1,30 @@
+extends ./base.jade
+block title
+    title Adding event
+block main
+    form.form(method = "post" action = "/addevent")
+        .form-group.row
+            label.form-control-label.col-md-2(for = "ename") Event name:
+            .col-md-10
+                input.form-control(id = "ename" type ="text" name ="name" value ="Event name")
+        .form-group.row
+            label.form-control-label.col-md-2(for = "eprice") Event price:
+            .col-md-10
+                input.form-control(id = "eprice" type = "number" name = "price" value = "0")
+        .form-group.row
+            label.form-control-label.col-md-2(for = "edate") Event date
+            .col-md-10
+                input.form-control(id = "edate" type = "date" name = "date" value = "2015-01-01")
+        .form-group.row
+            label.form-control-label.col-md-2 Participants:
+            .users.col-md-10
+                .user.col-md-2.col-sm-4
+                    .checkbox
+                        label
+                            input.userbox(type = "checkbox" class = "userbox" name = "participants")
+        .parts.form-group.row
+            label.form-control-label.col-md-2( for = "parts") Parts:
+            .col-md-10
+                input.form-control(type = "number" min = "1" name = "parts" value = "1")
+
+        button.btn.btn-primary(type = "submit") Create Event

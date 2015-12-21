@@ -48,16 +48,15 @@
 ; ============================= add event page ================================
 
 ; Helpers, for creation list of user for participation
-(def usercheckbox-sel [:.users] )
 
-(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" usercheckbox-sel [{username :name}]
+(h/defsnippet usercheckbox-elem "../resources/public/addevent.html" [:.user] [{username :name}]
   [:.userbox] (h/do->
-                (h/content username)
+                (h/content (str " " username))
                 (h/set-attr :value username)))
 
 (h/deftemplate addevent "../resources/public/addevent.html"
   [users]
-  [:.users] (h/content ( map #(usercheckbox-elem %) users) )
+  [:.users] (h/content (map #(usercheckbox-elem %) users) )
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
   [:#error] (h/content (errors-string)))
 

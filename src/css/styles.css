@@ -37,20 +37,20 @@ section.fees {
     vertical-align: middle;
 }
 
-.field {
+.event .field {
     padding: 0 0.1rem 0 0.1rem;
 }
 
-.action {
+.event .action {
     min-width: 2rem;
     min-height: 2rem;
     position: relative;
 }
-.action > button {
+.event .action > button {
     display: inline-block;
 }
 
-.parts {
+.event .parts {
     width: 3.5rem;
     display: inline-block;
 }
