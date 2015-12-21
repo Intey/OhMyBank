@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Adding event</title>
+</head>
+<body>
+  <div id="error"></div>
+  <form method="post"  action="/addevent">
+        <div>
+        	<label for="ename">Event name:</label> 	
+        	<input id="ename" type="text" name="name" value="Event name"/>
+        </div>
+        <div>
+        	<label for="eprice">Event price:</label>    
+        	<input id="eprice" type="number" name="price" value="0"/>
+        </div>
+        <div>
+        	<label for="edate">Event date:</label>    
+        	<input id="edate" type="date" name="date" value="2015-01-01"/>
+        </div>
+        <label for="participants">Participants:</label>
+        <div class="users">
+        	<input type="checkbox" class="userbox" name="participants"></input>
+        </div>
+        <label for="parts">Parts:</label>
+        <div class="parts">
+            <input type="number" min="1" name="parts"></input>
+        </div>
+        
+        <input type="submit" value="Add it"/>
+    </form>
+</body>
+</html>
