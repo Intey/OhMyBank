@@ -4,22 +4,26 @@ block title
 block header
 
 block main
-    p#uname
     p#error
     form(method="post" action="/register")
-        .form-group.row
-          label(for="username") Name:
-              input(type="text" id="username" name="username")
-        .form-group.row
-            label(for="birthdate") Birth date:
-                input(type="date" id="birthdate" name="birthdate")
-        .form-group.row
-            label(for="password1") Password:
-                input(type="password" id="pass1" name="password1")
-        .form-group.row
-            label(for="password2") One more time:
-                input(type="password" id="pass2" name="password2")
-        .form-group.row
-            label(for="student-flag") Student?
-                input(type="checkbox" id="student-flag" name="student-flag")
-        button.btn.btn-primary(type="submit")
+        .form-group.row.col-md-12
+            label.form-control-label.col-md-2(for="username") Name:
+            .col-md-10
+                input.form-control(type="text" id="username" name="username")
+        .form-group.row.col-md-12
+            label.form-control-label.col-md-2(for="birthdate") Birth date:
+            .col-md-10
+                input.form-control(type="date" id="birthdate" name="birthdate")
+        .form-group.row.col-md-12
+            label.form-control-label.col-md-2(for="password1") Password:
+            .col-md-10
+                input.form-control(type="password" id="pass1" name="password1")
+        .form-group.row.col-md-12
+            label.form-control-label.col-md-2(for="password2") One more time:
+            .col-md-10
+                input.form-control(type="password" id="pass2" name="password2")
+        .form-group.row.col-md-12
+            label.form-control-label.col-md-2(for="student-flag") Student?
+            .col-md-10
+                input.form-control.checkbox(type="checkbox" id="student-flag" name="student-flag")
+        button.btn.btn-primary(type="submit") Log up
