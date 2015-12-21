@@ -100,15 +100,6 @@ header > .buttons {
     margin: 0.5rem;
 }
 
-.event {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: .4rem;
-    padding: 0.1rem;
-    width: 9rem;
-}
-
 .fee {
     margin: 0.4rem;
     display: inline-block;
@@ -116,6 +107,20 @@ header > .buttons {
 .fee > * {
     padding: 0.2rem;
     text-align: center;
+}
+
+
+.event {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: .4rem;
+    padding: 0.1rem;
+    width: 15rem;
+}
+
+.event > * {
+    padding: .5rem 1rem 1rem 1rem;
 }
 
 @media (max-width: 320px) {
