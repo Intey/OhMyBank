@@ -12,9 +12,9 @@
 
 (defn user []
   (if-let [username (sess/get :username)]
-    
-    (if (= 1 (core/get-role username))
-      (admin/page username) 
+
+    (if (db/admin? username)
+      (admin/page username)
       (pages/user username))
     (redirect "/")))
 

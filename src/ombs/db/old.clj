@@ -44,7 +44,7 @@
 ;   In-progress - Collecting money! Not full sum payed.
 ;   Finished - closed.
 (def statuses {:initial "initial" :finished "finished" :in-progress "in-progress"})
-
+(def admin-role-value 0)
 (defn status-vector [ st ]
   (if (vector? st)
     (mapv #(% statuses) st)
@@ -75,6 +75,12 @@
 
 (defn get-rates [usernames] (map #(get-rate %) usernames))
 
+(defn admin? [username] (->
+                          (sql/select users (sql/where {:name username :role admin-role-value}))
+                          first
+                          nil?
+                          not
+                          ))
 
 ;============================================== EVENT =================================================
 ; (defrecord Event [name date price author status] )

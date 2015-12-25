@@ -29,10 +29,6 @@
               (sql/with users  (sql/fields [:name :user]))
               (sql/with events (sql/fields [:name :event] [:date :edate]))))
 
-(defn get-role [uid]
-  (:role (first
-           (sql/select users (sql/where {:id uid}) (sql/fields :role)))))
-
 (defn get-fid [uid eid]
   (:id (first
          (sql/select fees (sql/fields :id)

@@ -53,9 +53,6 @@
 (defn participants-count [ename date]
   (count (dbpay/get-participants ename date)))
 
-(defn get-role [username]
-  (db-adm/get-role (db/get-uid username)))
-
 (defn fee-exist? [eid uid]
   (not (empty? (db-adm/find-fee eid uid))))
 
