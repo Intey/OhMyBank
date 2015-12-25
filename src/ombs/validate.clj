@@ -58,9 +58,10 @@
   )
 
 (defmacro create-validator
-  "Create validation block, start with clearing errors, followed by create-rule calls for each ve-pairs.
-  ve-pairs is validator-error-pairs(vector) where first is function(rule that returns boolean), and second is error message, that was appends
-  in vld errors vector, when rule fails."
+  "Create validation block, start with clearing errors, followed by create-rule
+  calls for each ve-pairs.  ve-pairs is validator-error-pairs(vector) where
+  first is function(rule that returns boolean), and second is error message,
+  that was appends in vld errors vector, when rule fails."
   [tag ve-pairs]
   `(do
      ;(vld/clear-errors!)
