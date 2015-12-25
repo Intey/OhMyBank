@@ -77,10 +77,7 @@
 
 (defn admin? [username] (->
                           (sql/select users (sql/where {:name username :role admin-role-value}))
-                          first
-                          nil?
-                          not
-                          ))
+                          first nil?  not))
 
 ;============================================== EVENT =================================================
 ; (defrecord Event [name date price author status] )
