@@ -1,6 +1,13 @@
 #!/bin/bash
 
-# add merge
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=$1
+
 echo "compiling JS."
-cp $DIR"/../src/js/main.js" $DIR"/../resources/public/js/main.js"
+
+#TODO add merge
+files=($(find "$DIR/../src/js" -iname "*.js"))
+for f in ${files[@]}; do
+    bname=$(basename $f)
+    echo "cp $f ⇒ resources/public/js/$bname"
+    cp $f "$DIR/../resources/public/js/$bname"
+done

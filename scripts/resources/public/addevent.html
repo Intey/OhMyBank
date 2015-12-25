@@ -1,0 +1,61 @@
+
+<html>
+  <head>
+    <!-- ===========================================-->
+    <title>Adding event</title>
+    <!-- ===========================================-->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link href="css/styles.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <main>
+      <!-- ===========================================-->
+      <form method="post" action="/addevent" class="form">
+        <div class="form-group row">
+          <label for="ename" class="form-control-label col-md-2">Event name:</label>
+          <div class="col-md-10">
+            <input id="ename" type="text" name="name" value="Event name" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="eprice" class="form-control-label col-md-2">Event price:</label>
+          <div class="col-md-10">
+            <input id="eprice" type="number" name="price" value="0" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="edate" class="form-control-label col-md-2">Event date</label>
+          <div class="col-md-10">
+            <input id="edate" type="date" name="date" value="2015-01-01" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="form-control-label col-md-2">Participants:</label>
+          <div class="users col-md-10">
+            <div class="user col-md-2 col-sm-4">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="participants" class="userbox userbox"/>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="parts form-group row">
+          <label for="parts" class="form-control-label col-md-2">Parts:</label>
+          <div class="col-md-10">
+            <input type="number" min="0" name="parts" value="0" class="form-control"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Event</button>
+      </form>
+      <!-- ===========================================-->
+    </main>
+    <footer></footer>
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>
