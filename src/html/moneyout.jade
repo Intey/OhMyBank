@@ -6,9 +6,9 @@ block header
 
 block main
     form
-        select.form-control.users(name ="target[]")
+        select.form-control.users(name = "target[]" onchange = "update(this)")
             option
-        input.balance(type="number", value="0")
+        input.balance(type = "number", value = "0")
         button(type="submit")
 
 block scripts
