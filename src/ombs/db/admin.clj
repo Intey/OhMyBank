@@ -3,11 +3,11 @@
             [korma.db :as kdb]
             [ombs.db.payment :as dbpay]
             [ombs.db.partial :as partial-event]
-            [korma.core :as sql]
-            [noir.session :as sess]
             [ombs.db.old :refer :all] ; for entity
             [ombs.validate :as isvalid]
             [ombs.funcs :as fns]
+            [noir.session :as sess]
+            [korma.core :as sql]
             ))
 
 (declare rm-fee)
