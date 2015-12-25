@@ -7,4 +7,5 @@ DROP TABLE goods;
 DROP VIEW participants;
 DROP VIEW summary;
 DROP VIEW debts;
+DROP VIEW balances;
 

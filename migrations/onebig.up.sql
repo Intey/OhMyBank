@@ -17,7 +17,7 @@ CREATE TABLE users(
     [bdate] DATE NOT NULL,
     [rate] DOUBLE NOT NULL DEFAULT 1,
     [balance] DOUBLE NOT NULL DEFAULT 0,
-    -- 1 is default user, 0 is admin 
+    -- 1 is default user, 0 is admin
     [role] INTEGER NOT NULL DEFAULT 1);
 
 CREATE TABLE pays(
@@ -50,7 +50,7 @@ CREATE TABLE goods(
 
 CREATE VIEW participants
     AS
-    SELECT u.id uid, u.name user, e.name event, e.date [date], e.id eid 
+    SELECT u.id uid, u.name user, e.name event, e.date [date], e.id eid
     FROM participation p
     LEFT JOIN events e
     ON e.id = p.events_id
@@ -59,16 +59,24 @@ CREATE VIEW participants
 
 
 CREATE VIEW summary
-    AS 
+    AS
     SELECT e.id eid, u.id uid, e.name event, e.date, e.price, u.name user, sum(debit) debits, sum(credit) credits
     FROM events e
-    JOIN pays p 
+    JOIN pays p
     ON e.id = p.events_id
     LEFT JOIN users u
     ON u.id = p.users_id
     group by p.events_id, p.users_id;
 
 CREATE VIEW debts
-    AS 
+    AS
     SELECT eid, uid, event, user, [date], credits - debits debt
     FROM summary;
+
+CREATE VIEW balances
+    AS
+    SELECT u.name, COALESCE(sum(p.debit)-sum(p.credit),0) balance
+    FROM users u LEFT JOIN pays p
+    ON u.id = p.users_id
+    GROUP BY u.name;
+    ;

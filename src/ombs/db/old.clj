@@ -33,9 +33,11 @@
 (sql/defentity goods
   (sql/has-many events {:fk :events_id}))
 
+; DATA VIEWS
 (sql/defentity summary)
 (sql/defentity debts)
-
+(sql/defentity balances)
+;FIXME: delete one
 (sql/defentity participation)
 (sql/defentity participants)
 
@@ -62,6 +64,10 @@
   (first (sql/select users (sql/fields :name :bdate :balance :rate :password)
            (sql/where (= :name uname))
            (sql/limit 1))))
+
+(defn get-users []
+  "Get usernames and their balances"
+  (sql/select balances))
 
 (defn get-uid [uname]
   (:id (first (sql/select users (sql/fields :id)

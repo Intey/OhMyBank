@@ -1,11 +1,12 @@
 (ns ombs.view.pages
   (:require
-    [net.cgrand.enlive-html :as h]
-    [net.cgrand.reload :as reload]
-    [noir.session :as sess]
     [ombs.validate :refer [errors-string]]
     [ombs.core :as core]
     [ombs.view.event :refer [event-elem]]
+    [ombs.db.old :as db]
+    [net.cgrand.enlive-html :as h]
+    [net.cgrand.reload :as reload]
+    [noir.session :as sess]
     [clj-time.format :refer [formatter unparse]]
     [clj-time.local :refer [local-now]]
     [clj-time.core :refer [date-time]]
@@ -60,4 +61,12 @@
   [:#edate] (h/set-attr :value (unparse (formatter "YYYY-MM-dd") (local-now) ) )
   [:#error] (h/content (errors-string)))
 
+; =========================== money out page ==================================
+(h/defsnippet user-select-option "../resources/public/moneyout.html" [:.users :> :option] [user]
+  [:option] (comp (h/set-attr :value (:name user)) (h/set-attr :data-balance (:balance user)) (h/content (:name user))))
+
+(h/deftemplate moneyout "../resources/public/moneyout.html" []
+  [:.users] (h/content (map #(user-select-option %) (db/get-users)))
+  )
+; =============================================================================
 (reload/auto-reload *ns*)

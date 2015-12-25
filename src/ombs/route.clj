@@ -41,15 +41,21 @@
   (GET "/addevent" [_] (pages/addevent))
   (POST "/addevent" {params :params} (init-event params))
 
+  (GET "/moneyout" [_] (pages/moneyout))
+
   (GET  "/user" [_] (pages/user))
 
   (GET "/start" {params :params} (start params))
   (GET "/participate" {params :params} (participate params))
   (GET "/pay" {params :params} (pay params))
+
+  ; Like REST API
   (GET "/affirm" {{fid :fid} :params} (affirm fid))
   (GET "/refute" {{fid :fid} :params} (refute fid))
 
+  ; Just test tool
   (ANY "/api/pong" {params :params} (json/generate-string params))
+
   (GET "/api/events" [_] (json/generate-string (get-events)))
 
   (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
