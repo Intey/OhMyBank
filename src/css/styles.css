@@ -123,6 +123,13 @@ header > .buttons {
     padding: .5rem 1rem 1rem 1rem;
 }
 
+/* Div with form on moneyout page. */
+.userform {
+    text-align: center;
+    margin: 2rem auto 1rem auto;
+    padding: 1rem;
+}
+
 @media (max-width: 320px) {
 .event {
     display: flex;
@@ -131,6 +138,4 @@ header > .buttons {
     margin: .4rem;
     width: 7rem;
 }
-
-
 }

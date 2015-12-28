@@ -67,7 +67,7 @@
 
 (defn get-users []
   "Get usernames and their balances"
-  (sql/select balances))
+  (sql/select balances (sql/where (< 0 :balance))))
 
 (defn get-uid [uname]
   (:id (first (sql/select users (sql/fields :id)

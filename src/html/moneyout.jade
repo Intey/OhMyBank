@@ -5,11 +5,12 @@ block title
 block header
 
 block main
-    form
-        select.form-control.users(name = "target[]" onchange = "update(this)")
-            option
-        input.balance(type = "number", value = "0")
-        button(type="submit")
+    .userform.card
+        form(method = "post" action = "/moneyout")
+            select.form-control.users(name = "target" onchange = "update(this)")
+                option
+            input.balance(name = "money" type = "number" value = "0")
+            button(type="submit") Spended!
 
 block scripts
     script(src = "/js/balance-updater.js")

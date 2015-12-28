@@ -62,11 +62,19 @@
   [:#error] (h/content (errors-string)))
 
 ; =========================== money out page ==================================
+
 (h/defsnippet user-select-option "../resources/public/moneyout.html" [:.users :> :option] [user]
   [:option] (comp (h/set-attr :value (:name user)) (h/set-attr :data-balance (:balance user)) (h/content (:name user))))
 
+(defn fill-users[users]
+  "Return func, that fills users. If no any user given return func that produce
+  'We do not owe' message"
+  (if (> 0 (count users))
+    (h/content (map #(user-select-option %) users))
+    (h/content "We do not owe! Hooray!")
+    ))
+
 (h/deftemplate moneyout "../resources/public/moneyout.html" []
-  [:.users] (h/content (map #(user-select-option %) (db/get-users)))
-  )
+  [:.userform] (fill-users (db/get-users)))
 ; =============================================================================
 (reload/auto-reload *ns*)
