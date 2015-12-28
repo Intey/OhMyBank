@@ -42,6 +42,7 @@
   (POST "/addevent" {params :params} (init-event params))
 
   (GET "/moneyout" [_] (pages/moneyout))
+  (POST "/moneyout" {params :params} (json/generate-string params))
 
   (GET  "/user" [_] (pages/user))
 
