@@ -26,6 +26,8 @@
   "Main function for creating new event."
   (if (isvalid/new-event? event price date)
     (do
+      (dbpay/debit-payment (db/get-eid event date) (sess/get :username)
+                           (read-string price))
       (if (zero? (funcs/parse-int parts))
         (add-solid-event params)
         (add-partial-event (update params :parts funcs/parse-int)))
