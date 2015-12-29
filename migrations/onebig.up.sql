@@ -16,7 +16,6 @@ CREATE TABLE users(
     [password] varchar(40) NOT NULL,
     [bdate] DATE NOT NULL,
     [rate] DOUBLE NOT NULL DEFAULT 1,
-    [balance] DOUBLE NOT NULL DEFAULT 0,
     -- 1 is default user, 0 is admin
     [role] INTEGER NOT NULL DEFAULT 1);
 
@@ -75,7 +74,7 @@ CREATE VIEW debts
 
 CREATE VIEW balances
     AS
-    SELECT u.name, COALESCE(sum(p.debit)-sum(p.credit),0) balance
+    SELECT u.*, COALESCE(sum(p.debit)-sum(p.credit),0) balance
     FROM users u LEFT JOIN pays p
     ON u.id = p.users_id
     GROUP BY u.name;

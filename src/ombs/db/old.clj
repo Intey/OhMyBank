@@ -61,9 +61,8 @@
 
 (defn get-user [uname]
   "Return map of user info"
-  (first (sql/select users (sql/fields :name :bdate :balance :rate :password)
-           (sql/where (= :name uname))
-           (sql/limit 1))))
+  (first (sql/select balances (sql/where (= :name uname))
+                     (sql/limit 1))))
 
 (defn get-users []
   "Get usernames and their balances"
