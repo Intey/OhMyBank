@@ -139,10 +139,9 @@
               (sql/where (not= :status (statuses :finished)))))
 
 (defn get-event
-  ([ename date] get-event (get-eid ename date))
-  ([eid] (first (sql/select events (sql/where {:id eid}))))
+  ([ename date] (get-event (get-eid ename date)))
+  ([eid] (sql/select events (sql/where {:id eid})))
   )
-
 
 (defn get-price
   ([ename date]
