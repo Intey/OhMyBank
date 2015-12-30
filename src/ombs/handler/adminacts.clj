@@ -23,5 +23,5 @@
   (println "moneyout " username " " money)
   (let [uid (db/get-uid username)]
     (if (isvalid/moneyout? uid money)
-      (dbpay/credit-payment uid db/moeid money)
+      (dbp/credit-payment uid db/moeid money)
       (ch/generate-string {:error (isvalid/errors-string)}))))
