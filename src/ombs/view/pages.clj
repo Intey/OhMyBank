@@ -66,11 +66,14 @@
 (h/defsnippet user-select-option "../resources/public/moneyout.html" [:.users :> :option] [user]
   [:option] (comp (h/set-attr :value (:name user)) (h/set-attr :data-balance (:balance user)) (h/content (:name user))))
 
+(h/defsnippet form "../resources/public/moneyout.html" [:.userform] [users]
+ [:.users] (h/content (map #(user-select-option %) users)))
+
 (defn fill-users[users]
   "Return func, that fills users. If no any user given return func that produce
   'We do not owe' message"
-  (if (> 0 (count users))
-    (h/content (map #(user-select-option %) users))
+  (if (< 0 (count users))
+    (h/substitute (form users))
     (h/content "We do not owe! Hooray!")
     ))
 
