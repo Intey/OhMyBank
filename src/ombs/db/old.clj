@@ -47,6 +47,9 @@
 ;   Finished - closed.
 (def statuses {:initial "initial" :finished "finished" :in-progress "in-progress"})
 (def admin-role-value 0)
+; money out 'event id'
+(def moeid -1)
+
 (defn status-vector [ st ]
   (if (vector? st)
     (mapv #(% statuses) st)
