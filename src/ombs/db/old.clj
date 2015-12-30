@@ -110,21 +110,23 @@
               (sql/where {:id eid}))))
 
 (declare subtract-feesed-parts)
-(defn get-events [status]
-  "Return list of events, and it actual count of event"
-  ; Then we update each event elent: substract from each event count of parts,
-  ; that hang in fees.
-  ; Some events haven't parts, and after join it's have nil parts. So we need
-  ; fix before substract.
-  (map
-    #(update % :rest
-             (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
-    ; First of all, we select events from it table and join for each
-    ; rest(actual) parts.
-    (sql/select events
-                (sql/fields :id :name :date :price :author :status :parts)
-                (sql/where {:status [in (status-vector status)]})
-                (sql/with goods (sql/fields :rest)))))
+(defn get-events
+  ([] (get-events [:initial :in-progress :finished]))
+  ([status]
+   "Return list of events, and it actual count of event"
+   ; Then we update each event elent: substract from each event count of parts,
+   ; that hang in fees.
+   ; Some events haven't parts, and after join it's have nil parts. So we need
+   ; fix before substract.
+   (map
+     #(update % :rest
+              (comp (partial subtract-feesed-parts (:id %)) f/nil-fix))
+     ; First of all, we select events from it table and join for each
+     ; rest(actual) parts.
+     (sql/select events
+                 (sql/fields :id :name :date :price :author :status :parts)
+                 (sql/where {:status [in (status-vector status)]})
+                 (sql/with goods (sql/fields :rest))))))
 
 (defn subtract-feesed-parts [eid parts]
   "Substract from given parts, founded parts in active(all) fees."
