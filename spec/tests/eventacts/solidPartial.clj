@@ -2,7 +2,7 @@
   (:require [tests.test :refer :all]
             [clojure.java.shell :refer [sh]]
             [speclj.core :as spec]
-            [ombs.dbold :as db]
+            [ombs.db.old :as db]
             [ombs.db.admin :as dba]
             [ombs.db.payment :as dbp]
             [ombs.core :as core]
@@ -38,7 +38,7 @@
                (spec/context "partial event(without parts)"
                              (spec/it "is HIDDEN, when user NOT participate event"
                                       (spec/should-not (dbp/can-pay? uid eid-partial))
-                                      (spec/should (= 8 (db/get-rest-parts eid-partial))) 
+                                      (spec/should (= 8 (db/get-parts eid-partial)))
                                       )
 
                              (spec/it "is VISIBLE, when user participated and NOT create fee (not press pay)"
@@ -58,7 +58,7 @@
 
                              (spec/it "is HIDDEN, when all parts is in fees & pays"
                                       (dbp/create-fee uid eid-partial 4)
-                                      (spec/should-not (dbp/can-pay? uid eid-partial)) 
+                                      (spec/should-not (dbp/can-pay? uid eid-partial))
                                       )
 
                              (spec/it "is HIDDEN, after admin confirm user fee (8/8 parts)"
