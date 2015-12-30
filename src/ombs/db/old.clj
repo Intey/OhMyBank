@@ -143,8 +143,7 @@
 
 (defn get-event
   ([ename date] (get-event (get-eid ename date)))
-  ([eid] (first (sql/select events (sql/where {:id eid}))))
-  )
+  ([eid] (first (sql/select events (sql/where {:id eid})))))
 
 (defn get-price
   ([ename date]
