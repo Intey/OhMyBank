@@ -30,5 +30,5 @@
 (defn part-price [event-price parts] (/ event-price parts))
 
 (defn with-log [f]
-  (print f)
+  (println (f))
   (f))
