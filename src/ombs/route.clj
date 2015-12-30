@@ -17,7 +17,7 @@
     [noir.session :refer [wrap-noir-session]]
     [noir.validation :refer [wrap-noir-validation]]
     [noir.response :refer [redirect]]
-    [ombs.db.old :refer [get-events]]
+    ;[ombs.db.old :refer [get-events]]
 
     ; request handlers. Prepare data, and call views.
     [ombs.handler.pages :as pages]
@@ -25,6 +25,7 @@
     [ombs.handler.adminacts :refer [affirm refute moneyout]]
     [ombs.handler.addevent :refer [init-event]]
     [ombs.handler.auth :refer [login logout register reg-page]]
+    [ombs.handler.api :as api]
     [ombs.funcs :refer [parse-int]]
     ))
 
@@ -57,7 +58,9 @@
   ; Just test tool
   (ANY "/api/pong" {params :params} (json/generate-string params))
 
-  (GET "/api/events" [_] (json/generate-string (get-events)))
+  (GET "/api/help" [_] (api/help))
+  (GET "/api/events" {{types :types} :params} (api/get-events types))
+
 
   (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
   (not-found "Page not found")
