@@ -79,5 +79,8 @@
 
 (h/deftemplate moneyout "../resources/public/moneyout.html" []
   [:.userform] (fill-users (db/get-users)))
+
+(h/deftemplate barcheck "../resources/public/barcheck.html" [])
+
 ; =============================================================================
 (reload/auto-reload *ns*)

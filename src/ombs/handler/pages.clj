@@ -27,3 +27,5 @@
   (if (db/admin? (sess/get :username)) ; check if we stay on it
     (pages/moneyout)
     (redirect "/")))
+
+(defn barcheck [] (pages/barcheck))

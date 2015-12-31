@@ -61,6 +61,7 @@
   (GET "/api/help" [_] (api/help))
   (GET "/api/events" {{types :types} :params} (api/get-events types))
 
+  (GET "/barcheck" [] (pages/barcheck))
 
   (resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
   (not-found "Page not found")
