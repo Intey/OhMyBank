@@ -2,6 +2,7 @@
   (:require
     [clojure.string :as s]
     [ombs.db.old :as db]
+    [ombs.db.barcheck :as dbb]
     [ombs.db.payment :as dbp]
     [cheshire.core :as json]
     [ombs.funcs :refer [with-log]]
@@ -22,3 +23,5 @@
   (if-let [parsed (json/parse-string types true)]
     (db/get-events (mapv keyword parsed)))
   (db/get-events))
+
+(defn get-barcheck [date] (dbb/get-barcheck date))
