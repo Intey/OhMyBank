@@ -1,15 +1,15 @@
 #!/bin/bash
 
 DIR=$1
-
+SRC="$DIR/../src/js"
+DEST="$DIR/../resources/public/js"
 echo "compiling JS."
 
-#TODO add merge
-files=($(find "$DIR/../src/js" -iname "*.js"))
+files=($(find $SRC -iname "*.js"))
 for f in ${files[@]}; do
-    bname=$(basename $f)
-    echo "cp $f ⇒ resources/public/js/$bname"
-    cp $f "$DIR/../resources/public/js/$bname"
+    fname=$(basename $f)
+    echo "cp $f ⇒ resources/public/js/$fname"
+    cp $f $DEST"/$fname"
 done
 
-browserify -t [ babelify --presets [ react ] ] $SRC"/components.js" -o $DEST"/components.js" > /dev/stdout
+browserify -t [ babelify --presets [ react ] ] $SRC"/jsx/components.jsx" -o $DEST"/components.js" > /dev/stdout
