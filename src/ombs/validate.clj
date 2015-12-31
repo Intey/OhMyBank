@@ -27,6 +27,7 @@
           :empty-name "Username can't be empty"
           :not-found "User not found"
           :unexist "Username %s doesn't exists"
+          :low-balance "User %s doesn't have enough money"
           }
    :login {
            :invalid "Incorrect Login or password"
@@ -36,7 +37,9 @@
          }
    :pay {
          :wrong-parts "Parts count %s is greater that we have."
+         :wrong-money "Money should be > 0"
          }
+
    }
   )
 
@@ -133,6 +136,15 @@
                     [ ; FIXME: free-parts include parts from currect fee
                      [(<= parts (+ (dbp/free-parts ename date) parts))
                       (message [:event :parts-count])]
-                     ])
+                     ]))
+
+(defn moneyout? [username money]
+  (create-validator :admin
+                    [
+                     [(nil? (db/get-user username)) (message [:user :unexist])]
+                     [(< 0 money) (message [:pay :wrong-money])]
+                     [(<= money (:balance (db/get-user username))) (message [:user :low-balance] username)]
+                     ]
+                    )
   )
 

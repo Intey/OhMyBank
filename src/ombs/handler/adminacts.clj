@@ -2,7 +2,7 @@
   (require
     [ombs.db.old :as db]
     [ombs.db.admin :as dba]
-    [ombs.db.payment : as dbp]
+    [ombs.db.payment :as dbp]
     [ombs.validate :as isvalid]
     [cheshire.core :as ch]
     ))
@@ -19,6 +19,9 @@
     (dba/refute id)
     (ch/generate-string {:error (isvalid/errors-string)})))
 
-(defn moneyout [uid money]
-  (dbpay/credit-payment uid db/moeid money)
-  )
+(defn moneyout [username money]
+  (println "moneyout " username " " money)
+  (let [uid (db/get-uid username)]
+    (if (isvalid/moneyout? uid money)
+      (dbpay/credit-payment uid db/moeid money)
+      (ch/generate-string {:error (isvalid/errors-string)}))))
