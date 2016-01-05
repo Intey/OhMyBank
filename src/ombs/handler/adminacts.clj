@@ -15,9 +15,8 @@
 
 (defn refute [id]
   (println "refute " id)
-  (if (isvalid/fee? id)
-    (dba/refute id)
-    (ch/generate-string {:error (isvalid/errors-string)})))
+  (dba/refute id)
+  (ch/generate-string {:ok (str "removed fee " id)}))
 
 (defn moneyout [username money]
   (println "moneyout " username " " money)

@@ -44,13 +44,11 @@
 ; ============================ PRIVATE =======================================
 
 (defn- write-pay [{eid :events_id uid :users_id parts :parts money :money}]
-    (when (isvalid/payment? eid uid parts)
-      (when (> parts 0)
-        (partial-event/shrink-goods eid parts)
-        (dbpay/credit-payment eid uid money))
-      (dbpay/debit-payment eid uid money)
-      (if (dbpay/can-finish? eid)
-        (finish eid))))
+  (when (> parts 0)
+    (partial-event/shrink-goods eid parts)
+    (dbpay/credit-payment eid uid money))
+  (dbpay/debit-payment eid uid money)
+  (when (dbpay/can-finish? eid) (finish eid)))
 
 (defn- get-fee [id]
   (first (sql/select fees (sql/where {:id id}))) )
