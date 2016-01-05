@@ -56,6 +56,8 @@
 
 (defn errors? [] (vld/errors?))
 
+(defn add-error [tag text] (vld/set-error! tag text))
+
 (defmacro create-rule [tag [validator msg]]
   `(vld/rule ~@(list validator) [~tag ~msg] )
   )
@@ -72,42 +74,53 @@
      (not (vld/errors? ~tag)))
   )
 
-(defn add-error [tag text] (vld/set-error! tag text))
+(defn rule [[validator msg]]
+   (if-not validator
+     msg
+     nil))
 
-(defn new-event? [eventname price date]
-  (create-validator :event
-                    [
-                     [ (vld/has-value? eventname)              (message [:event :empty-name])      ]
-                     [ (vld/greater-than? price 0)             (message [:event :zero-price])      ]
-                     [ (vld/has-value? date)                   (message [:event :empty-date])      ]
-                     [ (empty? (db/get-event eventname date))  (message [:event :duplicate-event]) ]
-                     ]))
 
-(defn new-user? [username pass1 pass2]
-  (create-validator :register
-                    [
-                     [(vld/has-value? username) (message [:user :empty-name])]
-                     [(>= (count pass1) 8) (message [:register :short-pass])]
-                     [(= pass1 pass2) (message [:register :notmatch-pass])]
-                     [(empty? (db/get-user username)) (message [:user :unexist]) ]
-                     ]))
-
-(defn login? [username password]
-  (create-validator :login
-                    [[ (vld/has-value? username) (message [:user :empty-name])]
-                     [ (vld/has-value? (db/get-user username)) (message [:user :invalid])]
-                     [ (= password (:password (db/get-user username))) (message [:login :invalid])]
-                     ])
+(cond-> {}
+  false (msg-insert :e "First")
+  false (msg-insert :e "Second")
+  true (msg-insert :f "Third")
+  false (msg-insert :d "ERoror")
+  true (msg-insert :f (message [:event :empty-name]))
   )
 
+
+
+(defn msg-insert [coll tag msg]
+  (update coll tag #(vec (conj % msg)))
+  )
+
+(defn new-event? [eventname price date]
+  (cond-> {}
+    (vld/has-value? eventname)              (msg-insert :event (message [:event :empty-name]))
+    (vld/greater-than? price 0)             (msg-insert :event (message [:event :zero-price]))
+    (vld/has-value? date)                   (msg-insert :event (message [:event :empty-date]))
+    (empty? (db/get-event eventname date))  (msg-insert :event (message [:event :duplicate-event]))))
+
+(defn new-user? [username pass1 pass2]
+  (cond-> {}
+    (vld/has-value? username)       (msg-insert :login (message [:user :empty-name]))
+    (>= (count pass1) 8)            (msg-insert :login (message [:register :short-pass]))
+    (= pass1 pass2)                 (msg-insert :login (message [:register :notmatch-pass]))
+    (empty? (db/get-user username)) (msg-insert :login (message [:user :unexist]))
+    ))
+
+(defn login? [username password]
+  (cond-> {}
+    (vld/has-value? username)                       (msg-insert :login (message [:user :empty-name]))
+    (vld/has-value? (db/get-user username))         (msg-insert :login (message [:user :invalid]))
+    (= password (:password (db/get-user username))) (msg-insert :login (message [:login :invalid]))
+    ))
+
 (defn participation? [eid]
-  (create-validator :participation
-                    [
-                     [(not= (db/get-status eid) (db/statuses :finished))
-                      (message [:event :finished])]
-                     [(not= "" (:name (db/get-event eid)))
-                      (message [:event :unexist])]
-                     ]))
+  (cond-> {}
+    (not= (db/get-status eid) (db/statuses :finished)) (msg-insert :participation (message [:event :finished]))
+    (not= "" (:name (db/get-event eid)))               (msg-insert :participation (message [:event :unexist]))
+                     ))
 
 (defn payment? [eid uid parts]
   "Check, if id's is correct. Used with (db/get-*id)"
