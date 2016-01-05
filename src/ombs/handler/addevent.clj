@@ -41,26 +41,18 @@
                           users :participants
                           :as params} ]
   "Add event in events table, with adding participants, and calculating debts."
-  (if (isvalid/new-event? event price date)
-    (do
-      (db/add-event event (read-string price) (sess/get :username) date)
-      (if (> (count users) 0)
-        (let [party-pay (core/party-pay (funcs/parse-int price) users)]
-          ;use 'dorun' for execute lazy function 'db/credit-payment'
-          (dorun (map #(dbpay/credit-payment (db/get-eid event date) (db/get-uid %) party-pay)
-                      (funcs/as-vec users))))) ; may have only one user, so create vec
-      true) ; all is ok
-    false)) ; validation fail
+  (db/add-event event (read-string price) (sess/get :username) date)
+  (if (> (count users) 0)
+    (let [party-pay (core/party-pay (funcs/parse-int price) users)]
+      ;use 'dorun' for execute lazy function 'db/credit-payment'
+      (dorun (map #(dbpay/credit-payment (db/get-eid event date) (db/get-uid %) party-pay)
+                  (funcs/as-vec users)))))); may have only one user, so create vec
 
 (defn- add-partial-event [{event :name price :price date :date parts :parts
                            users :participants
                            :as params}]
-  (if (isvalid/new-event? event price date)
-    (do
-      (db/add-event event (funcs/parse-int price) (sess/get :username) date parts)
-      (add-good params)
-      true)
-    false))
+  (db/add-event event (funcs/parse-int price) (sess/get :username) date parts)
+  (add-good params))
 
 (defn- add-good [ {event :name price :price date :date users :participants parts :parts :as params} ]
   (if (partial-event/add-goods event date parts)
