@@ -74,46 +74,29 @@
      (not (vld/errors? ~tag)))
   )
 
-(defn rule [[validator msg]]
-   (if-not validator
-     msg
-     nil))
-
-
-(cond-> {}
-  false (msg-insert :e "First")
-  false (msg-insert :e "Second")
-  true (msg-insert :f "Third")
-  false (msg-insert :d "ERoror")
-  true (msg-insert :f (message [:event :empty-name]))
-  )
-
-
-
 (defn msg-insert [coll tag msg]
-  (update coll tag #(vec (conj % msg)))
-  )
+  (update coll tag #(vec (conj % msg))))
 
 (defn new-event? [eventname price date]
   (cond-> {}
-    (vld/has-value? eventname)              (msg-insert :event (message [:event :empty-name]))
-    (vld/greater-than? price 0)             (msg-insert :event (message [:event :zero-price]))
-    (vld/has-value? date)                   (msg-insert :event (message [:event :empty-date]))
-    (empty? (db/get-event eventname date))  (msg-insert :event (message [:event :duplicate-event]))))
+    (vld/has-value? eventname)                         (msg-insert :event (message [:event :empty-name]))
+    (vld/greater-than? price 0)                        (msg-insert :event (message [:event :zero-price]))
+    (vld/has-value? date)                              (msg-insert :event (message [:event :empty-date]))
+    (empty? (db/get-event eventname date))             (msg-insert :event (message [:event :duplicate-event]))))
 
 (defn new-user? [username pass1 pass2]
   (cond-> {}
-    (vld/has-value? username)       (msg-insert :login (message [:user :empty-name]))
-    (>= (count pass1) 8)            (msg-insert :login (message [:register :short-pass]))
-    (= pass1 pass2)                 (msg-insert :login (message [:register :notmatch-pass]))
-    (empty? (db/get-user username)) (msg-insert :login (message [:user :unexist]))
+    (vld/has-value? username)                          (msg-insert :login (message [:user :empty-name]))
+    (>= (count pass1) 8)                               (msg-insert :login (message [:register :short-pass]))
+    (= pass1 pass2)                                    (msg-insert :login (message [:register :notmatch-pass]))
+    (empty? (db/get-user username))                    (msg-insert :login (message [:user :unexist]))
     ))
 
 (defn login? [username password]
   (cond-> {}
-    (vld/has-value? username)                       (msg-insert :login (message [:user :empty-name]))
-    (vld/has-value? (db/get-user username))         (msg-insert :login (message [:user :invalid]))
-    (= password (:password (db/get-user username))) (msg-insert :login (message [:login :invalid]))
+    (vld/has-value? username)                          (msg-insert :login (message [:user :empty-name]))
+    (vld/has-value? (db/get-user username))            (msg-insert :login (message [:user :invalid]))
+    (= password (:password (db/get-user username)))    (msg-insert :login (message [:login :invalid]))
     ))
 
 (defn participation? [eid]
@@ -123,41 +106,30 @@
                      ))
 
 (defn payment? [eid uid parts]
-  "Check, if id's is correct. Used with (db/get-*id)"
-  (create-validator :pay
-                    [
-                     [(not= nil uid)
-                      (message [:user :empty-name])]
-                     [(not= nil eid)
-                      (message [:event :unexist])]
-                     [(<= parts (+ (dbp/free-parts eid) parts))
-                      (message [:pay :wrong-parts])]
-                     ]))
+  "Check, if id's is correct. Used with (db/get-*id). Also check if actual parts is less than availiable  "
+  (cond-> {}
+    (not= nil uid)                                     (msg-insert :payment (message :user :empty-name))
+    (not= nil eid)                                     (msg-insert :payment (message :event :unexist))
+    (<= parts (+ (dbp/free-parts eid) parts))          (msg-insert :payment (message :pay :wrong-parts))
+    ))
+
 (defn fee? [id]
- (create-validator :pay
-                   [
-                    [(not= nil id)
-                     (message [:fee :unexist])]
-                    [(not (nil? (db/event-from-fee id)))
-                     (message [:event :unexist])]
-                    [(vld/has-value? (sess/get :username))
-                     (message [:user :unexist])]
-                    ]))
+  (cond-> {}
+    (not= nil id)                                       (msg-insert :payment (message :fee :unexist))
+    (not (nil? (db/event-from-fee id)))                 (msg-insert :payment (message :event :unexist))
+    (vld/has-value? (sess/get :username))               (msg-insert :payment (message :user :unexist))
+    ))
 
 (defn parts? [ename date parts]
-  (create-validator :pay
-                    [ ; FIXME: free-parts include parts from currect fee
-                     [(<= parts (+ (dbp/free-parts ename date) parts))
-                      (message [:event :parts-count])]
-                     ]))
+  (cond-> {}
+    ; FIXME: free-parts include parts from currect fee
+    (<= parts (+ (dbp/free-parts ename date) parts))   (msg-insert :payment (message :event :parts-count))
+    ))
 
 (defn moneyout? [username money]
-  (create-validator :admin
-                    [
-                     [(nil? (db/get-user username)) (message [:user :unexist])]
-                     [(< 0 money) (message [:pay :wrong-money])]
-                     [(<= money (:balance (db/get-user username))) (message [:user :low-balance] username)]
-                     ]
-                    )
-  )
+  (cond-> {}
+    (nil? (db/get-user username))                      (msg-insert :payment (message :user :unexist))
+    (< 0 money)                                        (msg-insert :payment (message :pay :wrong-money))
+    (<= money (:balance (db/get-user username)))       (msg-insert :payment (message :user :low-balance username))
+    ))
 
