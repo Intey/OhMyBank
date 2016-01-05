@@ -56,8 +56,8 @@
 
 (defn errors? [] (vld/errors?))
 
-(defmacro create-rule [tag data]
-  `(vld/rule ~@(list (first data)) [~tag ~(last data)] )
+(defmacro create-rule [tag [validator msg]]
+  `(vld/rule ~@(list validator) [~tag ~msg] )
   )
 
 (defmacro create-validator
