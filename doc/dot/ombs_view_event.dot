@@ -1,7 +1,0 @@
-digraph g {
-subgraph cluster1 {
-label="ombs.view.event"
-G0 [shape=ellipse,style=bold,label="usercheckbox-sel"];
-G1 [shape=ellipse,style=bold,label="event-sel"];
-}
-}

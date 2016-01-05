@@ -1,5 +1,0 @@
-digraph g {
-subgraph cluster1 {
-label="ombs.view.pages"
-}
-}

@@ -1,6 +1,0 @@
-digraph g {
-subgraph cluster1 {
-label="ombs.funcs"
-G0 [shape=ellipse,style=bold,label="in?"];
-}
-}
