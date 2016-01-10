@@ -25,7 +25,7 @@
                                             [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
                                              :exclusions [org.seleniumhq.selenium/selenium-server]]
                                             [org.seleniumhq.selenium/selenium-server "2.45.0"] ; drive it manualy
-                                            [ring-mock "0.1.5"] ;;  Simplify generation of request
+                                            [ring/ring-mock "0.3.0"] ;;  Simplify generation of request
                                             [ring/ring-jetty-adapter "1.3.2"] ; for runs app before tests
                                             ]}
 
@@ -50,6 +50,6 @@
                       [cider/cider-nrepl "0.9.1"]
                       ]
 
-            ;:test-paths ["spec"]
+            :test-paths ["spec"]
 
             )
