@@ -17,3 +17,5 @@
 (def uid 1)
 (def eid-solid 2)
 (def eid-partial 3)
+
+(def content-json "application/json; charset=utf-8")

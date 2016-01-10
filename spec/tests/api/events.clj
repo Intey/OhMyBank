@@ -3,7 +3,7 @@
             [clojure.java.shell :refer [sh]]
             [speclj.core :as t]
             [ring.mock.request :as mock]
-            [ombs.route :refer [api]]
+            [ombs.route :refer [engine] ]
             [cheshire.core :as json]
             ))
 
@@ -14,20 +14,25 @@
               ;(sh "bash" "-c" "./scripts/resetdb.sh test")
               )
 
-            (t/it "but test"
-                  (t/should-be-same {:value 12 :body "expected"} {:value 12 :body "actual"})
-                  )
+            (t/it "not exists path, SHOULD: Content-Type == 'application/json', status == 404"
+                  (t/should=
+                     {:status 404
+					  :headers {"Content-Type" content-json} }
+                     (select-keys (engine (mock/content-type (mock/request :get "/unexists") content-json)) [:status :headers])
+                     ))
+
             (t/it "All events, SHOULD return vector"
-                  (t/should-be-same
-                    (api (mock/request :get "/events"))
+                  (t/should=
                     {:status 200
-                     :headers {"content-type" "application/json"}
+                     :headers {"Content-Type" content-json}
                      :body
-                     (json/generate-string [
-                                            :id 1 :name "Cookies" :price  124 :author   "Intey" :state "initial" :parts 0
-                                            :id 2 :name     "Tea" :price   50 :author "andreyk" :state "initial" :parts 0
-                                            :id 3 :name   "Pizza" :price 1300 :author   "Intey" :state "initial" :parts 8
-                                            ])
-                     })))
+                     (json/generate-string
+                       [
+                        {:id 1 :name "Cookies" :date "2016-01-10" :price  124.0 :author   "Intey" :status "initial" :parts 0 :rest 0 }
+                        {:id 2 :name     "Tea" :date "2016-01-10" :price   50.0 :author "andreyk" :status "initial" :parts 0 :rest 0 }
+                        {:id 3 :name   "Pizza" :date "2016-01-10" :price 1300.0 :author   "Intey" :status "initial" :parts 8 :rest 8 }]
+                       ) }
+                    (engine (mock/request :get "/api/events"))
+                    )))
 
 (t/run-specs)
