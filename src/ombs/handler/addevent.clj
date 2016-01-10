@@ -1,14 +1,14 @@
 (ns ombs.handler.addevent
   (:require
+    [noir.session :as sess]
+    [cheshire.core :as json]
     [ombs.db.old :as db]
     [ombs.db.partial :as partial-event]
     [ombs.db.payment :as dbpay]
     [ombs.core :as core]
     [ombs.funcs :as funcs]
     [ombs.validate :as isvalid]
-    [noir.session :as sess]
-    [noir.response :refer [redirect] ]
-    [ombs.view.pages :refer [addevent] :rename {addevent addevent-page}]
+    [ombs.handler.api :refer [okRes errorRes] ]
     )
   )
 ; Forward declarations
@@ -19,7 +19,7 @@
 
 (declare add-participants)
 ; ====== End forward declarations
-
+(defrecord Ok [code data])
 (defn init-event [ {event :name price :price date :date parts :parts
                     users :participants
                     :as params} ]
@@ -33,9 +33,9 @@
                            (db/get-uid (sess/get :username))
                            (read-string price))
       (when (not-empty users) (add-participants params))
-      (redirect "/user"))
+      okRes)
     ;if validation fails
-    (addevent-page (db/get-usernames)) ))
+    ))
 
 (defn- add-solid-event [ {event :name price :price date :date
                           users :participants
@@ -56,8 +56,10 @@
 
 (defn- add-good [ {event :name price :price date :date users :participants parts :parts :as params} ]
   (if (partial-event/add-goods event date parts)
-    (redirect "/user")
-    (addevent-page (db/get-usernames)) ))
+    (json/generate-string {:ok true})
+    ;valid response
+    ;invalide response
+    ))
 
 (defn- add-participants [{event :name date :date users :participants}]
   (dorun (map (comp #(dbpay/add-participant % (db/get-eid event date)) db/get-uid) users)))

@@ -22,3 +22,8 @@
   (if-let [parsed (json/parse-string types true)]
     (db/get-events (mapv keyword parsed)))
   (db/get-events))
+
+
+(def okRes (json/generate-string {:ok true}))
+
+(def errorRes (json/generate-string {:error "Some error occur"}))
