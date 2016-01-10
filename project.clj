@@ -6,6 +6,7 @@
             :dependencies [[org.clojure/clojure "1.7.0" ]
                            [org.clojure/clojure-contrib "1.2.0"] ;additions
                            [ring/ring-jetty-adapter "1.3.2"]
+                           [ring/ring-json "0.4.0"]
                            [compojure "1.3.3"] ; routing
                            [enlive "1.1.6"] ; templating(plain HTML)
                            [lib-noir "0.9.9"] ; session management
@@ -24,7 +25,7 @@
                                             [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
                                              :exclusions [org.seleniumhq.selenium/selenium-server]]
                                             [org.seleniumhq.selenium/selenium-server "2.45.0"] ; drive it manualy
-                                            [ring-mock "0.1.5"] ; ??
+                                            [ring-mock "0.1.5"] ;;  Simplify generation of request
                                             [ring/ring-jetty-adapter "1.3.2"] ; for runs app before tests
                                             ]}
 
