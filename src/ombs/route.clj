@@ -37,15 +37,13 @@
 					ByteArrayOutputStream))
   )
 
-(defn tee-stream
-  "Given a stream we can read from, returns the eagerly read bytes of the
-  stream, plus a new stream that will provide those same contents."
-  [stream]
-  (let [buffer (ByteArrayOutputStream.)
-        _ (io/copy stream buffer)
-        bytes (.toByteArray buffer)]
-    {:stream (ByteArrayInputStream. bytes)
-     :contents bytes}))
+(defn wrap-content-json [handler]
+  (fn [req]
+      (-> (handler req)
+          (assoc-in [:headers "Content-Type"] "application/json; charset=utf-8")
+          ;(assoc-in [:content-type] "application/json")
+          )))
+
 
 (defn with-debug
   ([value] (pprint value) value)
@@ -54,8 +52,9 @@
 (defroutes api
   (context "/api" [req]
            (GET "/" [] (api/help))
+           (GET "/test" [] (json/generate-string {:foo 123}))
            (context "/events" []
-                    (GET "/" [] (str []))
+                    (GET "/" [] (api/get-events))
                     (POST "/" [] "")
                     (context "/:id" [id]
 							 (defroutes event
@@ -71,7 +70,7 @@
 							   )
 							 )
                     )
-           )
+
            (context "/users" []
                     (defroutes user
                       (GET "/" [] (str []))
@@ -90,9 +89,9 @@
                              (PUT "/" {body :body} body)
                              (DELETE "/" [] id)
                              )
-                    )
+                    ))
+  (not-found "unexists path"))
 
-           )
 (defroutes old
   (POST "/login" request login)
   (POST "/logout" request logout)
@@ -120,13 +119,13 @@
 
 
   ;(resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
-  (not-found "Page not found")
   ) ;params should be last, it overlap all below routes.
 
 (def engine
   (-> api
     ;(wrap-routes wrap-stacktrace {:color? true})
     (wrap-routes wrap-json-response)
+    (wrap-routes wrap-content-json)
 	(wrap-routes #(wrap-json-body % {:keywords? true :bigdecimals? true}))
     ;(wrap-routes wrap-json-params) ;; read body as JSON in json-params
     (wrap-routes wrap-nested-params) ;; for such foo[bar]=e => {:foo {:bar e}}

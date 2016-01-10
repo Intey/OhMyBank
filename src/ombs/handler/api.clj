@@ -18,10 +18,10 @@
 (defn get-events
   "Gets json array of events types(in-progress, finished, initial).  Return
   events with type in given types."
-  [types]
-  (if-let [parsed (json/parse-string types true)]
-    (db/get-events (mapv keyword parsed)))
-  (db/get-events))
+  ([] (db/get-events))
+  ([types]
+   (if-let [parsed (json/parse-string types true)]
+     (db/get-events (mapv keyword parsed)))))
 
 
 (def okRes (json/generate-string {:ok true}))
