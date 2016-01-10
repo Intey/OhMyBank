@@ -6,10 +6,7 @@
             [ombs.db.admin :as dba]
             [ombs.db.payment :as dbp]
             [ombs.core :as core]
-            [noir.validation :as vld]
             ))
-
-(def affirmation (vld/wrap-noir-validation dba/affirm))
 
 (spec/describe "======= Pay button on"
 
@@ -31,7 +28,7 @@
                                       (dbp/create-fee uid eid-solid)
                                       (spec/should-not (dbp/can-pay? uid eid-solid)))
                              (spec/it "is HIDDEN, after admin confirm user fee"
-                                      (affirmation (dba/get-fid uid eid-solid))
+                                      (dba/get-fid uid eid-solid)
                                       (spec/should-not (dbp/can-pay? uid eid-solid))
                                       ))
 
@@ -52,7 +49,7 @@
                                       (spec/should (dbp/can-pay? uid eid-partial)))
 
                              (spec/it "is VISIBLE, after admin confirm user fee (4/8 parts)"
-                                      (affirmation (dba/get-fid uid eid-partial))
+                                      (dba/get-fid uid eid-partial)
                                       (spec/should (dbp/can-pay? uid eid-partial))
                                       )
 
@@ -62,7 +59,7 @@
                                       )
 
                              (spec/it "is HIDDEN, after admin confirm user fee (8/8 parts)"
-                                      (affirmation (dba/get-fid uid eid-partial))
+                                      (dba/get-fid uid eid-partial)
                                       (spec/should-not (dbp/can-pay? uid eid-partial))
                                       )
                              ))
