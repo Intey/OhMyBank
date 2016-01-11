@@ -3,6 +3,7 @@
     [clojure.java.shell :refer [sh]]
     [korma.db :as kdb]
     [korma.core :as sql]
+    [ring.mock.request :as mock]
     ))
 
 (kdb/defdb korma-db (kdb/sqlite3
@@ -19,3 +20,6 @@
 (def eid-partial 3)
 
 (def content-json "application/json; charset=utf-8")
+
+(defn apireq [method path]
+  (mock/content-type (mock/request method path) content-json))

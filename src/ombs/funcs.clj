@@ -1,4 +1,8 @@
-(ns ombs.funcs "contains generic functions")
+(ns ombs.funcs "contains generic functions"
+  (:require
+    [clj-time.core :as timec]
+    [clj-time.format :as timef]
+     ))
 
 (defn in?
   "checks if value contained in collection. Used for vectors. For maps, use 'some'"
@@ -32,3 +36,8 @@
 (defn with-log [f]
   (println (f))
   (f))
+
+(defn date
+  ([] (date "YYYY-MM-dd"))
+  ([format] (.format (java.text.SimpleDateFormat. format) (new java.util.Date)))
+  )
