@@ -11,13 +11,18 @@ VALUES
                 (1,     'Cookies',     124,          'Intey',     "in-progress",  0),
                 (2,     'Tea',         50,           'andreyk',   "in-progress",  0),
                 (3,     'Pizza',       1300,         'Intey',     "initial",      8),
-                (4,     'Waffles',      3000,         'Intey',     "finished",     8)
+                (4,     'Waffles',     3000,         'Intey',     "finished",     8),
+                (5,     'Bugs',        3000,         'Intey',     "in-progress",  8),
+                (6,     'Buggy Bugs',  2000,         'Error',     "in-progress",  8)
                 ;
 
 INSERT INTO goods
                 (events_id,   rest)
 VALUES
-                (3,     8);
+                (3,           8),
+                (5,           7),
+                (6,           7)
+                ;
 /* INSERT INTO participation
                 (users_id,   events_id)
 VALUES
