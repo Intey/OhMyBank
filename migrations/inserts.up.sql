@@ -6,11 +6,12 @@ VALUES
                 ;
 
 INSERT INTO events
-                (id,    name,          price,          author,      status,     parts)
+                (id,    name,          price,          author,      status,       parts)
 VALUES
-                (1,     'Cookies',     124,          'Intey',     "initial",  0),
-                (2,     'Tea',         50,           'andreyk',   "initial",  0),
-                (3,     'Pizza',       1300,         'Intey',     "initial",  8)
+                (1,     'Cookies',     124,          'Intey',     "in-progress",  0),
+                (2,     'Tea',         50,           'andreyk',   "in-progress",  0),
+                (3,     'Pizza',       1300,         'Intey',     "initial",      8),
+                (4,     'Waffles',      3000,         'Intey',     "finished",     8)
                 ;
 
 INSERT INTO goods

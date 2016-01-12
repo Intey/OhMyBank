@@ -4,6 +4,7 @@
     [korma.db :as kdb]
     [korma.core :as sql]
     [ring.mock.request :as mock]
+    [cheshire.core :as json]
     ))
 
 (kdb/defdb korma-db (kdb/sqlite3
@@ -21,5 +22,13 @@
 
 (def content-json "application/json; charset=utf-8")
 
-(defn apireq [method path]
-  (mock/content-type (mock/request method path) content-json))
+(defn apireq
+  ([method path] (mock/content-type (mock/request method path ) content-json))
+  ([method path params] (mock/content-type (mock/request method path params) content-json)))
+
+(defn mock-resp [body]
+  {:status 200
+   :headers {"Content-Type" content-json}
+   :body (json/generate-string body)
+   }
+  )
