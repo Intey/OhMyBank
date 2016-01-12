@@ -34,5 +34,4 @@
 
             (t/after-all
               (println "############################## RESET DB #######################################")
-              (sh "bash" "-c" "./scripts/resetdb.sh test")
-              ))
+              (sh "bash" "-c" "./scripts/resetdb.sh test")))

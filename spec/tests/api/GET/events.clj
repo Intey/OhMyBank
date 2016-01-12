@@ -26,9 +26,8 @@
                         :author "Intey" :status "finished" :parts 8 :rest 0 }
                        ])))
 
-                    (json/parse-string (:body (engine (apireq :get "/api/events"))))
-                    )
-                  )
+                    (json/parse-string (:body (engine (apireq :get "/api/events"))))))
+
             (t/it "ACTIVE events, SHOULD return events with status 'active'"
                   (t/should==
                     (json/parse-string (:body (mock-resp
@@ -36,9 +35,16 @@
                                :author "Intey" :status "in-progress" :parts 0 :rest 0}
                               {:id 2 :name "Tea" :date (date) :price 50.0
                                :author "andreyk" :status "in-progress" :parts 0 :rest 0}])))
-                    (json/parse-string (:body (engine (apireq :get "/api/events?type=active"))))
-                    )
-                    )
+                    (json/parse-string (:body (engine (apireq :get "/api/events?type=active"))))))
+            (t/it "FILTERED events, SHOULD return events, that correspond to given filters"
+                  (check-get==
+                    "/api/events?type=active&rest[fn]=equal&rest[val]=7&author=Intey"
+                    [{:id 2 :name "Bugs" :date (date) :price 3000.0
+                      :author "Intey" :status "in-progress" :parts 8 :rest 7}]
+                    ))
+
+            (engine (apireq :get "/api/test?type=active&rest[fn]=equal&rest[val]=7]"))
+
             (t/after-all
               (println "############################## RESET DB #######################################")
               (sh "bash" "-c" "./scripts/resetdb.sh test")))

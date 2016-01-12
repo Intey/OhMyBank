@@ -5,6 +5,7 @@
     [korma.core :as sql]
     [ring.mock.request :as mock]
     [cheshire.core :as json]
+    [ombs.route :refer [engine] ]
     ))
 
 (kdb/defdb korma-db (kdb/sqlite3
@@ -32,3 +33,8 @@
    :body (json/generate-string body)
    }
   )
+
+(defmacro check-get== [query expected]
+  `(t/should==
+    (json/parse-string (:body (mock-resp ~expected)))
+    (json/parse-string (:body (engine (apireq :get ~query))))) )
