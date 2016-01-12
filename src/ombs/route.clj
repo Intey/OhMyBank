@@ -44,29 +44,36 @@
           ;(assoc-in [:content-type] "application/json")
           )))
 
+(defrecord Mock [no-implement])
 
 (defn with-debug
   ([value] (pprint value) value)
   ([f & args] (pprint args) (apply f args)))
 
+(defn types [coll]
+  (if (coll? coll)
+    (conj (map types (rest coll)) (type (first coll)) )
+    (type coll)
+    )
+  )
+
 (defroutes api
   (context "/api" [req]
            (GET "/" [] (api/help))
-           (GET "/test" [] (json/generate-string {:foo 123}))
+           (GET "/test" {params :params} (do (println params) params))
            (context "/events" []
                     (GET "/" [] (api/get-events))
-                    (POST "/" [] "")
+                    (POST "/" [] '("posted new event"))
                     (context "/:id" [id]
 							 (defroutes event
-							   (GET "/" [] id)
+							   (GET "/" [] (str "event with id: " id))
 							   (PUT "/" {body :body} (str "updating event: " (with-debug body)))
-							   (DELETE "/" [] id)
+							   (DELETE "/" [] (str "delete event: " id))
 
 							   (context "/participants" []
 										(GET "/" {params :params} (str "no participants with params " (with-debug params)))
-										(POST "/" {params :params} (str "add new participants: " (with-debug params)))
-										)
-							   (POST "/start" [_] "starting event: " id)
+										(POST "/" {params :params} (str "add new participants: " (with-debug params))) )
+							   (POST "/start" [_] (str "starting event: " id))
 							   )
 							 )
                     )
@@ -123,12 +130,12 @@
 
 (def engine
   (-> api
+    (wrap-routes wrap-content-json)
     ;(wrap-routes wrap-stacktrace {:color? true})
     (wrap-routes wrap-json-response)
-    (wrap-routes wrap-content-json)
 	(wrap-routes #(wrap-json-body % {:keywords? true :bigdecimals? true}))
     ;(wrap-routes wrap-json-params) ;; read body as JSON in json-params
-    (wrap-routes wrap-nested-params) ;; for such foo[bar]=e => {:foo {:bar e}}
-    (wrap-routes wrap-keyword-params) ;; should be first
     (wrap-routes wrap-params) ;; add query params to :params(json-params)
+    (wrap-routes wrap-nested-params) ;; for such foo[bar]=e => {:foo {:bar e}}
+    (wrap-routes wrap-keyword-params) ;; NOTE: should be last
     ))
