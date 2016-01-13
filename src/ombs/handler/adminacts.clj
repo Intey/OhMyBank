@@ -1,6 +1,7 @@
 (ns ombs.handler.adminacts
   (require
     [ombs.db.old :as db]
+    [ombs.db.user :as dbu]
     [ombs.db.admin :as dba]
     [ombs.db.payment :as dbp]
     [ombs.validate :as isvalid]
@@ -20,7 +21,7 @@
 
 (defn moneyout [username money]
   (println "moneyout " username " " money)
-  (let [uid (db/get-uid username)]
+  (let [uid (dbu/get-uid username)]
     (if (isvalid/moneyout? uid money)
       (dbp/credit-payment uid db/moeid money)
       (ch/generate-string {:error (isvalid/errors-string)}))))

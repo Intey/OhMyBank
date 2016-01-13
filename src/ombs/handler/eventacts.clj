@@ -2,6 +2,7 @@
   (:require
     [ombs.core :as core]
     [ombs.db.old :as db]
+    [ombs.db.user :as dbu]
     [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
     [ombs.funcs :refer [parse-int]]
@@ -16,7 +17,7 @@
   post). Parts in params is count of parts, that user want to pay"
   (println "Pay params: " params)
   (let [uname (sess/get :username)
-        uid (db/get-uid uname)
+        uid (dbu/get-uid uname)
         parts (parse-int parts)]
     (if (isvalid/payment? eid uid parts)
       (do
@@ -30,7 +31,7 @@
   post)"
   (if-let [uname (sess/get :username)]
     (when (isvalid/participation? eid)
-      (core/add-participant eid (db/get-uid uname)))))
+      (core/add-participant eid (dbu/get-uid uname)))))
 
 (defn start [{eid :eid ename :event-name date :date :as params}]
   (if (db/is-initial? eid)

@@ -4,6 +4,7 @@
   (:require [ombs.db.old :as db]
             [ombs.db.payment :as dbpay]
             [ombs.db.admin :as db-adm]
+            [ombs.db.user :as dbu]
             [ombs.funcs :as fns]
             [ombs.validate :refer [add-error]]
             [noir.response :refer [redirect]]
@@ -37,7 +38,7 @@
   )
 
 (defn add-participant
-  ([ename date uname] (add-participant (db/get-eid ename) (db/get-uid uname)))
+  ([ename date uname] (add-participant (db/get-eid ename) (dbu/get-uid uname)))
   ([eid uid]
    (if (db/is-initial? eid)
      (dbpay/add-participant uid eid)
@@ -48,7 +49,7 @@
   (let [users (dbpay/get-participants eid)
         party-pay (party-pay (:price (db/get-event eid)) users)]
     (if (= (db/get-parts eid) 0); create debts only when event not partial
-      (doall (map #(dbpay/credit-payment eid (db/get-uid %) party-pay) users)))))
+      (doall (map #(dbpay/credit-payment eid (dbu/get-uid %) party-pay) users)))))
 
 (defn participants-count [ename date]
   (count (dbpay/get-participants ename date)))

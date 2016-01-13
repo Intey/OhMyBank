@@ -3,6 +3,7 @@
     [noir.session :as sess]
     [cheshire.core :as json]
     [ombs.db.old :as db]
+    [ombs.db.user :as dbu]
     [ombs.db.partial :as partial-event]
     [ombs.db.payment :as dbpay]
     [ombs.core :as core]
@@ -30,7 +31,7 @@
         (add-solid-event params)
         (add-partial-event (update params :parts funcs/parse-int)))
       (dbpay/debit-payment (db/get-eid event date)
-                           (db/get-uid (sess/get :username))
+                           (dbu/get-uid (sess/get :username))
                            (read-string price))
       (when (not-empty users) (add-participants params))
       okRes)
@@ -45,7 +46,7 @@
   (if (> (count users) 0)
     (let [party-pay (core/party-pay (funcs/parse-int price) users)]
       ;use 'dorun' for execute lazy function 'db/credit-payment'
-      (dorun (map #(dbpay/credit-payment (db/get-eid event date) (db/get-uid %) party-pay)
+      (dorun (map #(dbpay/credit-payment (db/get-eid event date) (dbu/get-uid %) party-pay)
                   (funcs/as-vec users)))))); may have only one user, so create vec
 
 (defn- add-partial-event [{event :name price :price date :date parts :parts
@@ -62,4 +63,4 @@
     ))
 
 (defn- add-participants [{event :name date :date users :participants}]
-  (dorun (map (comp #(dbpay/add-participant % (db/get-eid event date)) db/get-uid) users)))
+  (dorun (map (comp #(dbpay/add-participant % (db/get-eid event date)) dbu/get-uid) users)))

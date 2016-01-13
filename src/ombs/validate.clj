@@ -2,6 +2,7 @@
   (:require
     [noir.validation :as vld]
     [ombs.db.old :as db]
+    [ombs.db.user :as dbu]
     [ombs.db.payment :as dbp]
     [noir.session :as sess]
     [noir.response :refer [redirect]]
@@ -89,14 +90,14 @@
     (vld/has-value? username)                          (msg-insert :login (message [:user :empty-name]))
     (>= (count pass1) 8)                               (msg-insert :login (message [:register :short-pass]))
     (= pass1 pass2)                                    (msg-insert :login (message [:register :notmatch-pass]))
-    (empty? (db/get-user username))                    (msg-insert :login (message [:user :unexist]))
+    (empty? (dbu/get-user username))                    (msg-insert :login (message [:user :unexist]))
     ))
 
 (defn login? [username password]
   (cond-> {}
     (vld/has-value? username)                          (msg-insert :login (message [:user :empty-name]))
-    (vld/has-value? (db/get-user username))            (msg-insert :login (message [:user :invalid]))
-    (= password (:password (db/get-user username)))    (msg-insert :login (message [:login :invalid]))
+    (vld/has-value? (dbu/get-user username))            (msg-insert :login (message [:user :invalid]))
+    (= password (:password (dbu/get-user username)))    (msg-insert :login (message [:login :invalid]))
     ))
 
 (defn participation? [eid]
@@ -128,8 +129,8 @@
 
 (defn moneyout? [username money]
   (cond-> {}
-    (nil? (db/get-user username))                      (msg-insert :payment (message :user :unexist))
+    (nil? (dbu/get-user username))                      (msg-insert :payment (message :user :unexist))
     (< 0 money)                                        (msg-insert :payment (message :pay :wrong-money))
-    (<= money (:balance (db/get-user username)))       (msg-insert :payment (message :user :low-balance username))
+    (<= money (:balance (dbu/get-user username)))       (msg-insert :payment (message :user :low-balance username))
     ))
 

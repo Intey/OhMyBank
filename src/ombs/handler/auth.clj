@@ -1,6 +1,6 @@
 (ns ombs.handler.auth
   (:require
-    [ombs.db.old :as db]
+    [ombs.db.user :as dbu]
     [ombs.core :as core]
     [noir.session :as sess]
     [noir.response :refer [redirect] ]
@@ -14,7 +14,7 @@
 (defn register [{:keys [username password1 password2 birthdate student-flag] :as params} ]
   (if (isvalid/new-user? username password1 password2)
     (do
-      (db/add-user username password1 birthdate (core/rate student-flag))
+      (dbu/add-user username password1 birthdate (core/rate student-flag))
       (log-user username))))
 
 (defn login [ { {uname :username pass :password :as params} :params} ]

@@ -2,6 +2,7 @@
   (:require [korma.db :as kdb]
             [korma.core :as sql]
             [ombs.db.old :refer :all]
+            [ombs.db.user :as dbu]
             [ombs.db.partial :as partial-event]
             [ombs.funcs :as f]
             ))
@@ -15,7 +16,7 @@
                                         :events_id eid})))))
 
   ([uname ename edate]
-   (participated? (get-uid uname) (get-eid ename edate))))
+   (participated? (dbu/get-uid uname) (get-eid ename edate))))
 
 (defn get-debt
   "sum of all credits and debits in pays for current user and event. "
@@ -56,7 +57,7 @@
 (defn add-participant
   ([event date user]
   (sql/insert participation (sql/values {:events_id (get-eid event date)
-                                         :users_id (get-uid user)})))
+                                         :users_id (dbu/get-uid user)})))
   ([uid eid]
    (sql/insert participation (sql/values {:events_id eid :users_id uid })))
   )
