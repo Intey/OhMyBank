@@ -1,7 +1,7 @@
 (ns ombs.handler.eventacts
   (:require
     [ombs.core :as core]
-    [ombs.db.old :as db]
+    [ombs.db.event :as dbe]
     [ombs.db.user :as dbu]
     [ombs.db.payment :as dbpay]
     [ombs.validate :as isvalid]
@@ -10,7 +10,7 @@
     [noir.session :as sess]
     ))
 
-(defn- finish [ename date] (db/set-status ename date :finished))
+(defn- finish [ename date] (dbe/set-status ename date :finished))
 
 (defn pay [{eid :eid ename :event-name date :date parts :parts :as params}]
   "Add participation of current user and selected event(given as param from
@@ -34,5 +34,5 @@
       (core/add-participant eid (dbu/get-uid uname)))))
 
 (defn start [{eid :eid ename :event-name date :date :as params}]
-  (if (db/is-initial? eid)
+  (if (dbe/is-initial? eid)
     (core/start-event eid)))

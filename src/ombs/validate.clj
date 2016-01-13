@@ -1,7 +1,7 @@
 (ns ombs.validate
   (:require
     [noir.validation :as vld]
-    [ombs.db.old :as db]
+    [ombs.db.event :as dbe]
     [ombs.db.user :as dbu]
     [ombs.db.payment :as dbp]
     [noir.session :as sess]
@@ -83,7 +83,7 @@
     (vld/has-value? eventname)                         (msg-insert :event (message [:event :empty-name]))
     (vld/greater-than? price 0)                        (msg-insert :event (message [:event :zero-price]))
     (vld/has-value? date)                              (msg-insert :event (message [:event :empty-date]))
-    (empty? (db/get-event eventname date))             (msg-insert :event (message [:event :duplicate-event]))))
+    (empty? (dbe/get-event eventname date))             (msg-insert :event (message [:event :duplicate-event]))))
 
 (defn new-user? [username pass1 pass2]
   (cond-> {}
@@ -102,12 +102,12 @@
 
 (defn participation? [eid]
   (cond-> {}
-    (not= (db/get-status eid) (db/statuses :finished)) (msg-insert :participation (message [:event :finished]))
-    (not= "" (:name (db/get-event eid)))               (msg-insert :participation (message [:event :unexist]))
+    (not= (dbe/get-status eid) (dbe/statuses :finished)) (msg-insert :participation (message [:event :finished]))
+    (not= "" (:name (dbe/get-event eid)))               (msg-insert :participation (message [:event :unexist]))
                      ))
 
 (defn payment? [eid uid parts]
-  "Check, if id's is correct. Used with (db/get-*id). Also check if actual parts is less than availiable  "
+  "Check, if id's is correct. Used with (dbe/get-*id). Also check if actual parts is less than availiable  "
   (cond-> {}
     (not= nil uid)                                     (msg-insert :payment (message :user :empty-name))
     (not= nil eid)                                     (msg-insert :payment (message :event :unexist))
@@ -117,7 +117,7 @@
 (defn fee? [id]
   (cond-> {}
     (not= nil id)                                       (msg-insert :payment (message :fee :unexist))
-    (not (nil? (db/event-from-fee id)))                 (msg-insert :payment (message :event :unexist))
+    (not (nil? (dbe/event-from-fee id)))                 (msg-insert :payment (message :event :unexist))
     (vld/has-value? (sess/get :username))               (msg-insert :payment (message :user :unexist))
     ))
 

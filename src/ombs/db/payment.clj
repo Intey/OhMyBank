@@ -2,6 +2,7 @@
   (:require [korma.db :as kdb]
             [korma.core :as sql]
             [ombs.db.old :refer :all]
+            [ombs.db.event :as dbe]
             [ombs.db.user :as dbu]
             [ombs.db.partial :as partial-event]
             [ombs.funcs :as f]
@@ -16,7 +17,7 @@
                                         :events_id eid})))))
 
   ([uname ename edate]
-   (participated? (dbu/get-uid uname) (get-eid ename edate))))
+   (participated? (dbu/get-uid uname) (dbe/get-eid ename edate))))
 
 (defn get-debt
   "sum of all credits and debits in pays for current user and event. "
@@ -56,14 +57,14 @@
 
 (defn add-participant
   ([event date user]
-  (sql/insert participation (sql/values {:events_id (get-eid event date)
+  (sql/insert participation (sql/values {:events_id (dbe/get-eid event date)
                                          :users_id (dbu/get-uid user)})))
   ([uid eid]
    (sql/insert participation (sql/values {:events_id eid :users_id uid })))
   )
 
 (defn get-participants
-  ([ename edate] (get-participants (get-eid ename edate)))
+  ([ename edate] (get-participants (dbe/get-eid ename edate)))
   ([eid] (mapv #(first (vals %)) (sql/select participants (sql/fields :user)
                                       (sql/where {:eid eid})))))
 
@@ -84,8 +85,8 @@
 (defn can-pay? [uid eid]
   (and
     (participated? uid eid)
-    (= (get-status eid) (:in-progress statuses))
-    (< (fees-money uid eid) (/ (get-price eid) (count (get-participants eid)))))
+    (= (dbe/get-status eid) (:in-progress dbe/statuses))
+    (< (fees-money uid eid) (/ (dbe/get-price eid) (count (get-participants eid)))))
   )
 
 (defn fees-money [uid eid]
@@ -127,11 +128,11 @@
 (defn can-finish?
   ([ename date]
    (zero?
-     (if (zero? (get-parts ename date))
+     (if (zero? (dbe/get-parts ename date))
        (price-diff ename date)
        (partial-event/rest-parts ename date))))
   ([eid]
    (zero?
-     (if (zero? (get-parts eid))
+     (if (zero? (dbe/get-parts eid))
        (price-diff eid)
        (partial-event/rest-parts eid)))))

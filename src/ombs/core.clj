@@ -1,7 +1,7 @@
 (ns ombs.core
   "Contains main logic. No validations. All function hope that you give to it valid data. Use in
   handlers, views, etc. "
-  (:require [ombs.db.old :as db]
+  (:require [ombs.db.event :as dbe]
             [ombs.db.payment :as dbpay]
             [ombs.db.admin :as db-adm]
             [ombs.db.user :as dbu]
@@ -12,7 +12,7 @@
 
 (defn rate [student?] (if (= student? "on") 0.5 1.0 ) )
 
-(defn events [] (db/get-events [:initial :in-progress]))
+(defn events [] (dbe/get-events [:initial :in-progress]))
 
 (defn participated? [uname ename edate] (dbpay/participated? uname ename edate))
 
@@ -26,10 +26,10 @@
   (fns/part-price event-price (count users)))
 
 (defn is-initial?
-  ([ename date] (db/is-initial? (db/get-eid ename date)))
-  ([eid] (db/is-initial? eid)))
+  ([ename date] (dbe/is-initial? (dbe/get-eid ename date)))
+  ([eid] (dbe/is-initial? eid)))
 
-(defn is-active? [ename date] (= (db/get-status ename date) (:in-progress db/statuses)))
+(defn is-active? [ename date] (= (dbe/get-status ename date) (:in-progress dbe/statuses)))
 
 (defn- add-in-progress
   [uid eid]
@@ -38,17 +38,17 @@
   )
 
 (defn add-participant
-  ([ename date uname] (add-participant (db/get-eid ename) (dbu/get-uid uname)))
+  ([ename date uname] (add-participant (dbe/get-eid ename) (dbu/get-uid uname)))
   ([eid uid]
-   (if (db/is-initial? eid)
+   (if (dbe/is-initial? eid)
      (dbpay/add-participant uid eid)
      (add-in-progress uid eid))))
 
 (defn start-event [eid]
-  (db/set-status eid :in-progress)
+  (dbe/set-status eid :in-progress)
   (let [users (dbpay/get-participants eid)
-        party-pay (party-pay (:price (db/get-event eid)) users)]
-    (if (= (db/get-parts eid) 0); create debts only when event not partial
+        party-pay (party-pay (:price (dbe/get-event eid)) users)]
+    (if (= (dbe/get-parts eid) 0); create debts only when event not partial
       (doall (map #(dbpay/credit-payment eid (dbu/get-uid %) party-pay) users)))))
 
 (defn participants-count [ename date]

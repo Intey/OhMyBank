@@ -1,6 +1,7 @@
 (ns ombs.db.admin
   (:require [clojure.set :refer [rename-keys]]
             [korma.db :as kdb]
+            [ombs.db.event :as dbe]
             [ombs.db.payment :as dbpay]
             [ombs.db.partial :as partial-event]
             [ombs.db.old :refer :all] ; for entity
@@ -9,6 +10,8 @@
             [noir.session :as sess]
             [korma.core :as sql]
             ))
+
+(def moeid -1)
 
 (declare rm-fee)
 (declare get-fee)
@@ -38,8 +41,8 @@
   (sql/select fees (sql/where {:users_id uid :events_id eid})))
 
 (defn finish
-  ([ename date] (set-status ename date :finished))
-  ([eid] (set-status eid :finished)))
+  ([ename date] (dbe/set-status ename date :finished))
+  ([eid] (dbe/set-status eid :finished)))
 
 ; ============================ PRIVATE =======================================
 
