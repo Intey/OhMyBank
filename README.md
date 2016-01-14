@@ -41,16 +41,17 @@ Front side provide common functions:
 `lein ring server-headless` start server. without browser.
 
 ## Flow
-req
-+++
-┃ layer          | in                     | description
-┃ handler layer  | json parsed primitives | prepare income params for domain layer (expand params to recors). | no
-┃                |                        | flow branch param: ???
-┃ validate layer | records ^ primitives   | validate input from handler layer.                                | yes
-┃ domain layer   | records ^ primitives   | execute domain funcs. grouped db funcs, in data morfing.          | no
-∨ db layer       | records ^ primitives   | just sql's.                                                       |
-+++
-res
+
+    req
+    +++
+    ┃ layer          | in                     | description
+    ┃ handler layer  | json parsed primitives | prepare income params for domain layer (expand params to recors). | no
+    ┃                |                        | flow branch param: ???
+    ┃ validate layer | records ^ primitives   | validate input from handler layer.                                | yes
+    ┃ domain layer   | records ^ primitives   | execute domain funcs. grouped db funcs, in data morfing.          | no
+    ∨ db layer       | records ^ primitives   | just sql's.                                                       |
+    +++
+    res
 
 ## Records(Models)
 ### User
