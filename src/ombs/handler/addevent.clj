@@ -35,7 +35,7 @@
                            (read-string price))
       (when (not-empty users) (add-participants params))
       okRes)
-    ;if validation fails
+    0
     ))
 
 (defn- add-solid-event [ {event :name price :price date :date

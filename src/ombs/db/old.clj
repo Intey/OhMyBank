@@ -10,8 +10,12 @@
 (declare goods)
 (declare fees)
 
+(defrecord User [name password bdate role])
+(defrecord Event [name date price author status type parts])
+
 (sql/defentity users
   (sql/many-to-many events :pays {:lfk :users_id :rfk :events_id})
+  (sql/transform #(User. (:name %) (:password %) (:bdate %) (:role %)))
   (sql/has-many fees)
   )
 

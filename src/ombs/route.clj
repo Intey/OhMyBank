@@ -28,6 +28,7 @@
     [ombs.handler.addevent :refer [init-event]]
     [ombs.handler.auth :refer [login logout register]]
     [ombs.handler.api :as api]
+    [ombs.handler.api.events :as apie]
     [ombs.funcs :refer [parse-int]]
     [clojure.pprint :refer [pprint]]
 
@@ -62,8 +63,8 @@
            (GET "/" [] (api/help))
            (GET "/test" {params :params} (do (println params) params))
            (context "/events" []
-                    (GET "/" [] (api/get-events))
-                    (POST "/" [] '("posted new event"))
+                    (GET "/" [] (apie/get-events))
+                    (POST "/" {body :body} (apie/new-event body))
                     (context "/:id" [id]
 							 (defroutes event
 							   (GET "/" [] (str "event with id: " id))
