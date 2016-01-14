@@ -28,7 +28,7 @@ Front side provide common functions:
 
 ## TODO
 - [x] rate for event (NOTE: pizza parts)
-- [ ] money output
+- [x] money output
 - [ ] holiday auto event
 - [ ] fix bugs
 
@@ -37,21 +37,89 @@ Front side provide common functions:
 `lein spec -a` for run watcher, that run tests after their update.
 `lein ancient upgrade` for upgrade all dependencies. Be *on the ledge*!
 `lein repl` for run REPL with this project (My advice is use [LightTable](http://lighttable.com)).
+`lein ring server` start server. Also open browser on index page.
+`lein ring server-headless` start server. without browser.
 
-### Tasks
-Look in [Asana](https://app.asana.com/0/32535141326586/32535141326586)
+## Flow
+req
++++
+┃ layer          | in                     | description
+┃ handler layer  | json parsed primitives | prepare income params for domain layer (expand params to recors). | no
+┃                |                        | flow branch param: ???
+┃ validate layer | records ^ primitives   | validate input from handler layer.                                | yes
+┃ domain layer   | records ^ primitives   | execute domain funcs. grouped db funcs, in data morfing.          | no
+∨ db layer       | records ^ primitives   | just sql's.                                                       |
++++
+res
 
+## Records(Models)
+### User
+    + name
+    + dbate(birth date)
+    + password
+    + avatar
+    + rate:
+        handicap. By default - 1.0; For students - 0.5.  If, in event
+        participate 2 users, one with 1.0 and second with 0.5, so first should
+        pay 2/3, and student - 1/3. 50% discount, yo.
+    + role:
+        admin, banker, client
 
-##calculations
-User debt - when user sets to participation in some event, his balance
-decreased on party-pay
+### Event
+    + name
+    + date
+    + price
+    + author
+    + date
+    + status
 
-### Example
-Tea {participants: 5, price: 70}
-- all users have rate = 1
-    So, each user party-pay = (price / participants)
-- all users have different rate
-    user party-pay = (price / (one_price)*participats - rate)
+### Transaction
+Show user payment actions on events.
+
+### Fee
+Show user intention to pay in some event. Should be described by admin.
+
+### Error
+I going to hold validations and predicates in VALIDATION Layer. If they fall,
+Error generated and returned to client.
+    - id
+    - description
+    - where (where it's appears)
+
+## Functions
+
+### HANDLER Layer
+
+There, as sayed above, each action can return ERROR record.
+
+| name             | in                    | out         |
+| ---------------  | ----------------      | ----------- |
+| affirm           | fee ^ fid             | nil(ok)     |
+| refute           | fee ^ fid             | nil(ok)     |
+| moneyout         | fee ^ fid             | nil(ok)     |
+| participate      | EVENT ^ USER          | nil(ok)     |
+| pay              | EVENT ^ USER          | nil(ok)     |
+| log-in           | USER                  | TOKEN?      |
+| log-out          | USER                  | nil(ok)     |
+| register         | USER                  | nil(ok)     |
+| add-event        | EVENT ^ EVENT, [USER] | id          |
+| add-participants | EVENT, [USER]         | nil(ok)     |
+| add-user         | USER                  | id          |
+| get-event        | eid                   | EVENT       |
+| get-events       | nil ^ FILTERS         | [EVENT]     |
+
+### DB Layer
+
+| name               | in                           | out              |
+|--------------------|------------------------------|------------------|
+| party-pay          | EVENT, [USER] ^ price, USER  | integer          |
+| credit-payment     | EVENT, USER ^ eid, uid       | transaction-id   |
+| debit-payment      | EVENT, USER ^ eid, uid       | transaction-id   |
+| get-debt           | EVENT, USER ^ eid, uid       | integer          |
+| participated?      | EVENT, USER ^ eid, uid       | bool ^ ERROR     |
+| set-status         | EVENT ^ eid                  | eid ^ ERROR      |
+| get-rate           | USER ^ uid                   | integer ^ ERROR  |
+| get-rates          | [USER] ^ [uid]               | [integer]        |
 
 ### design links
 - [Simple Grid](http://tympanus.net/codrops/2013/04/17/responsive-full-width-grid)
