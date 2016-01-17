@@ -87,27 +87,58 @@ Error generated and returned to client.
     - description
     - where (where it's appears)
 
+## API
+
+I don't describe 'GET', because it obviously.
+
+### (Admin) /users
+
+POST: add new user.
+Params: login, password(crypted), fname, lname, rate, role.
+Return: nil
+
+### (Admin) /users/id
+
+PUT: change exist user.
+Params: login, password(crypted), fname, lname, rate, role.
+Return: nil
+
+### /events
+
+POST: add event.
+
+### /events/:id
+
+PUT: change event.
+Params: name, date, price, _parts_(may be deleted in future),
+
+### /events/:id/participants
+
+POST: add participant to event.
+Params: login
+
 ## Functions
 
 ### HANDLER Layer
 
 There, as sayed above, each action can return ERROR record.
 
-| name             | in                    | out         |
-| ---------------  | ----------------      | ----------- |
-| affirm           | fee ^ fid             | nil(ok)     |
-| refute           | fee ^ fid             | nil(ok)     |
-| moneyout         | fee ^ fid             | nil(ok)     |
-| participate      | EVENT ^ USER          | nil(ok)     |
-| pay              | EVENT ^ USER          | nil(ok)     |
-| log-in           | USER                  | TOKEN?      |
-| log-out          | USER                  | nil(ok)     |
-| register         | USER                  | nil(ok)     |
-| add-event        | EVENT ^ EVENT, [USER] | id          |
-| add-participants | EVENT, [USER]         | nil(ok)     |
-| add-user         | USER                  | id          |
-| get-event        | eid                   | EVENT       |
-| get-events       | nil ^ FILTERS         | [EVENT]     |
+| name            | in                    | out         |
+| --------------- | ----------------      | ----------- |
+| affirm          | fee ^ fid             | nil(ok)     |
+| refute          | fee ^ fid             | nil(ok)     |
+| moneyout        | fee ^ fid             | nil(ok)     |
+| participate     | EVENT ^ USER          | nil(ok)     |
+| pay             | EVENT ^ USER          | nil(ok)     |
+| log-in          | USER                  | TOKEN?      |
+| log-out         | USER                  | nil(ok)     |
+| register        | USER                  | nil(ok)     |
+| add-event       | EVENT ^ EVENT, [USER] | id          |
+| add-participant | EVENT, USER           | nil(ok)     |
+| add-user        | USER                  | id          |
+| add-users       | nil ^ FILTERS         | [USER]      |
+| get-event       | eid                   | EVENT       |
+| get-events      | nil ^ FILTERS         | [EVENT]     |
 
 ### DB Layer
 
