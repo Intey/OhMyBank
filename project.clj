@@ -5,18 +5,21 @@
                       :url "http://www.eclipse.org/legal/epl-v10.html"}
             :dependencies [[org.clojure/clojure "1.7.0" ]
                            [org.clojure/clojure-contrib "1.2.0"] ;additions
+
                            [ring/ring-jetty-adapter "1.3.2"]
-                           [ring/ring-json "0.4.0"]
-                           [compojure "1.3.3"] ; routing
-                           [enlive "1.1.6"] ; templating(plain HTML)
+
+                           ;;[enlive "1.1.6"] ; templating(plain HTML)
                            [lib-noir "0.9.9"] ; session management
-                           [liberator "0.12.2"] ; for RESTful project
-                           [cheshire "5.4.0"] ; JSON parsing
                            [clj-time "0.10.0"]
+
                            [org.clojure/java.jdbc "0.3.6"] ; deps fo db-driver
                            [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver
                            [korma "0.4.0"] ; sql in code
                            [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
+                           ;; API
+                           [compojure "1.3.3"] ; routing
+                           [cheshire "5.4.0"] ; JSON parsing
+                           [ring/ring-json "0.4.0"] ; parsing queries
                            ]
             :profiles {
                        :dev {
@@ -50,6 +53,6 @@
                       [cider/cider-nrepl "0.9.1"]
                       ]
 
-            :test-paths ["spec"]
+            ;; :test-paths ["spec"]
 
             )
