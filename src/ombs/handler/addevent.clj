@@ -44,7 +44,7 @@
   "Add event in events table, with adding participants, and calculating debts."
   (dbe/add-event event (read-string price) (sess/get :username) date)
   (if (> (count users) 0)
-    (let [party-pay (core/party-pay (funcs/parse-int price) users)]
+    (let [party-pay (funcs/party-pay (funcs/parse-int price) users)]
       ;use 'dorun' for execute lazy function 'db/credit-payment'
       (dorun (map #(dbpay/credit-payment (dbe/get-eid event date) (dbu/get-uid %) party-pay)
                   (funcs/as-vec users)))))); may have only one user, so create vec

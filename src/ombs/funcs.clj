@@ -31,7 +31,6 @@
   "Extract keys ks from hashes in sequence sq."
   (map #(replace % ks) sq))
 
-(defn part-price [event-price parts] (/ event-price parts))
 
 (defn with-log [f]
   (println (f))
@@ -41,3 +40,11 @@
   ([] (date "YYYY-MM-dd"))
   ([format] (.format (java.text.SimpleDateFormat. format) (new java.util.Date)))
   )
+
+(defn part-price [event-price parts] (/ event-price parts))
+
+(defn party-pay [event-price users]
+  "Simple for common events. For birthday, need more complex realization depends on each user rate."
+  (part-price event-price (count users)))
+
+(defn rate [student?] (if (= student? "on") 0.5 1.0 ) )

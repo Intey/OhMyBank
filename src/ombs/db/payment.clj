@@ -72,16 +72,15 @@
 ;; calc new_party-pay
 ;; create credits
 (defn add-participants [event users]
-    (let [party-pay (core/party-pay (funcs/parse-int (:price event) users))]
-      ;use 'dorun' for execute lazy function 'db/credit-payment'
-      (dorun
-        (map #(comp
-                (dbpay/credit-payment (:id event) (dbu/get-uid %) party-pay)
-                (sql/insert participation
-                            (sql/values {:events_id (:id event)
-                                         :users_id (dbu/get-uid user)})))
-
-                  (funcs/as-vec users))) ; may have only one user, so create vec)
+  (let [party-pay (f/party-pay (f/parse-int (:price event) users))]
+    ;use 'dorun' for execute lazy function 'db/credit-payment'
+    (dorun
+      (map #(comp
+              (credit-payment (:id event) (dbu/get-uid %) party-pay)
+              (sql/insert participation
+                          (sql/values {:events_id (:id event)
+                                       :users_id (dbu/get-uid %)})))
+           (f/as-vec users))))) ; may have only one user, so create vec)
 
 (defn get-participants
   ([ename edate] (get-participants (dbe/get-eid ename edate)))
