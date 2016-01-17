@@ -34,3 +34,5 @@
                           (sql/select users (sql/where {:name username :role admin-role-value}))
                           first nil?  not))
 
+(defn exists? [username]
+  (not (empty? (first (sql/select users (sql/where {:name username}))))))

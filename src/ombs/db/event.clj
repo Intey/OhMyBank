@@ -21,6 +21,8 @@
 
 (defn add-event
   ([ename price author date & [parts participats]]
+   (println (str "====== add event ==== :" ename ", " price ", " date ", " author ", " parts ", " participants))
+   (println)
    (let [parts (if (nil? nil) 0 parts)]
      (-> (sql/insert events (sql/values
                               {:name ename :price price :author author :date

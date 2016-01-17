@@ -1,144 +1,77 @@
 (ns ombs.route
   (:require
-    ;common routing. wraper for ...
-    [compojure.core :refer [ANY POST GET PUT DELETE defroutes wrap-routes context]]
-    ; 404, and resources for using css, js, html files.
-    [compojure.route :refer [resources not-found]]
-    ; colored stacktrace
-    [ring.middleware.stacktrace :refer [wrap-stacktrace]]
-
     [ring.middleware.params :refer [wrap-params]]
-    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
     [ring.middleware.nested-params :refer [wrap-nested-params]]
-    [ring.middleware.json :refer [wrap-json-response
-								  wrap-json-body
-								  wrap-json-params]]
-	[ring.util.request :as reqh]
-	[ring.util.response :as resh]
 
-    [cheshire.core :as json]
-
-    [noir.session :refer [wrap-noir-session]]
-    [noir.validation :refer [wrap-noir-validation]]
-    [noir.response :refer [redirect]]
-
-    ; request handlers. Prepare data, and call views.
-    [ombs.handler.eventacts :refer [pay participate start]]
-    [ombs.handler.adminacts :refer [affirm refute moneyout]]
-    [ombs.handler.addevent :refer [init-event]]
-    [ombs.handler.auth :refer [login logout register]]
-    [ombs.handler.api :as api]
-    [ombs.handler.api.events :as apie]
-    [ombs.funcs :refer [parse-int]]
+    [compojure.api.sweet :refer :all]
+    [ring.util.http-response :refer :all]
+	[schema.core :as s]
     [clojure.pprint :refer [pprint]]
 
-    [clojure.java.io :as io]
-	)
-  (:import (java.io ByteArrayInputStream
-					ByteArrayOutputStream))
-  )
-
-(defn wrap-content-json [handler]
-  (fn [req]
-      (-> (handler req)
-          (assoc-in [:headers "Content-Type"] "application/json; charset=utf-8")
-          ;(assoc-in [:content-type] "application/json")
-          )))
-
-(defrecord Mock [no-implement])
-
-(defn with-debug
-  ([value] (pprint value) value)
-  ([f & args] (pprint args) (apply f args)))
-
-(defn types [coll]
-  (if (coll? coll)
-    (conj (map types (rest coll)) (type (first coll)) )
-    (type coll)
-    )
-  )
-
-(defroutes api
-  (context "/api" []
-           (GET "/" [] (api/help))
-           (ANY "/test" {params :params qs :query-string qp :query-params
-                         b :body}
-                (pprint {:p params :qs qs :qp qp :bdy b }))
-           (context "/events" []
-                    (GET "/" [] (apie/get-events))
-                    (POST "/" {body :body} (apie/new-event body))
-                    (context "/:id" [id]
-							 (defroutes event
-							   (GET "/" [] (str "event with id: " id))
-							   (PUT "/" {body :body} (str "updating event: " (with-debug body)))
-							   (DELETE "/" [] (str "delete event: " id))
-
-							   (context "/participants" []
-										(GET "/" {params :params} (str "no participants with params " (with-debug params)))
-										(POST "/" {params :params} (str "add new participants: " (with-debug params))) )
-							   (POST "/start" [_] (str "starting event: " id))
-							   )
-							 )
-                    )
-
-           (context "/users" []
-                    (defroutes user
-                      (GET "/" [] (str []))
-                      (POST "/" {body :body} body)
-                      (context "/:id" [id]
-                               (GET "/" [] id)
-                               (PUT "/" {body :body} body)
-                               (DELETE "/" [] id)
-                               ))
-                    )
-           (context "/admin" []
-                    (GET "/" [] (str []))
-                    (POST "/" {body :body} body)
-                    (context "/:id" [id]
-                             (GET "/" [] id)
-                             (PUT "/" {body :body} body)
-                             (DELETE "/" [] id)
-                             )))
-
-  (not-found "unexists path"))
-
-(defroutes old
-  (POST "/login" request login)
-  (POST "/logout" request logout)
-
-  (POST "/register" {params :params} (register params))
-
-  (POST "/addevent" {params :params} (init-event params))
-
-  (POST "/moneyout" {{money :money username :target} :params} (moneyout money username))
-
-  (GET "/start" {params :params} (start params))
-  (GET "/participate" {params :params} (participate params))
-  (GET "/pay" {params :params} (pay params))
-
-  ; Like REST API
-  (GET "/affirm" {{fid :fid} :params} (affirm fid))
-  (GET "/refute" {{fid :fid} :params} (refute fid))
-
-  ; Just test tool
-  (ANY "/api/pong/:id" [params] (fn [{p :params}] (pprint p)))
-
-
-  ;;(GET "/api/help" [_] (api/help))
-  ;;(GET "/api/events" {{types :types} :params} (api/get-events types))
-
-
-  ;(resources "/") ;Should be after pages. Search all css, js, etc. in dir 'resources' in root of project
-  ) ;params should be last, it overlap all below routes.
-
-(def engine
-  (-> api
-    (wrap-routes wrap-content-json)
-    ;(wrap-routes wrap-stacktrace {:color? true})
-    (wrap-routes wrap-json-response)
-	(wrap-routes #(wrap-json-body % {:keywords? true :bigdecimals? true}))
-    ;(wrap-routes wrap-json-params) ;; read body as JSON in json-params
-    (wrap-routes wrap-params) ;; add query params to :params(json-params)
-    (wrap-routes wrap-nested-params) ;; for such foo[bar]=e => {:foo {:bar e}}
-    (wrap-routes wrap-keyword-params) ;; NOTE: should be last
+    [ombs.handler.api.events :as apie]
+    [ombs.handler.api.users :as apiu]
     ))
+
+
+;;(s/defschema Date org.joda.time.LocalDate )
+
+(s/defschema Event
+  {:id s/Int
+   :author s/Str
+   :name s/Str
+   :date s/Str
+   :price s/Num
+   :rest s/Num
+   :parts s/Num
+   :status s/Str
+   }
+  )
+(s/defschema InEvent
+  {:author s/Str
+   :name s/Str
+   :date s/Str
+   :price s/Num})
+
+
+(defapi engine
+  (swagger-ui)
+  (swagger-docs
+    {:info {:title "Bank API" :description "API for bank" }
+     :tags ["api" "event" "user"] }
+
+    )
+  (context* "/api" []
+            :tags ["api"]
+            (context* "/events" []
+                      :tags ["event"]
+                      (GET* "/" []
+                            :summary "Return events list"
+                            :query-params [{types :-
+                                            (describe [(s/enum :initial :finished :in-progress)]
+                                              (str "Select events by types. Optional."
+                                                   "Use query string: /api/events?types=initial&types=finished."))
+                                            nil}]
+                            (ok (apie/get-events types) ))
+                      (POST* "/" []
+                             :summary "Add event or events."
+                             :body-params [events :- (describe [InEvent] "Event data")
+                                           {participants :-  (describe [apiu/User] "nicknames of paticipats.") nil}
+                                           ]
+                             (ok (map apie/new-event events participants))
+                             ))
+            (context* "/users" []
+                      :tags [ "user"]
+                      (GET* "/" []
+                            :summary "return list of users")
+                      (POST* "/" []
+                             :summary "Add new clients to bank. After this, they can participate, create events etc."
+                             :body-params [{users :- (describe [apiu/User] "nicknames of paticipats.") nil}]
+
+                             (ok (map  users))
+                             )
+                      )
+
+            ))
+;; (-> engine
+;;     (wrap-routes wrap-nested-params)
+;;     (wrap-routes wrap-params))

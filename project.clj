@@ -20,6 +20,9 @@
                            [compojure "1.4.0"] ; routing
                            [cheshire "5.5.0"] ; JSON parsing
                            [ring/ring-json "0.4.0"] ; parsing queries
+                           ;; [metosin/ring-http-response "0.6.5"]
+                           ;; [metosin/schema-tools "0.7.0"]
+                           [metosin/compojure-api "0.23.1"] ; does it replace all above?
                            ]
             :profiles {
                        :dev {
