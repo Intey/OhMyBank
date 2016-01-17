@@ -6,30 +6,30 @@
             :dependencies [[org.clojure/clojure "1.7.0" ]
                            [org.clojure/clojure-contrib "1.2.0"] ;additions
 
-                           [ring/ring-jetty-adapter "1.3.2"]
+                           [ring/ring-jetty-adapter "1.4.0"]
 
                            ;;[enlive "1.1.6"] ; templating(plain HTML)
                            [lib-noir "0.9.9"] ; session management
-                           [clj-time "0.10.0"]
+                           [clj-time "0.11.0"]
 
-                           [org.clojure/java.jdbc "0.3.6"] ; deps fo db-driver
-                           [org.xerial/sqlite-jdbc "3.8.7"] ; sqlite driver
-                           [korma "0.4.0"] ; sql in code
-                           [ragtime/ragtime.sql.files "0.3.8"] ; db migrations
+                           [org.clojure/java.jdbc "0.4.2"] ; deps fo db-driver
+                           [org.xerial/sqlite-jdbc "3.8.11.2"] ; sqlite driver
+                           [korma "0.4.2"] ; sql in code
+                           [ragtime/ragtime.sql.files "0.3.9"] ; db migrations
                            ;; API
-                           [compojure "1.3.3"] ; routing
-                           [cheshire "5.4.0"] ; JSON parsing
+                           [compojure "1.4.0"] ; routing
+                           [cheshire "5.5.0"] ; JSON parsing
                            [ring/ring-json "0.4.0"] ; parsing queries
                            ]
             :profiles {
                        :dev {
                              :dependencies [
-                                            [speclj "3.3.0"]
-                                            [clj-webdriver "0.6.1" ; this use old version of selenium-server, so
+                                            [speclj "3.3.1"]
+                                            [clj-webdriver "0.7.2" ; this use old version of selenium-server, so
                                              :exclusions [org.seleniumhq.selenium/selenium-server]]
-                                            [org.seleniumhq.selenium/selenium-server "2.45.0"] ; drive it manualy
+                                            [org.seleniumhq.selenium/selenium-server "2.49.0"] ; drive it manualy
                                             [ring/ring-mock "0.3.0"] ;;  Simplify generation of request
-                                            [ring/ring-jetty-adapter "1.3.2"] ; for runs app before tests
+                                            [ring/ring-jetty-adapter "1.4.0"] ; for runs app before tests
                                             ]}
 
                        }
