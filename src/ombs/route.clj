@@ -59,9 +59,11 @@
   )
 
 (defroutes api
-  (context "/api" [req]
+  (context "/api" []
            (GET "/" [] (api/help))
-           (GET "/test" {params :params} (do (println params) params))
+           (ANY "/test" {params :params qs :query-string qp :query-params
+                         b :body}
+                (pprint {:p params :qs qs :qp qp :bdy b }))
            (context "/events" []
                     (GET "/" [] (apie/get-events))
                     (POST "/" {body :body} (apie/new-event body))
@@ -96,8 +98,8 @@
                              (GET "/" [] id)
                              (PUT "/" {body :body} body)
                              (DELETE "/" [] id)
-                             )
-                    ))
+                             )))
+
   (not-found "unexists path"))
 
 (defroutes old
