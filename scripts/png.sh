@@ -1,13 +1,6 @@
 #!/bin/sh
-cond=$1
-if [[ -z $cond ]]; then
-    echo "Give grep search string"
-    exit 1
-fi
 
-echo "use $cond"
-
-files=($(grep $cond -R doc/dot -l))
+files=($(find doc/dot -type f))
 for file in ${files[*]}; do
     echo "process $file"
     bn=$(basename $file)
