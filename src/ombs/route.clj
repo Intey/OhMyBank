@@ -49,7 +49,7 @@
     (context* "/events" []
       :tags ["events"]
       (GET* "/" []
-        :summary "Return events list"
+        :summary "Return events list with participants list for each"
 
         :query-params
         [{types :-
@@ -76,7 +76,7 @@
          :tags ["event"]
 
          (GET* "/" []
-           :summary "Return event by id"
+           :summary "Return event by id with participants"
            (ok []))
 
          (PUT* "/" []
