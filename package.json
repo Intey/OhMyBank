@@ -1,0 +1,27 @@
+{
+  "name": "ohmybank",
+  "version": "1.0.0",
+  "description": "Little bank project for my friends.  At work (yes, we work) we often buy cookies and tea, make gifts at birthday, and so on. Ad-hoc we don't have money for pay, so we remember a debt. But, when we have many events, debt can be lost. At first time, we usee excel. Not bad, but so little automatiozation and human factor: - One pay with creadit card, one with hand-cash - Bankir needs write debts. But also he needs work! Party time in his brain! - Some else",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Intey/ohmybank.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Intey/ohmybank/issues"
+  },
+  "homepage": "https://github.com/Intey/ohmybank#readme",
+  "dependencies": {
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  }
+}

@@ -18,3 +18,4 @@ test.db
 .ropeproject/
 __pycache__/
 doc/
+node_modules/
