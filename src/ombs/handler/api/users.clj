@@ -5,5 +5,10 @@
     ))
 
 (s/defschema User
-  {:login (s/pred db/exists? "Valid account")}
+  {:login  (describe (s/pred db/exists? "Invalid user") "Registred username" :type "String")}
+  )
+
+(defn add-user [user]
+  (println user)
+  user
   )

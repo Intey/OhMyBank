@@ -10,12 +10,15 @@
 
     [ombs.handler.api.events :as apie]
     [ombs.handler.api.users :as apiu]
+
+    [ombs.db.user :as db] ;; delete me plz
     ))
 
 
 ;;(s/defschema Date org.joda.time.LocalDate )
 
 (s/defschema Event
+
   {:id s/Int
    :author s/Str
    :name s/Str
@@ -26,12 +29,12 @@
    :status s/Str
    }
   )
+
 (s/defschema InEvent
   {:author s/Str
    :name s/Str
    :date s/Str
    :price s/Num})
-
 
 (defapi engine
   (swagger-ui)
@@ -41,37 +44,90 @@
 
     )
   (context* "/api" []
-            :tags ["api"]
-            (context* "/events" []
-                      :tags ["event"]
-                      (GET* "/" []
-                            :summary "Return events list"
-                            :query-params [{types :-
-                                            (describe [(s/enum :initial :finished :in-progress)]
-                                              (str "Select events by types. Optional."
-                                                   "Use query string: /api/events?types=initial&types=finished."))
-                                            nil}]
-                            (ok (apie/get-events types) ))
-                      (POST* "/" []
-                             :summary "Add event or events."
-                             :body-params [events :- (describe [InEvent] "Event data")
-                                           {participants :-  (describe [apiu/User] "nicknames of paticipats.") nil}
-                                           ]
-                             (ok (map apie/new-event events participants))
-                             ))
-            (context* "/users" []
-                      :tags [ "user"]
-                      (GET* "/" []
-                            :summary "return list of users")
-                      (POST* "/" []
-                             :summary "Add new clients to bank. After this, they can participate, create events etc."
-                             :body-params [{users :- (describe [apiu/User] "nicknames of paticipats.") nil}]
+    :tags ["api"]
 
-                             (ok (map  users))
-                             )
-                      )
+    (context* "/events" []
+      :tags ["events"]
+      (GET* "/" []
+        :summary "Return events list"
 
-            ))
+        :query-params
+        [{types :-
+          (describe
+            [(s/enum :initial :finished :in-progress)]
+            (str "Select events by types. Optional."
+                 "Use query string: /api/events?types=initial&types=finished."))
+          nil}]
+
+        (ok (apie/get-events types) ))
+
+      (POST* "/" []
+        :summary "Add event or events."
+
+        :body-params
+        [events :- (describe [InEvent] "Event data")
+         {participants :-
+          (describe [User] "Usernames of paticipats.")
+          nil} ]
+
+        (ok (map str participants))
+        )
+      (context* "/:id" []
+         :tags ["event"]
+
+         (GET* "/" []
+           :summary "Return event by id"
+           (ok []))
+
+         (PUT* "/" []
+           :summary "Change some event. Return New event if change applies return."
+
+           :body-params
+           [name :- (describe s/Str "New name")
+            date :- (describe s/Str "New date")
+            price :- (describe s/Num "New price") ]
+
+           (ok {}))
+
+         (DELETE* "/" []
+           :summary "remove event. return  Null, if all went's good."
+           (ok {}))
+
+         (context* "/participants" []
+           :tags ["participants"]
+
+           (GET* "/" []
+                 :summary "Return list of participants of event"
+                 (ok {}))
+
+           (POST* "/" []
+             :summary
+             (str "add new participant to event. Note, that this initiate many "
+                  "recalc of debts.")
+
+             :body-params [unsername :- (describe apiu/User "Registered username")]
+
+             (ok {}))
+
+           ) ;; participation context
+
+         ) ;; event context
+
+      ) ;; events context
+
+    (context* "/users" []
+              :tags [ "user"]
+              (GET* "/" []
+                    :summary "Return list of users")
+              (POST* "/" []
+                     :summary "Add new clients to bank. After this, they can participate, create events etc."
+                     :body-params [{users :-
+                                    (describe [apiu/User] "Usernames of paticipats.")
+                                    nil}]
+                     (ok (map apiu/add-user users))
+                     ))
+
+          ))
 ;; (-> engine
 ;;     (wrap-routes wrap-nested-params)
 ;;     (wrap-routes wrap-params))
