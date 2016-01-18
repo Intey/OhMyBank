@@ -139,3 +139,9 @@ header > .buttons {
     width: 7rem;
 }
 }
+.hidden {
+    display: none;
+}
+.optval input[type="number"] {
+    max-width: 3rem;
+}
