@@ -76,6 +76,7 @@
   )
 
 (defn msg-insert [coll tag msg]
+  "Append msg to coll under tag. {:tag [m1 m2 m3]} -> {:tag [m1 m2 m3 msg]}"
   (update coll tag #(vec (conj % msg))))
 
 (defn new-event? [eventname price date]
@@ -100,11 +101,13 @@
     (= password (:password (dbu/get-user username)))    (msg-insert :login (message [:login :invalid]))
     ))
 
-(defn participation? [eid]
-  (cond-> {}
-    (not= (dbe/get-status eid) (dbe/statuses :finished)) (msg-insert :participation (message [:event :finished]))
-    (not= "" (:name (dbe/get-event eid)))               (msg-insert :participation (message [:event :unexist]))
-                     ))
+(defn participation? [eid username]
+  "CHec, if both, event and user exists. return map of errors, or nil."
+  (not-empty
+    (cond-> {}
+      (nil? (:name (dbu/get-user username)))    (msg-insert :participation (message [:user :unexist]))
+      (nil?  (:name (dbe/get-event eid)))        (msg-insert :participation (message [:event :unexist]))
+      )))
 
 (defn payment? [eid uid parts]
   "Check, if id's is correct. Used with (dbe/get-*id). Also check if actual parts is less than availiable  "
