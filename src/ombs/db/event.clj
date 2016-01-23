@@ -108,3 +108,5 @@
                      (sql/with fees
                        (sql/fields)
                        (sql/where {:id fid})))))
+
+(defn exists? [id] (not (empty? (get-event id))))

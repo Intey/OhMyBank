@@ -11,30 +11,15 @@
     [ombs.handler.api.events :as apie]
     [ombs.handler.api.users :as apiu]
 
-    [ombs.db.user :as db] ;; delete me plz
     ))
 
-
 ;;(s/defschema Date org.joda.time.LocalDate )
-
-(s/defschema Event
-
-  {:id s/Int
-   :author s/Str
-   :name s/Str
-   :date s/Str
-   :price s/Num
-   :rest s/Num
-   :parts s/Num
-   :status s/Str
-   }
-  )
-
 (s/defschema InEvent
   {:author s/Str
    :name s/Str
    :date s/Str
-   :price s/Num})
+   :price s/Num
+   (s/optional-key :participants) (describe [apiu/User] "Usernames of paticipats.") })
 
 (defapi engine
   (swagger-ui)
@@ -65,22 +50,19 @@
       (POST* "/" []
         :summary "Add event or events."
         :body-params
-        [events :- (describe [InEvent] "Event data")
-         {participants :-
-          (describe [apiu/User] "Usernames of paticipats.")
-          nil} ]
+        [events :- (describe [InEvent] "Event data")]
 
-        (ok (map str participants))
+        (ok (map apie/new-event events))
         )
 
 
       (context* "/:id" []
-         :tags ["event"]
 
 
-         (GET* "/" []
+         (GET* "/" [id]
+           :path-params [id :- s/Int ]
            :summary "Return event by id with participants"
-           (ok []))
+           (apie/get-event id))
 
 
          (PUT* "/" []
