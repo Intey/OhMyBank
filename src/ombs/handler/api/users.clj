@@ -2,6 +2,7 @@
   (:require
     [schema.core :as s]
     [ombs.db.user :as db]
+    [compojure.api.sweet :refer :all]
     ))
 
 (s/defschema User
