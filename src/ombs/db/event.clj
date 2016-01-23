@@ -110,3 +110,6 @@
                        (sql/where {:id fid})))))
 
 (defn exists? [id] (not (empty? (get-event id))))
+
+(defn delete [id]
+      (sql/delete events (sql/where {:id id})))
