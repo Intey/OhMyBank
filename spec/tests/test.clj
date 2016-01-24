@@ -13,15 +13,14 @@
                        :user "user"
                        :password "placeholder"}))
 
-(defn cleandb-fixture [f]
-  (sh "bash" "-c" "./resetdb.sh test")
-  (f))
+(defn cleandb []
+  (sh "bash" "-c" "./resetdb.sh test"))
 
 (def uid 1)
 (def eid-solid 2)
 (def eid-partial 3)
 
-(def content-json "application/json; charset=utf-8")
+(def content-json "application/json")
 
 (defn apireq
   ([method path] (mock/content-type (mock/request method path ) content-json))
@@ -29,7 +28,7 @@
 
 (defn mock-resp [body]
   {:status 200
-   :headers {"Content-Type" content-json}
+   :headers {"Content-Type" content-json }
    :body (json/generate-string body)
    }
   )

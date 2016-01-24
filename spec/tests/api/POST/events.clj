@@ -2,7 +2,6 @@
   (:require [tests.test :refer :all]
             [clojure.java.shell :refer [sh]]
             [speclj.core :as t]
-            ;[ring.mock.request :as mock]
             [ombs.funcs :refer [date]]
             [ombs.route :refer [engine] ]
             [cheshire.core :as json]
@@ -35,7 +34,7 @@
 
             (t/context "array of events"
                        (let [response
-                             (json/parse-string (:body (engine (apireq :post "/api/events" {}))))]
+                             (:body (engine (apireq :post "/api/events" {})))]
                          (t/it "it SHOULD return vector added events"
                                (t/should-be seq? response)
                                (t/should= 2 (count response))
