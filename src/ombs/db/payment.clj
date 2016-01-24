@@ -72,7 +72,7 @@
 ;; calc new_party-pay
 ;; create credits
 (defn add-participants [event users]
-  (let [party-pay (f/party-pay (f/parse-int (:price event) users))]
+  (let [party-pay (f/party-pay (f/parse-int (:price event)) users)]
     ;use 'dorun' for execute lazy function 'db/credit-payment'
     (dorun
       (map #(comp

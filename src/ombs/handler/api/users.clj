@@ -13,3 +13,5 @@
   (println user)
   user
   )
+
+(defn exists? [username] (db/exists? username))
