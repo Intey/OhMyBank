@@ -28,7 +28,7 @@
 
 (defn mock-resp [body]
   {:status 200
-   :headers {"Content-Type" content-json }
+   :headers {"Content-Type" content-json "Accept" content-json}
    :body (json/generate-string body)
    }
   )

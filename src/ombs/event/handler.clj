@@ -20,8 +20,9 @@
 (defn get-events
   "Gets json array of events types(in-progress, finished, initial).  Return
   events with type in given types."
-  ([] (resp/ok (dbe/get-events)))
-  ([types] (resp/ok (dbe/get-events (mapv keyword types)))))
+  ([types] (resp/ok (if (nil? types)
+                      (dbe/get-events)
+                      (dbe/get-events (mapv keyword types))))))
 
 (defn new-event
   ([{:keys [name date price author &[parts]] :as params}]

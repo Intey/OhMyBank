@@ -26,6 +26,7 @@
                            ]
             :profiles {
                        :dev {
+                             :test-paths ["spec"]
                              :dependencies [
                                             [speclj "3.3.1"]
                                             [clj-webdriver "0.7.2" ; this use old version of selenium-server, so
@@ -56,6 +57,5 @@
                       [cider/cider-nrepl "0.9.1"]
                       ]
 
-            ;; :test-paths ["spec"]
 
             )

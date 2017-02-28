@@ -20,15 +20,11 @@
                           (sql/where (and (= :name ename) (= :date date)))))))
 
 (defn add-event
-  ([ename price author date & [parts participats]]
-   (println (str "====== add event ==== :" ename ", " price ", " date ", " author ", " parts ", " participants))
-   (println)
-   (let [parts (if (nil? nil) 0 parts)]
+  ([event & [participats]]
      (-> (sql/insert events (sql/values
-                              {:name ename :price price :author author :date
-                               date :status (statuses :initial) :parts parts}))
+                              (assoc event :status (statuses :initial))))
          vals
-         first))))
+         first)))
 
 (defn set-status
   ([ename date s]

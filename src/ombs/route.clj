@@ -1,12 +1,14 @@
 (ns ombs.route
   (:require
     [compojure.api.sweet :refer :all]
+    [compojure.api.middleware :refer [api-middleware]]
     [ring.util.http-response :refer :all]
     [ombs.handler.api.users :as apiu]
     [ombs.event.route :as eroute]
     ))
 
 (defapi engine
+  :middlewares [api-middleware]
   (swagger-ui)
   (swagger-docs
     {:info {:title "Bank API" :description "API for bank" }

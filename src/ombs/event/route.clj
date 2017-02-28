@@ -31,7 +31,7 @@
                "Use query string: /api/events?types=initial&types=finished."))
         nil}] ;; optional enul
 
-      (ok (apie/get-events types)))
+      (apie/get-events types))
 
 
     (POST* "/" []

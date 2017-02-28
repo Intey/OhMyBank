@@ -1,0 +1,14 @@
+(ns tests.payment
+  (:require
+    [speclj.core :as t]
+    [tests.helpers :refer :all]
+    [ombs.db.payment :as dbp]
+    )
+  )
+
+(t/describe "When call db-fn"
+  (t/context "add-participants"
+    (t/it "with event id and new rates array"
+      true
+      )
+    ))

@@ -23,10 +23,3 @@ VALUES
                 (5,           7),
                 (6,           7)
                 ;
-/* INSERT INTO participation
-                (users_id,   events_id)
-VALUES
-                (1,     1),
-                (1,     3),
-                (2,     2),
-                (2,     3); */
